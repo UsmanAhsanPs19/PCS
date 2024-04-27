@@ -1,20 +1,31 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { useState } from 'react';
+import AppNavigation from './app/navigation';
+import useFont from './hooks/useFont';
+import AppLoading from 'expo-app-loading';
+import { SafeAreaView } from 'react-native';
 
 export default function App() {
+  const [isFontReady, setIsFontReady] = useState(false);
+
+  const LoadFonts = async () => {
+    await useFont();
+  };
+
+  if (!isFontReady) {
+    return (
+      <AppLoading
+        startAsync={LoadFonts}
+        onFinish={() => setIsFontReady(true)}
+        onError={(e) => {
+          console.log("Error font loading:", e)
+        }}
+      />
+    );
+  }
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <SafeAreaView style={{ flex: 1 }}>
+      <AppNavigation />
+    </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});

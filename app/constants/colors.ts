@@ -1,0 +1,13 @@
+export const THEME_COLORS = {
+    PRIMARY_COLOR: "#ED1B24",
+    PRIMARY_COLOR_DARK: "#AB1017",
+    PRIMARY_DARK: "#840A10",
+    BG_COLOR: "#ffffff",
+    BG_DASHBOARD: "#F5F6FA",
+    textColor: "#120D26",
+    BORDER_COLOR: "#E4DFDF",
+    PLACEHOLDER_COLOR: "#747688",
+    ICON_COLOR: "#807A7A",
+    BUTTON_SHADOW: "#6F7EC9",
+    GRAY_TEXT: "#868686"
+}

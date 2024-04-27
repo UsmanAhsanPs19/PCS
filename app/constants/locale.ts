@@ -1,0 +1,22 @@
+export const GlbalLocale = {
+    signin: "Sign in",
+    verification: "Verification",
+    reset_password: "Reset Password",
+    email: "abc@gmail.com",
+    fullname: "Full name",
+    confirm_password: "Confirm password",
+    password_placeholder: "Your Password",
+    remeber_me: "Remeber Me",
+    forgot_password: "Forgot Password?",
+    dont_have_account: "Do not have an account? ",
+    have_account: "Already have an account? ",
+    signup: "Sign up",
+    continue: "Continue",
+    send: "Send",
+    homeHeaderText: "53rd International\nCardiocon 2024\nLahore",
+    headerLabel: "Cardiocon 2024",
+    pcs_portal: "PCS Portal",
+    navigation_label: "Navigation",
+    speakers_label: "Speakers",
+    sponsers_label: "Sponsers"
+}
