@@ -90,7 +90,7 @@ export default function SignupScreen({ navigation }) {
             style={{ backgroundColor: THEME_COLORS.BG_COLOR }}
             className="flex-1 items-center pt-20"
         >
-            <StatusBar style={'light'} />
+            <StatusBar style={'dark'} />
             {/* View for input fields & login button */}
             <ScrollView>
                 <View className="space-y-4">

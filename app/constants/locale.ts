@@ -18,5 +18,15 @@ export const GlbalLocale = {
     pcs_portal: "PCS Portal",
     navigation_label: "Navigation",
     speakers_label: "Speakers",
-    sponsers_label: "Sponsers"
+    sponsers_label: "Sponsers",
+    information_label: "Information",
+    logout: "Logout",
+    search: "Search",
+    contactUs: "Contact Us",
+    eventName: "53rd International Cardiocon Conference Lahore, Pakistan",
+    eventDate: "11 November - 14 November, 2024",
+    eventTime: "8:00 AM - 6:00 PM",
+    contactNumbers: "+92-332-8586568, +92-42-99211128",
+    eventEmail: "info@pcs.org.pk",
+    eventWebLink: "www.pcs.org.pk"
 }

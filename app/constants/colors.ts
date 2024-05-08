@@ -5,9 +5,13 @@ export const THEME_COLORS = {
     BG_COLOR: "#ffffff",
     BG_DASHBOARD: "#F5F6FA",
     textColor: "#120D26",
+    textLightGrayColor: "#44485F",
     BORDER_COLOR: "#E4DFDF",
     PLACEHOLDER_COLOR: "#747688",
     ICON_COLOR: "#807A7A",
     BUTTON_SHADOW: "#6F7EC9",
-    GRAY_TEXT: "#868686"
+    GRAY_TEXT: "#868686",
+    HALF_WHITE_COLOR: "#F5F6FA",
+    TEXT_LIGHT_BLACK: "#121212",
+    TEXT_GRAY_TIME: "#8F8E91"
 }

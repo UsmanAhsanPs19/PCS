@@ -10,11 +10,19 @@ import LoginScreen from '../screens/Auth/LoginScreen';
 import SignupScreen from '../screens/Auth/SignupScreen';
 import VerificationScreen from '../screens/Auth/VerificationScreen';
 import ResetPasswordScreen from '../screens/Auth/ResetPasswordScreen';
-import ScheduleScreen from '../screens/BottomNavigation/Schedule';
 import NavigationScreen from '../screens/BottomNavigation/Navigation';
 import HomeScreen from '../screens/BottomNavigation/Home';
 import { THEME_COLORS } from '../constants/colors';
 import { CalendarDaysIcon, HomeIcon, Squares2X2Icon } from 'react-native-heroicons/outline';
+import PCSPortal from '../screens/OtherScreens/PCSPortal';
+import NavigationPortal from '../screens/OtherScreens/NavigationPortal';
+import GeneralInformation from '../screens/OtherScreens/GeneralInformation';
+import SpeakersScreen from '../screens/OtherScreens/SpeakersScreen';
+import SpeakerDetails from '../screens/OtherScreens/SpeakerDetails';
+import SessionDetails from '../screens/OtherScreens/SessionDetails';
+import ScheduleScreen from '../screens/OtherScreens/ScheduleScreen';
+import SponsersScreens from '../screens/OtherScreens/SponsersScreens';
+import GeneralInformationScreen from '../screens/OtherScreens/GeneralInformationScreen';
 
 // Create a bottom tab navigator
 const BottomTabs = createBottomTabNavigator();
@@ -65,12 +73,22 @@ export default function AppNavigation() {
     return (
         <NavigationContainer>
             <MainScreens.Navigator initialRouteName='Splash' screenOptions={{ headerShown: false }}>
+                {/* <MainScreens.Navigator initialRouteName='GeneralInformation' screenOptions={{ headerShown: false }}> */}
                 <MainScreens.Screen name='Splash' component={SplashScreen} />
                 <MainScreens.Screen name='Login' component={LoginScreen} />
                 <MainScreens.Screen name='Signup' component={SignupScreen} />
                 <MainScreens.Screen name='Verification' component={VerificationScreen} />
                 <MainScreens.Screen name='Forgot' component={ResetPasswordScreen} />
                 <MainScreens.Screen name='Dashboard' component={Dashboard} />
+                <MainScreens.Screen name='PCSPortal' component={PCSPortal} />
+                <MainScreens.Screen name='NavigationPortal' component={NavigationPortal} />
+                <MainScreens.Screen name='EventInfo' component={GeneralInformation} />
+                <MainScreens.Screen name='SpeakersScreen' component={SpeakersScreen} />
+                <MainScreens.Screen name='SpeakerDetails' component={SpeakerDetails} />
+                <MainScreens.Screen name='SessionDetails' component={SessionDetails} />
+                <MainScreens.Screen name='ScheduleScreen' component={ScheduleScreen} />
+                <MainScreens.Screen name='SponsersScreens' component={SponsersScreens} />
+                <MainScreens.Screen name='GeneralInformation' component={GeneralInformationScreen} />
                 {/*<MainScreens.Screen name='RecipeDetail' component={RecipeDetails} /> */}
             </MainScreens.Navigator>
         </NavigationContainer>
