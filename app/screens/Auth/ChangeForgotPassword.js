@@ -10,25 +10,31 @@ import { ArrowLeftIcon } from 'react-native-heroicons/outline'
 import CustomButton from './components/CustomButton'
 import Toast from 'react-native-toast-message'
 import { postRequest } from '../../helpers/APIRequest'
-import { forgot_password_url } from '../../constants/APIEndpoints'
+import { change_forgot_password_url } from '../../constants/APIEndpoints'
 
-export default function ResetPasswordScreen({ navigation }) {
-    const [email, setEmail] = useState('');
+export default function ChangeForgotPassword({ navigation, route }) {
+    const email = route?.params?.email
+    const [password, setPassword] = useState('');
     const [errors, setErrors] = useState({});
+    const [confirm_password, setConfirmPassword] = useState("");
     const [isLoading, setIsLoading] = useState(false)
 
-    // Validate email format
-    const validateEmail = (email) => {
-        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return re.test(String(email).toLowerCase());
+    // Password length must be 6
+    const validatePasswordLength = (password) => {
+        return password.length >= 6;
     };
 
     function validateData() {
         let isValid = true;
         let tempError = { ...errors };
 
-        if (!validateEmail(email)) {
-            tempError = { ...tempError, email: 'Invalid email address' };
+        if (!validatePasswordLength(password.trim())) {
+            tempError = { ...tempError, password: 'Password must be at least 6 characters long.' };
+            isValid = false;
+        }
+
+        if (password.trim() !== confirm_password.trim()) {
+            tempError = { ...tempError, confirm_password: 'Confirm Password must be matched with password.' };
             isValid = false;
         }
         setErrors(tempError)
@@ -40,25 +46,27 @@ export default function ResetPasswordScreen({ navigation }) {
         if (validateData()) {
             let data = new FormData();
             data.append('email', email);
+            data.append('new_password', password.trim());
 
-            await postRequest(forgot_password_url, data, null).then(async response => {
-                console.log("Response:::", response)
+            await postRequest(change_forgot_password_url, data, null).then(async response => {
                 if (response.status) {
                     Toast.show({
                         type: 'success',
-                        text1: 'Reset Password',
+                        text1: 'Change Password',
                         text2: response.message
                     });
-                    navigation.navigate({ name: 'Verification', params: { email } })
+                    navigation.reset({
+                        index: 0,
+                        routes: [{ name: 'Login' }],
+                    });
                 }
                 else {
                     Toast.show({
                         type: 'error',
-                        text1: 'Reset Password',
+                        text1: 'Change Password',
                         text2: response.message
                     });
                 }
-
                 setIsLoading(false)
             }).catch(error => {
                 console.log("Error:", error.response?.data)
@@ -86,20 +94,33 @@ export default function ResetPasswordScreen({ navigation }) {
                     <Text
                         className={"mb-4 text-lg font-medium space-y-2"}
                         style={{ color: THEME_COLORS.textColor, fontSize: hp(2.5), fontFamily: "Poppins-Medium" }}
-                    >{GlbalLocale.reset_password}
+                    >{GlbalLocale.set_new_password}
                     </Text>
                     <Text
                         className={"mb-4 text-lg font-medium"}
                         style={{ color: THEME_COLORS.textColor, fontSize: hp(2), fontFamily: "Poppins-Regular" }}
-                    >{`Please enter your email address to request a password reset`}
+                    >{`Please enter your new Password`}
                     </Text>
                 </View>
-                {/* Email Input */}
+                {/* Password Input */}
                 <CustomInput
-                    placeholder={GlbalLocale.email}
-                    value={email}
-                    setValue={setEmail}
-                    name='email'
+                    placeholder={GlbalLocale.password_placeholder}
+                    value={password}
+                    setValue={setPassword}
+                    isSecured={true}
+                    name='password'
+                    error={errors.password}
+                    classes={"my-2"}
+                />
+
+                {/* Password Input */}
+                <CustomInput
+                    placeholder={GlbalLocale.confirm_password}
+                    value={confirm_password}
+                    setValue={setConfirmPassword}
+                    isSecured={true}
+                    name='password'
+                    error={errors.confirm_password}
                     classes={"my-2"}
                 />
 

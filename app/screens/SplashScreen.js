@@ -4,18 +4,52 @@ import { StatusBar } from 'expo-status-bar';
 import AppIcon from '../../assets/AppIcon';
 import { useNavigation } from '@react-navigation/native';
 import { THEME_COLORS } from '../constants/colors';
+import { useDispatch, useSelector } from 'react-redux';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { getRequest } from '../helpers/APIRequest';
+import { get_profile } from '../constants/APIEndpoints';
+import { setAuth, setIsAuthorized } from '../redux/AuthSlice';
 
 
 export default function SplashScreen() {
-
+    const dispatch = useDispatch();
+    const { isAuthorized } = useSelector((state) => state?.AuthStore);
     const navigation = useNavigation();
 
     useEffect(() => {
-        setTimeout(() => {
-            // toggleColorScheme()
-            navigation.replace("Login")
-        }, 2500)
+        getTokenOrProceed()
     }, [])
+
+
+    async function getTokenOrProceed() {
+        const token = await AsyncStorage.getItem('token');
+        if (token) {
+            getUserData(token);
+        }
+        else
+            setTimeout(() => {
+                // toggleColorScheme()
+                navigation.replace("Login")
+            }, 2500)
+    }
+
+    async function getUserData(token) {
+        await getRequest(get_profile, token).then(respponse => {
+            if (respponse.status) {
+                dispatch(setAuth(respponse.data?.profile));
+                dispatch(setIsAuthorized(true));
+                navigation.replace("Dashboard")
+            }
+            else {
+                setTimeout(() => {
+                    // toggleColorScheme()
+                    navigation.replace("Login")
+                }, 2500)
+            }
+        }).catch(error => {
+            console.log("Error GEt Profile::", error)
+        })
+    }
 
     // const base64Svg = base64Encode(SplashBg());
     return (

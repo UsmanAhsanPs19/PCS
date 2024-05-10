@@ -2,7 +2,10 @@ import { useState } from 'react';
 import AppNavigation from './app/navigation';
 import useFont from './hooks/useFont';
 import AppLoading from 'expo-app-loading';
+import { Provider } from 'react-redux';
 import { SafeAreaView } from 'react-native';
+import Toast from 'react-native-toast-message';
+import { store } from './app/redux/store';
 
 export default function App() {
   const [isFontReady, setIsFontReady] = useState(false);
@@ -24,8 +27,11 @@ export default function App() {
   }
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <AppNavigation />
-    </SafeAreaView>
+    <Provider store={store}>
+      <SafeAreaView style={{ flex: 1 }}>
+        <AppNavigation />
+        <Toast />
+      </SafeAreaView>
+    </Provider>
   );
 }

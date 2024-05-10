@@ -1,23 +1,32 @@
 import { View, Text, TextInput, TouchableOpacity } from 'react-native'
 import React, { useState } from 'react'
 import { heightPercentageToDP as hp } from "react-native-responsive-screen"
-import { EnvelopeIcon, EyeIcon, EyeSlashIcon, LockClosedIcon, UserIcon } from 'react-native-heroicons/outline'
+import { AcademicCapIcon, BriefcaseIcon, BuildingOfficeIcon, EnvelopeIcon, EyeIcon, EyeSlashIcon, GlobeAltIcon, LockClosedIcon, PhoneIcon, UserIcon } from 'react-native-heroicons/outline'
 import { THEME_COLORS } from '../constants/colors';
 
-export default function CustomInput({ name = "", classes, value = "", setValue, style, placeholder = "", isSecured = false, error = null }) {
+export default function CustomInput({ name = "", classes, value = "", setValue, style, placeholder = "", isSecured = false, error = null, keyboardType = "default" }) {
     const [secure, setSecure] = useState(isSecured);
     return (
         <View>
             <View className={`flex-row border rounded-lg p-3 space-x-2 items-center justify-between ${classes}`}
                 style={[style, { borderColor: error ? "red" : THEME_COLORS.BORDER_COLOR }]}
             >
-                <View className={`w-4/5 flex-row space-x-2 items-center`}>
+                <View className={`w-4/5 flex-row space-x-2 justify-center items-center`}>
                     {name === "email" && <EnvelopeIcon size={hp(3)}
-
                         color={THEME_COLORS.ICON_COLOR} />}
                     {name === "password" && <LockClosedIcon size={hp(3)}
                         color={THEME_COLORS.ICON_COLOR} />}
                     {name === "username" && <UserIcon size={hp(3)}
+                        color={THEME_COLORS.ICON_COLOR} />}
+                    {name === "country" && <GlobeAltIcon size={hp(3)}
+                        color={THEME_COLORS.ICON_COLOR} />}
+                    {name === "phone_number" && <PhoneIcon size={hp(3)}
+                        color={THEME_COLORS.ICON_COLOR} />}
+                    {name === "profession" && <AcademicCapIcon size={hp(3)}
+                        color={THEME_COLORS.ICON_COLOR} />}
+                    {name === "place_of_work" && <BuildingOfficeIcon size={hp(3)}
+                        color={THEME_COLORS.ICON_COLOR} />}
+                    {name === "department" && <BriefcaseIcon size={hp(3)}
                         color={THEME_COLORS.ICON_COLOR} />}
                     <TextInput
                         className={`flex-1`}
@@ -25,7 +34,7 @@ export default function CustomInput({ name = "", classes, value = "", setValue, 
                         onChangeText={text => {
                             setValue(text)
                         }}
-                        keyboardType='default' //phone-pad, numeric, default, email-address
+                        keyboardType={keyboardType} //phone-pad, numeric, default, email-address
                         cursorColor={THEME_COLORS.PRIMARY_COLOR}
                         secureTextEntry={secure}
                         placeholder={placeholder}

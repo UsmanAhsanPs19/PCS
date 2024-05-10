@@ -23,6 +23,7 @@ import SessionDetails from '../screens/OtherScreens/SessionDetails';
 import ScheduleScreen from '../screens/OtherScreens/ScheduleScreen';
 import SponsersScreens from '../screens/OtherScreens/SponsersScreens';
 import GeneralInformationScreen from '../screens/OtherScreens/GeneralInformationScreen';
+import ChangeForgotPassword from '../screens/Auth/ChangeForgotPassword';
 
 // Create a bottom tab navigator
 const BottomTabs = createBottomTabNavigator();
@@ -79,6 +80,7 @@ export default function AppNavigation() {
                 <MainScreens.Screen name='Signup' component={SignupScreen} />
                 <MainScreens.Screen name='Verification' component={VerificationScreen} />
                 <MainScreens.Screen name='Forgot' component={ResetPasswordScreen} />
+                <MainScreens.Screen name='ChangePassword' component={ChangeForgotPassword} />
                 <MainScreens.Screen name='Dashboard' component={Dashboard} />
                 <MainScreens.Screen name='PCSPortal' component={PCSPortal} />
                 <MainScreens.Screen name='NavigationPortal' component={NavigationPortal} />

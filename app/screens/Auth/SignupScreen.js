@@ -8,15 +8,27 @@ import { GlbalLocale } from '../../constants/locale'
 import CustomInput from '../../components/CustomInput'
 import { ArrowLeftIcon } from 'react-native-heroicons/solid'
 import CustomButton from './components/CustomButton'
+import { Picker } from '@react-native-picker/picker'
+import { postRequest } from '../../helpers/APIRequest'
+import { signup_url } from '../../constants/APIEndpoints'
+import Toast from 'react-native-toast-message';
 
 export default function SignupScreen({ navigation }) {
-    const [username, setUsername] = useState("");
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
     const [email, setEmail] = useState('');
-    const [confirm_email, setConfirmEmail] = useState('');
+    const [profession, setProfession] = useState('');
+    const [place_of_work, setPlaceOfWork] = useState('');
+    const [department, setDepartment] = useState('');
+    const [country, setCountry] = useState('');
+    const [phone_number, setPhoneNumber] = useState('');
     const [password, setPassword] = useState("");
     const [confirm_password, setConfirmPassword] = useState("");
     const [isLoading, setIsLoading] = useState(false)
-    const [errors, setErrors] = useState({})
+    const [errors, setErrors] = useState({});
+    const [selected_title, setSelectedTitle] = useState("Mr.")
+    const [selected_gender, setSelectedGender] = useState("Male")
+
 
     // Validate email format
     const validateEmail = (email) => {
@@ -44,13 +56,63 @@ export default function SignupScreen({ navigation }) {
         let isValid = true;
         let tempError = { ...errors };
 
-        if (username.trim() === "") {
-            tempError = { ...tempError, username: 'Full name is required' };
+        if (firstName.trim() === "") {
+            tempError = { ...tempError, firstName: 'Full name is required' };
+            isValid = false;
+        }
+        if (lastName.trim() === "") {
+            tempError = { ...tempError, lastName: 'Full name is required' };
+            isValid = false;
+        }
+        if (profession.trim() === "") {
+            tempError = { ...tempError, profession: 'Profession field is required' };
+            isValid = false;
+        }
+        if (place_of_work.trim() === "") {
+            tempError = { ...tempError, place_of_work: 'Place of work field is required' };
+            isValid = false;
+        }
+        if (department.trim() === "") {
+            tempError = { ...tempError, department: 'Department field is required' };
             isValid = false;
         }
 
-        if (!validateFullName(username)) {
-            tempError = { ...tempError, username: 'Full name should not contain numbers' };
+        if (country.trim() === "") {
+            tempError = { ...tempError, country: 'Country is required' };
+            isValid = false;
+        }
+
+        if (phone_number.trim() === "") {
+            tempError = { ...tempError, phone_number: 'Phone number is required' };
+            isValid = false;
+        }
+
+        if (!validateFullName(firstName)) {
+            tempError = { ...tempError, firstName: 'Full name should not contain numbers' };
+            isValid = false;
+        }
+        if (!validateFullName(lastName)) {
+            tempError = { ...tempError, lastName: 'Full name should not contain numbers' };
+            isValid = false;
+        }
+
+        if (!validateFullName(profession)) {
+            tempError = { ...tempError, profession: 'Profession should not contain numbers' };
+            isValid = false;
+        }
+
+        if (!validateFullName(place_of_work)) {
+            tempError = { ...tempError, profession: 'Place of work should not contain numbers' };
+            isValid = false;
+        }
+
+        if (!validateFullName(department)) {
+            tempError = { ...tempError, profession: 'Department should not contain numbers' };
+            isValid = false;
+        }
+
+        if (!validateFullName(country)) {
+            tempError = { ...tempError, profession: 'Country should not contain numbers' };
             isValid = false;
         }
 
@@ -73,14 +135,47 @@ export default function SignupScreen({ navigation }) {
     }
 
 
-    function validateAndSubmit() {
+    async function validateAndSubmit() {
         clearError();
         setIsLoading(true);
         if (handleValidation()) {
-            navigation.navigate('Verification')
+            // navigation.navigate('Verification')
             //API calling here
+            let data = new FormData();
+            data.append('title', selected_title);
+            data.append('gender', selected_gender);
+            data.append('first_name', firstName);
+            data.append('last_name', lastName);
+            data.append('profession', profession);
+            data.append('place_of_work', place_of_work);
+            data.append('department', department);
+            data.append('country', country);
+            data.append('phone_number', phone_number);
+            data.append('email', email);
+            data.append('password', password);
 
-            setIsLoading(false)
+            await postRequest(signup_url, data, null).then(response => {
+                console.log("Response:::", response)
+                if (response.status) {
+                    Toast.show({
+                        type: 'success',
+                        text1: 'Signup',
+                        text2: response.message
+                    });
+                    navigation.goBack();
+                }
+                else {
+                    Toast.show({
+                        type: 'error',
+                        text1: 'Signup',
+                        text2: response.message
+                    });
+                }
+                setIsLoading(false)
+            }).catch(error => {
+                console.log("Error:", error.response.data)
+                setIsLoading(false)
+            })
         }
         setIsLoading(false)
     }
@@ -88,11 +183,13 @@ export default function SignupScreen({ navigation }) {
     return (
         <View
             style={{ backgroundColor: THEME_COLORS.BG_COLOR }}
-            className="flex-1 items-center pt-20"
+            className="flex-1 items-center pt-10"
         >
             <StatusBar style={'dark'} />
             {/* View for input fields & login button */}
-            <ScrollView>
+            <ScrollView
+                showsVerticalScrollIndicator={false}
+            >
                 <View className="space-y-4">
                     <ArrowLeftIcon
                         onPress={() => {
@@ -108,15 +205,121 @@ export default function SignupScreen({ navigation }) {
                         >{GlbalLocale.signup}
                         </Text>
                     </View>
-                    {/* User name Input */}
+
+                    {/* Dropdown for title inputs */}
+                    <View className="border rounded-lg"
+                        style={{
+                            borderColor: THEME_COLORS.BORDER_COLOR
+                        }}
+                    >
+                        <Picker
+                            className=""
+                            selectionColor={THEME_COLORS.PRIMARY_COLOR}
+                            selectedValue={selected_title}
+                            shouldRasterizeIOS
+                            onValueChange={(itemValue, itemIndex) =>
+                                setSelectedTitle(itemValue)
+                            }
+                        >
+                            <Picker.Item label="Mr." value="Mr." />
+                            <Picker.Item label="Mrs." value="Mrs." />
+                            <Picker.Item label="Miss" value="Miss" />
+                            <Picker.Item label="Dr." value="Dr." />
+                            <Picker.Item label="Prof." value="Prof." />
+                        </Picker>
+                    </View>
+
+                    {/* First name Input */}
                     <CustomInput
-                        placeholder={GlbalLocale.fullname}
-                        value={username}
-                        setValue={setUsername}
+                        placeholder={GlbalLocale.firstName}
+                        value={firstName}
+                        setValue={setFirstName}
                         name='username'
-                        error={errors.username}
+                        error={errors.firstName}
                         classes={"my-2"}
                     />
+
+                    {/* Last name Input */}
+                    <CustomInput
+                        placeholder={GlbalLocale.lastName}
+                        value={lastName}
+                        setValue={setLastName}
+                        name='username'
+                        error={errors.lastName}
+                        classes={"my-2"}
+                    />
+
+                    {/* Gender details */}
+                    <View className="border rounded-lg"
+                        style={{
+                            borderColor: THEME_COLORS.BORDER_COLOR
+                        }}
+                    >
+                        <Picker
+                            className=""
+                            selectionColor={THEME_COLORS.PRIMARY_COLOR}
+                            selectedValue={selected_title}
+                            shouldRasterizeIOS
+                            onValueChange={(itemValue, itemIndex) =>
+                                setSelectedTitle(itemValue)
+                            }
+                        >
+                            <Picker.Item label="Male" value="Male" />
+                            <Picker.Item label="Female" value="Female" />
+                        </Picker>
+                    </View>
+
+                    {/* Profession Input */}
+                    <CustomInput
+                        placeholder={GlbalLocale.profession}
+                        value={profession}
+                        setValue={setProfession}
+                        name='profession'
+                        error={errors.profession}
+                        classes={"my-2"}
+                    />
+
+                    {/* Place of work Input */}
+                    <CustomInput
+                        placeholder={GlbalLocale.place_of_work}
+                        value={place_of_work}
+                        setValue={setPlaceOfWork}
+                        name='place_of_work'
+                        error={errors.place_of_work}
+                        classes={"my-2"}
+                    />
+
+                    {/* Department Input */}
+                    <CustomInput
+                        placeholder={GlbalLocale.department}
+                        value={department}
+                        setValue={setDepartment}
+                        name='department'
+                        error={errors.department}
+                        classes={"my-2"}
+                    />
+
+                    {/* Country Input */}
+                    <CustomInput
+                        placeholder={GlbalLocale.country}
+                        value={country}
+                        setValue={setCountry}
+                        name='country'
+                        error={errors.country}
+                        classes={"my-2"}
+                    />
+
+                    {/* Phone Number Input */}
+                    <CustomInput
+                        placeholder={GlbalLocale.phone_number}
+                        value={phone_number}
+                        setValue={setPhoneNumber}
+                        name='phone_number'
+                        keyboardType='numeric'
+                        error={errors.phone_number}
+                        classes={"my-2"}
+                    />
+
                     {/* Email Input */}
                     <CustomInput
                         placeholder={GlbalLocale.email}
@@ -166,28 +369,32 @@ export default function SignupScreen({ navigation }) {
                         />
                     </View>
                 </View>
-            </ScrollView>
-            {/* View to show the signup text */}
-            <View
-                className="flex-row justify-center items-center mb-3"
-            >
-                <Text
-                    className={"text-lg font-medium space-y-2"}
-                    style={{ color: THEME_COLORS.textColor, fontSize: hp(2), fontFamily: "Poppins-Regular" }}
-                >{GlbalLocale.have_account}
-                </Text>
-                <TouchableOpacity
-                    onPress={() => {
-                        navigation.goBack()
-                    }}
+                {/* View to show the signup text */}
+                <View
+                    className="flex-row justify-center items-center mb-3"
                 >
                     <Text
                         className={"text-lg font-medium space-y-2"}
-                        style={{ color: THEME_COLORS.PRIMARY_COLOR, fontSize: hp(2), fontFamily: "Poppins-Medium" }}
-                    >{GlbalLocale.signin}!
+                        style={{ color: THEME_COLORS.textColor, fontSize: hp(2), fontFamily: "Poppins-Regular" }}
+                    >{GlbalLocale.have_account}
                     </Text>
-                </TouchableOpacity>
-            </View>
+                    <TouchableOpacity
+                        onPress={() => {
+                            navigation.goBack()
+                        }}
+                    >
+                        <Text
+                            className={"text-lg font-medium space-y-2"}
+                            style={{ color: THEME_COLORS.PRIMARY_COLOR, fontSize: hp(2), fontFamily: "Poppins-Medium" }}
+                        >{GlbalLocale.signin}!
+                        </Text>
+                    </TouchableOpacity>
+                </View>
+            </ScrollView>
+
+            {/* <PopupMessage
+                visible={true}
+            /> */}
         </View>
     )
 }
