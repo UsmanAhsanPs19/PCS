@@ -18,7 +18,16 @@ export default function SplashScreen() {
 
     useEffect(() => {
         getTokenOrProceed()
-    }, [])
+    }, [isAuthorized])
+
+    // useEffect(() => {
+    //     if (!isAuthorized) {
+    //         navigation.reset({
+    //             index: 0,
+    //             routes: [{ name: 'Dashboard' }],
+    //         });
+    //     }
+    // }, [isAuthorized])
 
 
     async function getTokenOrProceed() {
@@ -29,7 +38,10 @@ export default function SplashScreen() {
         else
             setTimeout(() => {
                 // toggleColorScheme()
-                navigation.replace("Login")
+                navigation.reset({
+                    index: 0,
+                    routes: [{ name: 'Dashboard' }],
+                });
             }, 2500)
     }
 

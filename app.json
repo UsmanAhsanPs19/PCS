@@ -41,6 +41,12 @@
             "./assets/fonts/poppins_thin.ttf"
           ]
         }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "The app accesses your photos to use it for your identification."
+        }
       ]
     ]
   }

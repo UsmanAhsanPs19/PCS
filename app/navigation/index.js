@@ -24,6 +24,8 @@ import ScheduleScreen from '../screens/OtherScreens/ScheduleScreen';
 import SponsersScreens from '../screens/OtherScreens/SponsersScreens';
 import GeneralInformationScreen from '../screens/OtherScreens/GeneralInformationScreen';
 import ChangeForgotPassword from '../screens/Auth/ChangeForgotPassword';
+import ModifyAccount from '../screens/OtherScreens/ModifyAccount';
+import RegisterForConference from '../screens/OtherScreens/RegisterForConference';
 
 // Create a bottom tab navigator
 const BottomTabs = createBottomTabNavigator();
@@ -81,6 +83,7 @@ export default function AppNavigation() {
                 <MainScreens.Screen name='Verification' component={VerificationScreen} />
                 <MainScreens.Screen name='Forgot' component={ResetPasswordScreen} />
                 <MainScreens.Screen name='ChangePassword' component={ChangeForgotPassword} />
+                <MainScreens.Screen name='UpdateProfile' component={ModifyAccount} />
                 <MainScreens.Screen name='Dashboard' component={Dashboard} />
                 <MainScreens.Screen name='PCSPortal' component={PCSPortal} />
                 <MainScreens.Screen name='NavigationPortal' component={NavigationPortal} />
@@ -91,6 +94,7 @@ export default function AppNavigation() {
                 <MainScreens.Screen name='ScheduleScreen' component={ScheduleScreen} />
                 <MainScreens.Screen name='SponsersScreens' component={SponsersScreens} />
                 <MainScreens.Screen name='GeneralInformation' component={GeneralInformationScreen} />
+                <MainScreens.Screen name='RegisterForConference' component={RegisterForConference} />
                 {/*<MainScreens.Screen name='RecipeDetail' component={RecipeDetails} /> */}
             </MainScreens.Navigator>
         </NavigationContainer>

@@ -7,7 +7,7 @@ import AppIcon from '../../../assets/AppIcon'
 import { GlbalLocale } from '../../constants/locale'
 import { CalendarIcon, EnvelopeIcon, GlobeAltIcon, MapPinIcon, PhoneIcon } from 'react-native-heroicons/solid'
 
-export default function GeneralInformationScreen() {
+export default function GeneralInformationScreen({ navigation }) {
     return (
         <View
             style={{ backgroundColor: THEME_COLORS.PRIMARY_COLOR_DARK }}

@@ -1,12 +1,56 @@
-import { View, Text, ScrollView, Image, TouchableOpacity } from 'react-native'
-import React from 'react'
+import { View, Text, ScrollView, Image, TouchableOpacity, FlatList, ActivityIndicator } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import { THEME_COLORS } from '../../constants/colors'
-import { heightPercentageToDP as hp } from 'react-native-responsive-screen'
+import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen'
 import { StatusBar } from 'expo-status-bar'
 import { GlbalLocale } from '../../constants/locale'
 import HomeHeader from './components/header'
 import { navigation_section_data, pcs_portal_data, speakers_data, sponers_data } from '../../constants/data'
+import { MEDIA_BASE_URL, getRequest } from '../../helpers/APIRequest'
+import { top_speakers_url, top_sponsers_url } from '../../constants/APIEndpoints'
+import { UserCircleIcon } from 'react-native-heroicons/solid'
+import { useSelector } from 'react-redux'
 export default function HomeScreen({ navigation }) {
+    const { isAuthorized } = useSelector((state) => state?.AuthStore);
+    const [speakers_loading, setSpeakersLoading] = useState(false);
+    const [sponsers_loading, setSponsersLoading] = useState(false);
+    const [top_speakers, setTopSpeakers] = useState([]);
+    const [top_sponsers, setTopSponsers] = useState([]);
+
+    useEffect(() => {
+        getSpeakers();
+        getSponsers();
+    }, [])
+
+    // Get list of top speakers
+    async function getSpeakers() {
+        setSpeakersLoading(true);
+        await getRequest(top_speakers_url).then(response => {
+            console.log("getSpeakers Data::", response)
+            if (response.status && response.data) {
+                setTopSpeakers(response.data)
+            }
+            setSpeakersLoading(false)
+        }).catch(error => {
+            console.log("getSpeakers Error:::", error)
+            setSpeakersLoading(false)
+        })
+    }
+
+    // Get list of top sponsers
+    async function getSponsers() {
+        setSponsersLoading(true);
+        await getRequest(top_sponsers_url).then(response => {
+            console.log("getSponsers Data::", response)
+            if (response.status && response.data) {
+                setTopSponsers(response.data)
+            }
+            setSponsersLoading(false)
+        }).catch(error => {
+            console.log("getSponsers Error:::", error)
+            setSponsersLoading(false)
+        })
+    }
 
     return (
         <View className="flex-1" style={{ backgroundColor: THEME_COLORS.BG_DASHBOARD }}>
@@ -56,10 +100,15 @@ export default function HomeScreen({ navigation }) {
                                 </TouchableOpacity>
                             </View>
                             {/* Portal section after login */}
-                            <View className="mx-1 space-y-2">
+                            {isAuthorized && <View className="mx-1 space-y-2">
                                 {/* Row 1 */}
                                 <View className=" flex-row items-center justify-center space-x-3">
-                                    {pcs_portal_data.firstData.map(d => (<View
+                                    {pcs_portal_data.firstData.map(d => (<TouchableOpacity
+                                        onPress={() => {
+                                            if (d.screenName) {
+                                                navigation.navigate(d.screenName)
+                                            }
+                                        }}
                                         style={{
                                             elevation: 3,
                                             shadowColor: '#000',
@@ -83,7 +132,7 @@ export default function HomeScreen({ navigation }) {
                                                 fontSize: hp(0.8),
                                                 backgroundColor: THEME_COLORS.PRIMARY_COLOR
                                             }}>Edit Submission</Text>}
-                                    </View>))}
+                                    </TouchableOpacity>))}
                                 </View>
                                 {/* Row 2 */}
                                 <View className="w-full flex-row items-center justify-center space-x-3">
@@ -113,7 +162,26 @@ export default function HomeScreen({ navigation }) {
                                             }}>Edit Submission</Text>}
                                     </View>))}
                                 </View>
-                            </View>
+                            </View>}
+                            {!isAuthorized && <TouchableOpacity
+                                onPress={() => {
+                                    navigation.navigate('Login')
+                                }}
+                                className="space-y-2 rounded-xl p-4 items-center justify-center"
+                                style={{
+                                    height: hp('20%'),
+                                    backgroundColor: THEME_COLORS.PRIMARY_COLOR_DARK
+                                }}
+                            >
+                                <UserCircleIcon color={"white"} size={hp(10)} />
+                                <Text
+                                    className={"text-sm font-normal text-center"}
+                                    style={{ color: "white", fontFamily: "Poppins-Regular" }}
+                                >
+                                    {GlbalLocale.login_dashboard_text}
+                                </Text>
+
+                            </TouchableOpacity>}
                         </View>
 
                         {/* Navigation section */}
@@ -138,41 +206,34 @@ export default function HomeScreen({ navigation }) {
                                 </TouchableOpacity>
                             </View>
                             {/* Navigation Container Content */}
-                            <View className="mx-1 space-y-2">
-                                {/* Row 1 */}
-                                <View className=" flex-row items-center justify-center space-x-2">
-                                    {navigation_section_data.firstData.map(d => (<View
-                                        style={{
-                                            height: hp('12%'),
-                                            backgroundColor: THEME_COLORS.PRIMARY_COLOR_DARK
-                                        }}
-                                        className="w-1/2 flex-1 p-3 bg-white items-center justify-center rounded-xl">
-                                        {d.icon}
-                                        <Text className="text-center mt-1"
+                            <View className="">
+                                <FlatList
+                                    disableVirtualization
+                                    data={navigation_section_data}
+                                    numColumns={2}
+                                    renderItem={({ item, index }) => (
+                                        <TouchableOpacity
+                                            key={index}
+                                            onPress={() => {
+                                                if (item.screenName) {
+                                                    navigation.navigate(item.screenName)
+                                                }
+                                            }}
                                             style={{
-                                                color: "white",
-                                                fontFamily: "Poppins-Medium",
-                                            }}>{d.text}</Text>
-                                    </View>))}
-                                </View>
-                                {/* Row 2 */}
-                                <View className=" flex-row items-center justify-center space-x-2">
-                                    {navigation_section_data.secondData.map(d => (<View
-                                        style={{
-                                            height: hp('12%'),
-                                            backgroundColor: THEME_COLORS.PRIMARY_COLOR_DARK
-                                        }}
-                                        className="w-1/2 flex-1 p-3 bg-white items-center justify-center rounded-xl">
-                                        {d.icon}
-                                        <Text className="text-center mt-1"
-                                            style={{
-                                                color: "white",
-                                                fontFamily: "Poppins-Medium",
-                                            }}>{d.text}</Text>
-                                    </View>))}
-                                </View>
+                                                height: hp('12%'),
+                                                backgroundColor: THEME_COLORS.PRIMARY_COLOR_DARK
+                                            }}
+                                            className={`flex-1 ${(index + 1) / 2 == 0 ? "ml-2" : "mr-2"} mb-2 p-3 bg-white items-center justify-center rounded-xl`}>
+                                            {item.icon}
+                                            <Text className="text-center mt-1"
+                                                style={{
+                                                    color: "white",
+                                                    fontFamily: "Poppins-Medium",
+                                                }}>{item.text}</Text>
+                                        </TouchableOpacity>
+                                    )}
+                                />
                             </View>
-
                         </View>
 
                         {/* Speakers section */}
@@ -184,76 +245,67 @@ export default function HomeScreen({ navigation }) {
                                     style={{ color: THEME_COLORS.textColor, fontFamily: "Poppins-Medium" }}
                                 >{GlbalLocale.speakers_label}
                                 </Text>
-                                <Text
-                                    className={""}
-                                    style={{ fontSize: hp(1.5), color: THEME_COLORS.PRIMARY_DARK, fontFamily: "Poppins-SemiBold" }}
-                                >See all
-                                </Text>
+                                <TouchableOpacity
+                                    onPress={() => {
+                                        navigation.navigate("SpeakersScreen")
+                                    }}
+                                >
+                                    <Text
+                                        className={""}
+                                        style={{ fontSize: hp(1.5), color: THEME_COLORS.PRIMARY_DARK, fontFamily: "Poppins-SemiBold" }}
+                                    >See all
+                                    </Text>
+                                </TouchableOpacity>
                             </View>
                             {/* Speakers Container Content */}
-                            <View className="mx-1 space-y-2">
-                                {/* Row 1 */}
-                                <View className=" flex-row items-center justify-center space-x-2">
-                                    {speakers_data.firstData.map(d => (<View
-                                        style={{
-                                            height: hp('8%'),
-                                            backgroundColor: THEME_COLORS.PRIMARY_COLOR_DARK
-                                        }}
-                                        className="w-1/2 flex-row bg-white items-center justify-center rounded-xl">
-                                        <Image
-                                            className="rounded-lg"
-                                            style={{ height: "100%" }}
-                                            source={d.image}
-                                        />
-                                        <View className="px-1 flex-1">
-                                            <Text className="text-center"
-                                                numberOfLines={1}
+                            <View className="space-y-1">
+                                <FlatList
+                                    disableVirtualization
+                                    data={top_speakers}
+                                    ListHeaderComponent={
+                                        speakers_loading && <View className="space-y-1 my-2 flex justify-center items-center">
+                                            <ActivityIndicator color={THEME_COLORS.PRIMARY_DARK} size={"large"} />
+                                            <Text
                                                 style={{
-                                                    color: "white",
-                                                    fontSize: hp(1.3),
-                                                    fontFamily: "Poppins-SemiBold",
-                                                }}>{d.name}</Text>
-                                            <Text className="text-center"
-                                                numberOfLines={2}
-                                                style={{
-                                                    color: "white",
-                                                    fontFamily: "Poppins-Regular",
-                                                    fontSize: hp(0.9)
-                                                }}>{d.designation}</Text>
+                                                    color: THEME_COLORS.GRAY_TEXT,
+                                                    fontFamily: "Poppins-Regular"
+                                                }}>Please wait...</Text>
                                         </View>
-                                    </View>))}
-                                </View>
-                                {/* Row 2 */}
-                                <View className=" flex-row items-center justify-center space-x-2">
-                                    {speakers_data.secondData.map(d => (<View
-                                        style={{
-                                            height: hp('8%'),
-                                            backgroundColor: THEME_COLORS.PRIMARY_COLOR_DARK
-                                        }}
-                                        className="w-1/2 flex-row bg-white items-center justify-center rounded-xl">
-                                        <Image
-                                            className="rounded-lg"
-                                            style={{ height: "100%", }}
-                                            source={d.image}
-                                        />
-                                        <View className="px-1 flex-1">
-                                            <Text className="text-center"
-                                                numberOfLines={1}
-                                                style={{
-                                                    color: "white",
-                                                    fontSize: hp(1.3),
-                                                    fontFamily: "Poppins-SemiBold",
-                                                }}>{d.name}</Text>
-                                            <Text className="text-center"
-                                                numberOfLines={2}
-                                                style={{
-                                                    color: "white",
-                                                    fontFamily: "Poppins-Regular",
-                                                    fontSize: hp(0.9)
-                                                }}>{d.designation}</Text>
-                                        </View>
-                                    </View>))}
-                                </View>
+                                    }
+                                    numColumns={2}
+                                    renderItem={({ item, index }) => (
+                                        <TouchableOpacity
+                                            style={{
+                                                height: hp('10%'),
+                                                elevation: 3,
+                                                backgroundColor: THEME_COLORS.PRIMARY_COLOR_DARK
+                                            }}
+                                            className={`flex-1 ${(index + 1) / 2 == 0 ? "ml-2" : "mr-2"} mb-2 flex-row bg-white items-center justify-center rounded-xl`}>
+                                            <Image
+                                                className="rounded-lg"
+                                                resizeMode='cover'
+                                                style={{ height: "100%", width: wp('15%') }}
+                                                source={{ uri: `${MEDIA_BASE_URL}/${item.image}` }}
+                                            />
+                                            <View className="px-1 flex-1">
+                                                <Text className="text-center text-sm"
+                                                    numberOfLines={2}
+                                                    style={{
+                                                        color: "white",
+                                                        // fontSize: hp(1.3),
+                                                        fontFamily: "Poppins-SemiBold",
+                                                    }}>{`${item.name}(${item.country})`}</Text>
+                                                <Text className="text-center"
+                                                    numberOfLines={2}
+                                                    style={{
+                                                        color: "white",
+                                                        fontFamily: "Poppins-Regular",
+                                                        fontSize: hp(1)
+                                                    }}>{item.tagline}</Text>
+                                            </View>
+                                        </TouchableOpacity>
+                                    )}
+                                />
                             </View>
                         </View>
                     </View>
@@ -267,22 +319,43 @@ export default function HomeScreen({ navigation }) {
                                 style={{ color: THEME_COLORS.textColor, fontFamily: "Poppins-Medium" }}
                             >{GlbalLocale.sponsers_label}
                             </Text>
-                            <Text
-                                className={""}
-                                style={{ fontSize: hp(1.5), color: THEME_COLORS.PRIMARY_DARK, fontFamily: "Poppins-SemiBold" }}
-                            >See all
-                            </Text>
+                            <TouchableOpacity
+                                onPress={() => {
+                                    navigation.navigate("SponsersScreens")
+                                }}
+                            >
+                                <Text
+                                    className={""}
+                                    style={{ fontSize: hp(1.5), color: THEME_COLORS.PRIMARY_DARK, fontFamily: "Poppins-SemiBold" }}
+                                >See all
+                                </Text>
+                            </TouchableOpacity>
                         </View>
 
                         {/* Sponsers content */}
                         <View className="bg-white flex-wrap w-full p-3 space-x-7 space-y-3 justify-stretch items-center flex-row">
                             {
-                                sponers_data.map(image => (
-                                    <View className="">
-                                        {image}
-                                    </View>
-                                )
-                                )
+                                sponsers_loading ? <View className="space-y-1 flex-1 my-2 flex justify-center items-center">
+                                    <ActivityIndicator color={THEME_COLORS.PRIMARY_DARK} size={"large"} />
+                                    <Text
+                                        style={{
+                                            color: THEME_COLORS.GRAY_TEXT,
+                                            fontFamily: "Poppins-Regular"
+                                        }}>Please wait...</Text>
+                                </View>
+                                    :
+                                    top_sponsers.map((image, index) => (
+                                        <View className="p-3">
+                                            <Image
+                                                key={index}
+                                                resizeMode='contain'
+                                                className=""
+                                                style={{ height: hp(6), width: wp('17%') }}
+                                                source={{ uri: `${MEDIA_BASE_URL}/${image.image}` }}
+                                            />
+                                        </View>
+                                    )
+                                    )
                             }
                         </View>
                     </View>

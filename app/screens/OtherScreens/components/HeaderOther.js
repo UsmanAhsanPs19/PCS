@@ -13,7 +13,7 @@ export default function HeaderOther({ label = "No Label", classes, text_color = 
         >
             {showBack && <ArrowLeftIcon
                 onPress={onPress}
-                size={hp(2)}
+                size={hp(2.5)}
                 color={color_arrow}
             />}
             <Text

@@ -32,7 +32,12 @@ export default function PCSPortal({ navigation }) {
                             justifyContent: 'space-between'
                         }}
                         numColumns={2}
-                        renderItem={({ item, index }) => (<View
+                        renderItem={({ item, index }) => (<TouchableOpacity
+                            onPress={() => {
+                                if (item.screenName) {
+                                    navigation.navigate({ name: item.screenName, params: { forSelf: true } })
+                                }
+                            }}
                             style={{
                                 elevation: 5,
                                 shadowColor: '#000',
@@ -58,7 +63,7 @@ export default function PCSPortal({ navigation }) {
                                     fontSize: hp(0.8),
                                     backgroundColor: THEME_COLORS.PRIMARY_COLOR
                                 }}>Edit Submission</Text>}
-                        </View>)}
+                        </TouchableOpacity>)}
                         keyExtractor={(item, index) => index.toString()}
                         ListFooterComponent={
                             <View

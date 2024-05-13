@@ -17,7 +17,8 @@ import UserIcon from "../../assets/UserIcon"
 export const pcs_portal_data = {
     firstData: [{
         text: "Modify Your Personal Account",
-        icon: <UserIcon />
+        icon: <UserIcon />,
+        screenName: "UpdateProfile"
     },
     {
         text: "Clinical Case",
@@ -46,7 +47,8 @@ export const pcs_portal_data = {
 export const pcs_portal_all_data = [
     {
         text: "Modify Your Personal Account",
-        icon: <UserIcon width={55} height={56} />
+        icon: <UserIcon width={55} height={56} />,
+        screenName: "UpdateProfile"
     },
     {
         text: "Clinical Case",
@@ -80,7 +82,8 @@ export const pcs_portal_all_data = [
     },
     {
         text: "Register For Event",
-        icon: <RegisterEventIcon width={55} height={56} />
+        icon: <RegisterEventIcon width={55} height={56} />,
+        screenName: "RegisterForConference"
     },
     {
         text: "Print Event Card",
@@ -88,60 +91,62 @@ export const pcs_portal_all_data = [
     },
 ];
 
-export const navigation_section_data = {
-    firstData: [{
+export const navigation_section_data = [
+    {
         text: "Schedule",
-        icon: <ScheduleIcon />
+        icon: <ScheduleIcon />,
+        screenName: "ScheduleScreen"
     },
     {
         text: "Speakers",
-        icon: <UserCircleIcon />
-    }],
-    secondData: [{
+        icon: <UserCircleIcon />,
+        screenName: "SpeakersScreen"
+    },
+    {
         text: "Event Information",
-        icon: <EventIcon />
+        icon: <EventIcon />,
+        screenName: "EventInfo"
     },
     {
         text: "General Information",
         isEditable: true,
-        icon: <InfoIcon />
-    },
-    ],
-}
-
-export const navigation_all_data = [
-    "PCS Portal",
-    "Schedule",
-    "Scientific Program",
-    "Speakers",
-    "Sponsers",
-    "FAQs",
-    "General Information",
-    "Register for Cardiocon 2024"
+        icon: <InfoIcon />,
+        screenName: "GeneralInformation"
+    }
 ]
 
-export const speakers_data = {
-    firstData: [{
-        image: require("../../assets/d1.png"),
-        name: "Robert F. Spetzler",
-        designation: "Emeritus Chair Neurosurgery at Barrow Neurological Institute"
-    },
-    {
-        image: require("../../assets/d2.png"),
-        name: "Andres M. Lozono",
-        designation: "MD, PhD, FRCSC, FRSC, FCAHS"
-    }],
-    secondData: [{
-        image: require("../../assets/d3.png"),
-        name: "Micheal T Lawton",
-        designation: "President and CEO Professor and Chair."
-    },
-    {
-        image: require("../../assets/d4.png"),
-        name: "Aeron Cohan-Gadol",
-        designation: "President and CEO, The Neurosurgical Atlas."
-    }]
+export const navigation_all_data = [
+    { name: "PCS Portal", screenName: "PCSPortal" },
+    { name: "Schedule", screenName: "ScheduleScreen" },
+    { name: "Scientific Program", screenName: "" },
+    { name: "Speakers", screenName: "SpeakersScreen" },
+    { name: "Sponsors", screenName: "SponsersScreens" },
+    { name: "FAQs", screenName: "" },
+    { name: "General Information", screenName: "GeneralInformation" },
+    { name: "Register for Cardiocon 2024", screenName: "" }
+]
+
+export const speakers_data = [{
+    image: require("../../assets/d1.png"),
+    name: "Robert F. Spetzler",
+    designation: "Emeritus Chair Neurosurgery at Barrow Neurological Institute"
+},
+{
+    image: require("../../assets/d2.png"),
+    name: "Andres M. Lozono",
+    designation: "MD, PhD, FRCSC, FRSC, FCAHS"
+},
+{
+    image: require("../../assets/d3.png"),
+    name: "Micheal T Lawton",
+    designation: "President and CEO Professor and Chair."
+},
+{
+    image: require("../../assets/d4.png"),
+    name: "Aeron Cohan-Gadol",
+    designation: "President and CEO, The Neurosurgical Atlas."
 }
+]
 
 export const speakers_all_data = [
     {

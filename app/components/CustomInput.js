@@ -1,10 +1,10 @@
 import { View, Text, TextInput, TouchableOpacity } from 'react-native'
 import React, { useState } from 'react'
 import { heightPercentageToDP as hp } from "react-native-responsive-screen"
-import { AcademicCapIcon, BriefcaseIcon, BuildingOfficeIcon, EnvelopeIcon, EyeIcon, EyeSlashIcon, GlobeAltIcon, LockClosedIcon, PhoneIcon, UserIcon } from 'react-native-heroicons/outline'
+import { AcademicCapIcon, BanknotesIcon, BriefcaseIcon, BuildingOfficeIcon, DevicePhoneMobileIcon, EnvelopeIcon, EyeIcon, EyeSlashIcon, GlobeAltIcon, IdentificationIcon, LockClosedIcon, PhoneIcon, UserIcon } from 'react-native-heroicons/outline'
 import { THEME_COLORS } from '../constants/colors';
 
-export default function CustomInput({ name = "", classes, value = "", setValue, style, placeholder = "", isSecured = false, error = null, keyboardType = "default" }) {
+export default function CustomInput({ name = "", classes, value = "", setValue, style, placeholder = "", isSecured = false, error = null, keyboardType = "default", editable = true }) {
     const [secure, setSecure] = useState(isSecured);
     return (
         <View>
@@ -28,12 +28,19 @@ export default function CustomInput({ name = "", classes, value = "", setValue, 
                         color={THEME_COLORS.ICON_COLOR} />}
                     {name === "department" && <BriefcaseIcon size={hp(3)}
                         color={THEME_COLORS.ICON_COLOR} />}
+                    {name === "cnic" && <IdentificationIcon size={hp(3)}
+                        color={THEME_COLORS.ICON_COLOR} />}
+                    {name === "mobile_number" && <DevicePhoneMobileIcon size={hp(3)}
+                        color={THEME_COLORS.ICON_COLOR} />}
+                    {name === "amount" && <BanknotesIcon size={hp(3)}
+                        color={THEME_COLORS.ICON_COLOR} />}
                     <TextInput
                         className={`flex-1`}
                         value={value}
                         onChangeText={text => {
                             setValue(text)
                         }}
+                        editable={editable}
                         keyboardType={keyboardType} //phone-pad, numeric, default, email-address
                         cursorColor={THEME_COLORS.PRIMARY_COLOR}
                         secureTextEntry={secure}

@@ -29,8 +29,8 @@ export default function NavigationPortal({ navigation }) {
                         renderItem={({ item, index }) => (
                             <TouchableOpacity
                                 onPress={() => {
-                                    if (index === 6) {
-                                        navigation.navigate("EventInfo")
+                                    if (item.screenName) {
+                                        navigation.navigate(item.screenName)
                                     }
                                 }}
                                 className="mb-4 p-5 rounded-xl"
@@ -43,7 +43,7 @@ export default function NavigationPortal({ navigation }) {
                                     style={{
                                         fontFamily: "Poppins-Regular"
                                     }}
-                                >{item}</Text>
+                                >{item?.name}</Text>
                             </TouchableOpacity>)}
                         keyExtractor={(item, index) => index.toString()}
                     />

@@ -1,8 +1,15 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
-
+import { useDispatch } from 'react-redux';
+import { setAuth, setIsAuthorized } from '../redux/AuthSlice';
+import { store } from '../redux/store';
+import Toast from 'react-native-toast-message';
+export const MEDIA_BASE_URL = "https://pcsadmin.edylinn.com";
 const BASE_URL = 'https://pcsadmin.edylinn.com/api';
 
 const apiRequest = async (method, url, data = null, token = null) => {
+
     const headers = {};
     if (data instanceof FormData) {
         headers['Content-Type'] = 'multipart/form-data'
@@ -10,8 +17,9 @@ const apiRequest = async (method, url, data = null, token = null) => {
     else {
         headers['Content-Type'] = 'application/json'
     }
-    if (token) {
-        headers['Authorization'] = `Bearer ${token}`;
+    const token_data = await AsyncStorage.getItem('token');
+    if (token_data) {
+        headers['Authorization'] = `Bearer ${token_data}`;
     }
     try {
         const response = await axios.request({
@@ -22,6 +30,19 @@ const apiRequest = async (method, url, data = null, token = null) => {
         });
         return response.data;
     } catch (error) {
+        if (error.response && error.response.status === 401) {
+            // Clear token from AsyncStorage
+            await AsyncStorage.removeItem('token');
+            // Redirect user to login page
+            // redirectToLogin();
+            Toast.show({
+                type: 'error',
+                text1: 'Unauthenticated',
+                text2: "Session Expired. Please login and try again!"
+            });
+            store.dispatch(setAuth({}));
+            store.dispatch(setIsAuthorized(false));
+        }
         throw error;
     }
 };
