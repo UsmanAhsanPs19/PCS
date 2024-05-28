@@ -21,7 +21,11 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "permissions": [
+        "android.permission.RECORD_AUDIO"
+      ],
+      "package": "com.usmanahsandeveloper.PCS"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -48,6 +52,11 @@
           "photosPermission": "The app accesses your photos to use it for your identification."
         }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "35b29d4b-2f42-4c15-b5df-138d62787bf0"
+      }
+    }
   }
 }
