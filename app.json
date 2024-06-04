@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "PCS",
+    "name": "PCS(Pakistan Cardiac Society)",
     "slug": "PCS",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -15,7 +15,8 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.edylinn.PCS"
     },
     "android": {
       "adaptiveIcon": {
@@ -25,7 +26,7 @@
       "permissions": [
         "android.permission.RECORD_AUDIO"
       ],
-      "package": "com.usmanahsandeveloper.PCS"
+      "package": "com.edylinn.PCS"
     },
     "web": {
       "favicon": "./assets/favicon.png"

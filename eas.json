@@ -1,7 +1,4 @@
 {
-  "cli": {
-    "version": ">= 7.1.2"
-  },
   "build": {
     "development": {
       "developmentClient": true,
@@ -10,9 +7,21 @@
     "preview": {
       "distribution": "internal"
     },
-    "production": {}
+    "production": {
+      "distribution": "store"
+    }
   },
   "submit": {
-    "production": {}
+    "production": {
+      "android": {
+        "serviceAccountKeyPath": "./pcsapp.json",
+        "track": "production",
+        "releaseStatus": "completed"
+      },
+      "ios": {
+        "appleId": "your-apple-id",
+        "ascAppId": "your-asc-app-id"
+      }
+    }
   }
 }

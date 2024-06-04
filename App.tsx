@@ -1,28 +1,40 @@
-import { useState } from 'react';
-import AppNavigation from './app/navigation';
-import useFont from './hooks/useFont';
-import AppLoading from 'expo-app-loading';
-import { Provider } from 'react-redux';
-import { SafeAreaView } from 'react-native';
-import Toast from 'react-native-toast-message';
-import { store } from './app/redux/store';
+import { useEffect, useState } from "react";
+import { ActivityIndicator, SafeAreaView, View } from "react-native";
+import Toast from "react-native-toast-message";
+import { Provider } from "react-redux";
+import { THEME_COLORS } from "./app/constants/colors";
+import AppNavigation from "./app/navigation";
+import { store } from "./app/redux/store";
+import useFont from "./hooks/useFont";
 
 export default function App() {
   const [isFontReady, setIsFontReady] = useState(false);
 
+  useEffect(() => {
+    LoadFonts();
+  }, []);
+
   const LoadFonts = async () => {
-    await useFont();
+    await useFont()
+      .then((res) => {
+        setIsFontReady(true);
+      })
+      .catch((error) => {
+        console.log("Error fonts loading::::", error);
+      });
   };
 
   if (!isFontReady) {
     return (
-      <AppLoading
-        startAsync={LoadFonts}
-        onFinish={() => setIsFontReady(true)}
-        onError={(e) => {
-          console.log("Error font loading:", e)
+      <View
+        style={{
+          flex: 1,
+          alignItems: "center",
+          justifyContent: "center",
         }}
-      />
+      >
+        <ActivityIndicator size={"large"} color={THEME_COLORS.PRIMARY_COLOR} />
+      </View>
     );
   }
 

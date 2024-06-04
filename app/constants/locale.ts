@@ -52,5 +52,8 @@ export const GlbalLocale = {
     eventWebLink: "www.pcs.org.pk",
     update: "Update",
     check_code: "Check Code",
+    cnic_without_dash: "CNIC Number (without dashes)",
+    pmnc:"PMNC",
+    pmdc:"PMDC",
     login_dashboard_text: "Sign In to PCS Portal to submit your Abstracts and register yourself for Cardiocon 2024"
 }
