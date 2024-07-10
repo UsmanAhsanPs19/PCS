@@ -1,4 +1,4 @@
-import { Image, ScrollView, Text, TouchableOpacity, View } from 'react-native'
+import { Image, ScrollView, Text, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { THEME_COLORS } from '../../constants/colors'
 import { StatusBar } from 'expo-status-bar'
@@ -8,9 +8,8 @@ import CustomInput from '../../components/CustomInput'
 import CustomButton from './components/CustomButton'
 import { Picker } from '@react-native-picker/picker'
 import { getRequest, postRequest } from '../../helpers/APIRequest'
-import { get_profile, signup_url, update_user } from '../../constants/APIEndpoints'
+import { get_profession, get_profile, update_user } from '../../constants/APIEndpoints'
 import Toast from 'react-native-toast-message';
-import * as ImagePicker from 'expo-image-picker';
 import HeaderOther from './components/HeaderOther'
 import { useDispatch, useSelector } from 'react-redux'
 import ChooseImage from './components/ChooseImage'
@@ -36,6 +35,7 @@ export default function ModifyAccount({ navigation }) {
     const [selected_title, setSelectedTitle] = useState("Mr.")
     const [selected_gender, setSelectedGender] = useState("Male")
     const [is_profile_loading, setIsProfileLoading] = useState(false)
+    const [profession_list, setProfessionList] = useState([])
 
 
     useEffect(() => {
@@ -55,6 +55,32 @@ export default function ModifyAccount({ navigation }) {
         setPlaceOfWork(user?.place_of_work)
         setProfession(user?.profession)
         setSelectedTitle(user?.title)
+    }
+
+    useEffect(() => {
+        getProfessions()
+    }, [])
+
+    async function getProfessions() {
+        await getRequest(get_profession)
+            .then((response) => {
+                console.log("getProfessions Data::", response);
+                if (response.status && response.data) {
+                    setProfessionList(response.data)
+                }
+                else {
+                    Toast.show({
+                        text1: "Profession",
+                        autoHide,
+                        position: "top",
+                        type: "error",
+                        text2: response.message || response?.error?.message || "Some issue while getting professions."
+                    })
+                }
+            })
+            .catch((error) => {
+                console.log("getProfessions Error:::", error);
+            });
     }
 
     async function getUserData() {
@@ -212,31 +238,31 @@ export default function ModifyAccount({ navigation }) {
         }
     }
 
-    async function openImagePicker() {
-        let result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.Images,
-            allowsEditing: true,
-            aspect: [4, 3],
-            quality: 1,
-        });
+    // async function openImagePicker() {
+    //     let result = await ImagePicker.launchImageLibraryAsync({
+    //         mediaTypes: ImagePicker.MediaTypeOptions.Images,
+    //         allowsEditing: true,
+    //         aspect: [4, 3],
+    //         quality: 1,
+    //     });
 
-        if (!result.canceled) {
-            setPickedImage(result.assets[0])
-        }
-        else {
-            Toast.show({
-                text1: "Pick Image",
-                text2: "User cancelled the process",
-                type: "error",
-                text1Style: {
-                    fontFamily: "Poppins-Regular"
-                },
-                text2Style: {
-                    fontFamily: "Poppins-Regular"
-                }
-            })
-        }
-    }
+    //     if (!result.canceled) {
+    //         setPickedImage(result.assets[0])
+    //     }
+    //     else {
+    //         Toast.show({
+    //             text1: "Pick Image",
+    //             text2: "User cancelled the process",
+    //             type: "error",
+    //             text1Style: {
+    //                 fontFamily: "Poppins-Regular"
+    //             },
+    //             text2Style: {
+    //                 fontFamily: "Poppins-Regular"
+    //             }
+    //         })
+    //     }
+    // }
 
     return (
         <View
@@ -274,7 +300,7 @@ export default function ModifyAccount({ navigation }) {
                     </View>
                     {/* Image picker */}
                     <ChooseImage
-                        openImagePicker={openImagePicker}
+                        setPickedImage={setPickedImage}
                         picked_image={picked_image}
                     />
 
@@ -342,14 +368,50 @@ export default function ModifyAccount({ navigation }) {
                     </View>
 
                     {/* Profession Input */}
-                    <CustomInput
+                    {/* <CustomInput
                         placeholder={GlbalLocale.profession}
                         value={profession}
                         setValue={setProfession}
                         name='profession'
                         error={errors.profession}
                         classes={"my-2"}
-                    />
+                    /> */}
+                    {/* Profession Input */}
+                    <View className="space-y-1">
+                        <Text
+                            className={"text-lg font-thin"}
+                            style={{
+                                color: THEME_COLORS.GRAY_TEXT,
+                                fontSize: hp(1.5),
+                                fontFamily: "Poppins-Regular",
+                            }}
+                        >
+                            {GlbalLocale.profession}
+                        </Text>
+                        <View
+                            className="border rounded-lg"
+                            style={{
+                                borderColor: THEME_COLORS.BORDER_COLOR,
+                            }}
+                        >
+                            <Picker
+                                className=""
+                                selectionColor={THEME_COLORS.PRIMARY_COLOR}
+                                selectedValue={profession}
+                                shouldRasterizeIOS
+                                placeholder="Profession"
+                                onValueChange={(itemValue, itemIndex) =>
+                                    setProfession(itemValue)
+                                }
+                            >
+                                {
+                                    profession_list.map((prof, index) => (
+                                        <Picker.Item key={index} label={prof?.name} value={prof?.name} />
+                                    ))
+                                }
+                            </Picker>
+                        </View>
+                    </View>
 
                     {/* Place of work Input */}
                     <CustomInput

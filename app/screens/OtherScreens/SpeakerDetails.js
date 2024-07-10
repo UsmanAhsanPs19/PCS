@@ -1,27 +1,15 @@
-import { View, Text, FlatList } from 'react-native'
+import { View, Text, FlatList, Image, TouchableOpacity } from 'react-native'
 import React from 'react'
 import { THEME_COLORS } from '../../constants/colors'
 import { StatusBar } from 'expo-status-bar'
 import HeaderOther from './components/HeaderOther'
-import { heightPercentageToDP as hp } from 'react-native-responsive-screen'
+import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen'
 import moment from 'moment'
+import { MEDIA_BASE_URL } from '../../helpers/APIRequest'
 // import { navigation_all_data } from '../../constants/data'
 
 export default function SpeakerDetails({ navigation, route }) {
     const data = route?.params || null;
-    const eventDetails = [{
-        date: moment().format("ll"),
-        time: "10:00 - 13:00",
-        duration: "3 Hours",
-        title: "Anaphylaxis and other life threatning allergic emergencies",
-        venue: "Maqbool Block, Hall A"
-    }, {
-        date: moment().format("ll"),
-        time: "10:00 - 13:00",
-        duration: "3 Hours",
-        title: "Anaphylaxis and other life threatning allergic emergencies",
-        venue: "Maqbool Block, Hall A"
-    }]
     return (
         <View
             style={{ backgroundColor: THEME_COLORS.BG_COLOR }}
@@ -42,11 +30,20 @@ export default function SpeakerDetails({ navigation, route }) {
             >
                 <View className=""
                     style={{
-                        top: hp(-6)
+                        top: hp(-4)
                     }}
                 >
-                    {data?.image}
+                    <Image
+                        className="rounded-xl"
+                        resizeMode='contain'
+                        style={{
+                            height: hp(18),
+                            width: wp(29)
+                        }}
+                        source={{ uri: `${MEDIA_BASE_URL}/${data.image}` }}
+                    />
                 </View>
+
                 <View
                     style={{
                         top: hp(-2)
@@ -63,16 +60,20 @@ export default function SpeakerDetails({ navigation, route }) {
                         numberOfLines={2}
                         style={{ color: THEME_COLORS.HALF_WHITE_COLOR, fontFamily: "Poppins-Regular" }}
                     >
-                        {data?.designation}
+                        {data?.tagline}
                     </Text>
                 </View>
             </View>
 
             <FlatList
-                data={eventDetails}
+                data={data?.get_schedule || []}
                 className="mt-3"
                 renderItem={({ item, index }) => (
-                    < View className="h-auto rounded-xl pl-0.5 my-2 mx-1"
+                    <TouchableOpacity
+                        onPress={() => {
+                            navigation.navigate({ name: "SessionDetails", params: { item: item.schedule_details, data } })
+                        }}
+                        key={item.schedule_id} className="h-auto rounded-xl pl-0.5 my-2 mx-1"
                         style={{
                             elevation: 3,
                             shadowColor: '#000',
@@ -92,44 +93,44 @@ export default function SpeakerDetails({ navigation, route }) {
                                 ellipsizeMode='tail'
                                 style={{ color: THEME_COLORS.PRIMARY_COLOR_DARK, fontFamily: "Poppins-Regular" }}
                             >
-                                {item?.date}
+                                {moment(item?.schedule_details?.session_date?.date).format("ddd, ll")}
                             </Text>
-                            <View className="flex-row space-x-2">
+                            <View className="flex-row justify-between space-x-3">
                                 <View className="">
                                     <Text
-                                        className={"text-lg"}
+                                        className={"text-base"}
                                         style={{ color: THEME_COLORS.PRIMARY_COLOR_DARK, fontFamily: "Poppins-SemiBold" }}
                                     >
-                                        {item?.time}
+                                        {item?.schedule_details?.session_time?.slot}
                                     </Text>
                                     <Text
                                         className={"text-lg"}
                                         style={{ color: THEME_COLORS.PRIMARY_COLOR_DARK, fontFamily: "Poppins-Regular" }}
                                     >
-                                        {item?.duration}
+                                        {item?.schedule_details?.duration}
                                     </Text>
                                 </View>
-                                <View className=""
-                                    style={{ flex: 1 }}
+                                <View className="flex-1"
+                                    style={{}}
                                 >
                                     <Text
-                                        className={"text-sm text-left"}
+                                        className={"text-base text-left"}
                                         numberOfLines={2}
                                         style={{ color: THEME_COLORS.PRIMARY_COLOR_DARK, fontFamily: "Poppins-SemiBold" }}
                                     >
-                                        {item?.title}
+                                        {item?.schedule_details?.title}
                                     </Text>
                                     <Text
                                         className={"text-sm mt-1"}
                                         numberOfLines={2}
                                         style={{ color: THEME_COLORS.PRIMARY_COLOR_DARK, fontFamily: "Poppins-Regular" }}
                                     >
-                                        {item?.venue}
+                                        {item?.schedule_details?.venue}
                                     </Text>
                                 </View>
                             </View>
                         </View>
-                    </View>
+                    </TouchableOpacity>
                 )}
                 ListEmptyComponent={<View className="flex-1 bg-white items-center justify-center">
                     <Text

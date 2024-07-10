@@ -26,6 +26,10 @@ import GeneralInformationScreen from '../screens/OtherScreens/GeneralInformation
 import ChangeForgotPassword from '../screens/Auth/ChangeForgotPassword';
 import ModifyAccount from '../screens/OtherScreens/ModifyAccount';
 import RegisterForConference from '../screens/OtherScreens/RegisterForConference';
+import BookSouvinir from '../screens/OtherScreens/Souvinir/BookSouvinir';
+import RegistrantsList from '../screens/OtherScreens/RegistrantsList';
+import RegistrantDetails from '../screens/OtherScreens/RegistrantDetails';
+import WebSubmissionForms from '../screens/OtherScreens/WebSubmissionForms';
 
 // Create a bottom tab navigator
 const BottomTabs = createBottomTabNavigator();
@@ -95,6 +99,11 @@ export default function AppNavigation() {
                 <MainScreens.Screen name='SponsersScreens' component={SponsersScreens} />
                 <MainScreens.Screen name='GeneralInformation' component={GeneralInformationScreen} />
                 <MainScreens.Screen name='RegisterForConference' component={RegisterForConference} />
+                <MainScreens.Screen name='GetSouvinir' component={BookSouvinir} />
+                <MainScreens.Screen name='RegistrantsList' component={RegistrantsList} />
+                <MainScreens.Screen name='RegistrantsDetails' component={RegistrantDetails} />
+                <MainScreens.Screen name='WebSubmissionForms' component={WebSubmissionForms} />
+
                 {/*<MainScreens.Screen name='RecipeDetail' component={RecipeDetails} /> */}
             </MainScreens.Navigator>
         </NavigationContainer>

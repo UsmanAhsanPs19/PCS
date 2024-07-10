@@ -20,12 +20,14 @@ import {
   top_sponsers_url,
 } from "../../constants/APIEndpoints";
 import { THEME_COLORS } from "../../constants/colors";
-import { navigation_section_data, pcs_portal_data } from "../../constants/data";
+import { navigation_data_after_auth, navigation_section_data, pcs_portal_data } from "../../constants/data";
 import { GlbalLocale } from "../../constants/locale";
 import { MEDIA_BASE_URL, getRequest } from "../../helpers/APIRequest";
 import HomeHeader from "./components/header";
 export default function HomeScreen({ navigation }) {
   const { isAuthorized } = useSelector((state) => state?.AuthStore);
+  const { user } = useSelector(state => state.AuthStore);
+  const { general_info } = useSelector((state) => state?.GeneralState);
   const [speakers_loading, setSpeakersLoading] = useState(false);
   const [sponsers_loading, setSponsersLoading] = useState(false);
   const [top_speakers, setTopSpeakers] = useState([]);
@@ -91,7 +93,7 @@ export default function HomeScreen({ navigation }) {
                   fontFamily: "Poppins-Medium",
                 }}
               >
-                Nov 11, 2024 - Nov 13, 2024
+                {general_info?.date}
               </Text>
               <Text
                 className="text-xs text-center"
@@ -100,7 +102,7 @@ export default function HomeScreen({ navigation }) {
                   fontFamily: "Poppins-Regular",
                 }}
               >
-                Pearl Continental Hotel, Lahore
+                {general_info?.location}
               </Text>
             </View>
 
@@ -117,7 +119,7 @@ export default function HomeScreen({ navigation }) {
                 >
                   {GlbalLocale.pcs_portal}
                 </Text>
-                <TouchableOpacity
+                {isAuthorized && <TouchableOpacity
                   onPress={() => {
                     navigation.navigate("PCSPortal");
                   }}
@@ -132,7 +134,7 @@ export default function HomeScreen({ navigation }) {
                   >
                     See all
                   </Text>
-                </TouchableOpacity>
+                </TouchableOpacity>}
               </View>
               {/* Portal section after login */}
               {isAuthorized && (
@@ -144,6 +146,9 @@ export default function HomeScreen({ navigation }) {
                         onPress={() => {
                           if (d.screenName) {
                             navigation.navigate(d.screenName);
+                          }
+                          else if (d.key !== "modify_profile") {
+                            navigation.navigate({ name: 'WebSubmissionForms', params: { title: d.text, path: `${d.link}${user.user_id}` } })
                           }
                         }}
                         style={{
@@ -167,7 +172,7 @@ export default function HomeScreen({ navigation }) {
                         >
                           {d.text}
                         </Text>
-                        {d.isEditable && (
+                        {d.key && user[d.key] == 0 && (
                           <Text
                             className="py-0.5 px-2 rounded-full text-center"
                             style={{
@@ -186,7 +191,14 @@ export default function HomeScreen({ navigation }) {
                   {/* Row 2 */}
                   <View className="w-full flex-row items-center justify-center space-x-3">
                     {pcs_portal_data.secondData.map((d) => (
-                      <View
+                      <TouchableOpacity
+                        disabled={!d.link}
+                        onPress={() => {
+                          if (d.key !== "modify_profile" && d.link) {
+                            navigation.navigate({ name: 'WebSubmissionForms', params: { title: d.text, path: `${d.link}${user.user_id}` } })
+                          }
+
+                        }}
                         style={{
                           elevation: 3,
                           shadowColor: "#000",
@@ -208,7 +220,7 @@ export default function HomeScreen({ navigation }) {
                         >
                           {d.text}
                         </Text>
-                        {d.isEditable && (
+                        {d.key && user[d.key] == 0 && (
                           <Text
                             className="py-0.5 px-2 rounded-full text-center"
                             style={{
@@ -221,11 +233,13 @@ export default function HomeScreen({ navigation }) {
                             Edit Submission
                           </Text>
                         )}
-                      </View>
+                      </TouchableOpacity>
                     ))}
                   </View>
                 </View>
               )}
+
+              {/* Portal section without login */}
               {!isAuthorized && (
                 <TouchableOpacity
                   onPress={() => {
@@ -282,7 +296,7 @@ export default function HomeScreen({ navigation }) {
               <View className="">
                 <FlatList
                   disableVirtualization
-                  data={navigation_section_data}
+                  data={!isAuthorized ? navigation_section_data : navigation_section_data.slice(0, navigation_section_data.length - 1).concat(navigation_data_after_auth)}
                   numColumns={2}
                   renderItem={({ item, index }) => (
                     <TouchableOpacity
@@ -296,9 +310,8 @@ export default function HomeScreen({ navigation }) {
                         height: hp("12%"),
                         backgroundColor: THEME_COLORS.PRIMARY_COLOR_DARK,
                       }}
-                      className={`flex-1 ${
-                        (index + 1) / 2 == 0 ? "ml-2" : "mr-2"
-                      } mb-2 p-3 bg-white items-center justify-center rounded-xl`}
+                      className={`flex-1 ${(index + 1) / 2 == 0 ? "ml-2" : "mr-2"
+                        } mb-2 p-3 bg-white items-center justify-center rounded-xl`}
                     >
                       {item.icon}
                       <Text
@@ -378,9 +391,8 @@ export default function HomeScreen({ navigation }) {
                         elevation: 3,
                         backgroundColor: THEME_COLORS.PRIMARY_COLOR_DARK,
                       }}
-                      className={`flex-1 ${
-                        (index + 1) / 2 == 0 ? "ml-2" : "mr-2"
-                      } mb-2 flex-row bg-white items-center justify-center rounded-xl`}
+                      className={`flex-1 ${(index + 1) / 2 == 0 ? "ml-2" : "mr-2"
+                        } mb-2 flex-row bg-white items-center justify-center rounded-xl`}
                     >
                       <Image
                         className="rounded-lg"

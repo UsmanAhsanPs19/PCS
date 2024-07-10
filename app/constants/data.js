@@ -7,95 +7,158 @@ import LekSellIcon from "../../assets/LeksellIcon"
 import MedicalFileIcon from "../../assets/MedicalFileIcon"
 import NurseIcon from "../../assets/NurseIcon"
 import PrintEventCardIcon from "../../assets/PrintEventCardIcon"
+import QuizIcon from "../../assets/QuizIcon"
 import RegisterEventIcon from "../../assets/RegisterEventIcon"
+import RegistrationListIcon from "../../assets/RegistrationListIcon"
 import SathiSponser from "../../assets/SathiSponer"
 import ScheduleIcon from "../../assets/ScheduleIcon"
+import SouvenirIcon from "../../assets/SouvenirIcon"
 import SPBigIcon from "../../assets/SpBigIcon"
 import UserCircleIcon from "../../assets/UserCircle"
 import UserIcon from "../../assets/UserIcon"
+
 
 export const pcs_portal_data = {
     firstData: [{
         text: "Modify Your Personal Account",
         icon: <UserIcon />,
-        screenName: "UpdateProfile"
+        key: "modify_profile",
+        screenName: "UpdateProfile",
     },
     {
         text: "Clinical Case",
-        isEditable: true,
+        key: "clinical_case",
+        link: "web-clinical-case-submission/",
         icon: <MedicalFileIcon />
     },
     {
         text: "Scientific Abstract",
+        key: "abstract_submission",
+        link: "web-abstract-submission/",
         icon: <MedicalFileIcon />
     }],
     secondData: [{
         text: "Submit an Image",
-        isEditable: true,
+        key: "image_submission",
+        // isEditable: true,
+        link: "web-image-submission/",
         icon: <ImageIcon />
     },
     {
         text: "Nursing Professional Clinical Case or Abstract",
-        icon: <NurseIcon />
+        icon: <NurseIcon />,
+        key: "",
     },
     {
         text: "Late-Breaking Trial",
-        icon: <MedicalFileIcon />
+        icon: <MedicalFileIcon />,
+        key: "late_breaking_trial",
+        link: "web-late-breaking-trial-submission/",
     }]
 }
 
-export const pcs_portal_all_data = [
+export const pcs_portal_register_data = [
     {
         text: "Modify Your Personal Account",
         icon: <UserIcon width={55} height={56} />,
-        screenName: "UpdateProfile"
+        screenName: "UpdateProfile",
+        isVisible: true,
+        key: "modify_profile",
     },
     {
         text: "Clinical Case",
         isEditable: true,
-        icon: <MedicalFileIcon width={55} height={56} />
+        key: "clinical_case",
+        link: "web-clinical-case-submission/",
+        icon: <MedicalFileIcon width={55} height={56} />,
+        isVisible: true
     },
     {
         text: "Scientific Abstract",
-        icon: <MedicalFileIcon width={55} height={56} />
+        icon: <MedicalFileIcon width={55} height={56} />,
+        isVisible: true,
+        link: "web-abstract-submission/",
+        key: "abstract_submission",
     },
     {
         text: "Late-Breaking Trial",
-        icon: <MedicalFileIcon width={55} height={56} />
+        icon: <MedicalFileIcon width={55} height={56} />,
+        isVisible: true,
+        link: "web-late-breaking-trial-submission/",
+        key: "late_breaking_trial",
     },
     {
         text: "Allied Professional Clinical Case or Abstract",
-        icon: <MedicalFileIcon width={55} height={56} />
+        icon: <MedicalFileIcon width={55} height={56} />,
+        isVisible: true,
+        key: "",
     },
     {
-        text: "Innovation for Solvurs Innovators Day",
-        icon: <MedicalFileIcon width={55} height={56} />
+        text: "Innovation for PCS Innovators Day",
+        icon: <MedicalFileIcon width={55} height={56} />,
+        key: "innovation_submission",
+        isVisible: true,
+        link: "web-innovation-submission/"
+
     },
     {
         text: "Submit an Image",
         isEditable: true,
-        icon: <ImageIcon width={55} height={55} />
+        link: "web-image-submission/",
+        key: "image_submission",
+        icon: <ImageIcon width={55} height={55} />,
+        isVisible: true
     },
     {
         text: "Nursing Professional Clinical Case or Abstract",
-        icon: <NurseIcon width={55} height={56} />
+        icon: <NurseIcon width={55} height={56} />,
+        isVisible: true,
+        key: ""
     },
     {
         text: "Register For Event",
         icon: <RegisterEventIcon width={55} height={56} />,
-        screenName: "RegisterForConference"
-    },
-    {
-        text: "Print Event Card",
-        icon: <PrintEventCardIcon width={55} height={56} />
+        screenName: "RegisterForConference",
+        isVisible: false,
+        link: "",
+        key: "register_for_event"
     },
 ];
+
+export const pcs_later_part = [
+    {
+        text: "Other Person Registration",
+        icon: <RegisterEventIcon width={55} height={56} />,
+        screenName: "RegisterForConference",
+        isVisible: false,
+        isAfter: true,
+    },
+    {
+        text: "Registration Lists for Event",
+        icon: <RegistrationListIcon width={55} height={56} />,
+        screenName: "RegistrantsList",
+        isVisible: true,
+        isAfter: true,
+    },
+]
+
+export const pcs_data_souvenier = [
+    {
+        text: "Souvinir",
+        icon: <SouvenirIcon width={55} height={56} />,
+        screenName: "GetSouvinir",
+        isVisible: false,
+        isAfter: true,
+    },
+]
+
+
 
 export const navigation_section_data = [
     {
         text: "Schedule",
         icon: <ScheduleIcon />,
-        screenName: "ScheduleScreen"
+        screenName: "ScheduleScreen",
     },
     {
         text: "Speakers",
@@ -112,11 +175,21 @@ export const navigation_section_data = [
         isEditable: true,
         icon: <InfoIcon />,
         screenName: "GeneralInformation"
+    },
+
+]
+
+export const navigation_data_after_auth = [
+    {
+        text: "Quiz",
+        isEditable: false,
+        icon: <QuizIcon />,
+        screenName: ""
     }
 ]
 
 export const navigation_all_data = [
-    { name: "PCS Portal", screenName: "PCSPortal" },
+    // { name: "PCS Portal", screenName: "PCSPortal" },
     { name: "Schedule", screenName: "ScheduleScreen" },
     { name: "Scientific Program", screenName: "" },
     { name: "Speakers", screenName: "SpeakersScreen" },

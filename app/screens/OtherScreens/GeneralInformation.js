@@ -1,14 +1,53 @@
-import { View, Text, ScrollView } from 'react-native'
-import React from 'react'
+import { View, Text, ScrollView, ActivityIndicator, TouchableOpacity, Linking } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import { THEME_COLORS } from '../../constants/colors'
 import { StatusBar } from 'expo-status-bar'
 import { GlbalLocale } from '../../constants/locale'
 import HeaderOther from './components/HeaderOther'
 // import { navigation_all_data } from '../../constants/data'
 import MapImage from '../../../assets/MapImage'
+import { event_information } from '../../constants/APIEndpoints'
+import { getRequest } from '../../helpers/APIRequest'
 
 
 export default function GeneralInformation({ navigation }) {
+
+    const [data, setData] = useState({});
+    const [isLoading, setIsLoading] = useState(false);
+
+    useEffect(() => {
+        getInformation()
+    }, [])
+
+    // Get information
+    async function getInformation() {
+        setIsLoading(true);
+        await getRequest(event_information).then(response => {
+            console.log("getInformation Data::", JSON.stringify(response))
+            if (response.status && response.data) {
+                setData(response.data)
+            }
+            setIsLoading(false)
+        }).catch(error => {
+            console.log("getInformation Error:::", error)
+            setIsLoading(false)
+        })
+    }
+
+    const openGoogleMaps = () => {
+        const url = data.pin_location;
+
+        Linking.canOpenURL(url)
+            .then((supported) => {
+                if (supported) {
+                    Linking.openURL(url);
+                } else {
+                    Alert.alert("Error", "Google Maps app is not installed or the location url is not supported.");
+                }
+            })
+            .catch((err) => console.error("An error occurred", err));
+    };
+
     return (
         <ScrollView
             style={{ backgroundColor: THEME_COLORS.BG_COLOR }}
@@ -25,13 +64,22 @@ export default function GeneralInformation({ navigation }) {
                         label={GlbalLocale.information_label}
                     />
                 </View>
-
+                {
+                    isLoading &&
+                    <ActivityIndicator
+                        color={THEME_COLORS.PRIMARY_COLOR}
+                        size={"large"}
+                        className="self-center"
+                    />
+                }
                 <View >
                     {/* <PinnedLocation latitude={31.5027} longitude={74.3487} /> */}
                     {/* map component as a  image */}
-                    <View className="items-center justify-stretch">
+                    <TouchableOpacity
+                        onPress={openGoogleMaps}
+                        className="items-center justify-stretch">
                         <MapImage />
-                    </View>
+                    </TouchableOpacity>
                     <View className="space-y-2">
                         {/* Event Name and Date view */}
                         <View>
@@ -39,13 +87,13 @@ export default function GeneralInformation({ navigation }) {
                                 className={"text-xl font-medium text-center"}
                                 style={{ color: THEME_COLORS.textLightGrayColor, fontFamily: "Poppins-SemiBold" }}
                             >
-                                CARDIOCON 2024
+                                {data?.title}
                             </Text>
                             <Text
                                 className={"text-xl font-semibold text-center"}
                                 style={{ color: THEME_COLORS.textLightGrayColor, fontFamily: "Poppins-Medium" }}
                             >
-                                9-11 Nov, 20244
+                                {data?.date}
                             </Text>
                         </View>
                         {/* Venue location name */}
@@ -54,7 +102,7 @@ export default function GeneralInformation({ navigation }) {
                                 className={"text-xl font-medium text-center"}
                                 style={{ color: THEME_COLORS.textLightGrayColor, fontFamily: "Poppins-SemiBold" }}
                             >
-                                Pearl Continental Hotel, Lahore
+                                {data?.location}
                             </Text>
                         </View>
                         {/* Description of event */}
@@ -63,9 +111,7 @@ export default function GeneralInformation({ navigation }) {
                                 className={"text-base font-bold text-justify"}
                                 style={{ color: THEME_COLORS.textLightGrayColor, fontFamily: "Poppins-Bold" }}
                             >
-                                Dear Colleagues,{"\n\n"}
-                                On behalf of the Organizing Committee of the 35th Conference of Pakistan Society of Neurosurgeons (PSN) that will be held from the 11th to the 13th of November 2022 in King Edward Medical University Lahore, Pakistan. We would like to send you our warmest greetings and invite you to participate in this quintessential moot of Pakistani Neurosurgeons.
-                                We are working to constitute an attractive scientific program that will cover all subspecialties, and will be inviting speakers of international repute to conduct workshops and grace the conference with their talks. The conference will kick off with pre-conference talks and workshops. Soon, we will send you the final scientific program,
+                                {data?.data}
                             </Text>
                         </View>
                     </View>

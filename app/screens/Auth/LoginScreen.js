@@ -21,8 +21,8 @@ export default function LoginScreen({ navigation }) {
     const [remeberMe, setRememberMe] = useState(false);
     const [errors, setErrors] = useState({});
     const [isLoading, setIsLoading] = useState(false)
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState("");
+    const [email, setEmail] = useState('wepidi4096@nolanzip.com'); //wepidi4096@nolanzip.com
+    const [password, setPassword] = useState("Usman@786"); //Usman@786
 
     useEffect(() => {
         // Check if user credentials are saved and automatically log in if "Remember Me" is enabled
@@ -124,7 +124,7 @@ export default function LoginScreen({ navigation }) {
         >
             <StatusBar style={'light'} />
             {/* View for input fields & login button */}
-            <View className="space-y-4 flex-1">
+            <View className="space-y-4 flex-1 z-10">
                 <View className="self-center">
                     <AppIcon />
                 </View>
@@ -198,7 +198,7 @@ export default function LoginScreen({ navigation }) {
             </View>
             {/* View to show the signup text */}
             <View
-                className="flex-row justify-center items-center mb-3"
+                className="flex-row justify-center items-center mb-3 z-0"
             >
                 <Text
                     className={"text-lg font-medium space-y-2"}

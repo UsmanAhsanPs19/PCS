@@ -17,7 +17,9 @@ export default function HeaderOther({ label = "No Label", classes, text_color = 
                 color={color_arrow}
             />}
             <Text
-                className="text-xl text-center"
+                className="text-xl text-center mx-3"
+                numberOfLines={1}
+                ellipsizeMode='middle'
                 style={{
                     fontFamily: "Poppins-Bold",
                     color: text_color

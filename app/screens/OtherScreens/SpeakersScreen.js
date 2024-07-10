@@ -25,7 +25,7 @@ export default function SpeakersScreen({ navigation }) {
     async function getAllSpeakers() {
         setIsLoading(true);
         await getRequest(all_speakers_url).then(response => {
-            console.log("getAllSponsers Data::", response)
+            console.log("getAllSponsers Data::", JSON.stringify(response))
             if (response.status && response.data) {
                 setSpeakers(response.data)
             }
@@ -57,12 +57,12 @@ export default function SpeakersScreen({ navigation }) {
                     <View className="space-y-2">
                         {/* Description of event */}
                         <View className="">
-                            <CustomInput
+                            {/* <CustomInput
                                 placeholder={GlbalLocale.search}
                                 value={search}
                                 setValue={setSearch}
                                 classes={"my-2"}
-                            />
+                            /> */}
                             <FlatList
                                 disableVirtualization
                                 ListHeaderComponent={

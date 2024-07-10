@@ -1,14 +1,19 @@
-import { View, Text, FlatList } from 'react-native'
-import React from 'react'
+import { View, Text, FlatList, Image, ActivityIndicator, TouchableOpacity } from 'react-native'
+import React, { useState } from 'react'
 import { THEME_COLORS } from '../../constants/colors'
 import { StatusBar } from 'expo-status-bar'
 import HeaderOther from './components/HeaderOther'
-import { heightPercentageToDP as hp } from 'react-native-responsive-screen'
+import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen'
 import moment from 'moment'
 import { speakers_all_data } from '../../constants/data'
+import { MEDIA_BASE_URL } from '../../helpers/APIRequest'
 // import { navigation_all_data } from '../../constants/data'
 
 export default function SessionDetails({ navigation, route }) {
+
+    const { item, data } = route?.params
+    const [isLoading, setIsLoading] = useState(false)
+
 
     const eventDetails = {
         date: moment().format("ll"),
@@ -46,27 +51,27 @@ export default function SessionDetails({ navigation, route }) {
                         ellipsizeMode='tail'
                         style={{ color: THEME_COLORS.PRIMARY_COLOR_DARK, fontFamily: "Poppins-Regular" }}
                     >
-                        Session V: Intensive Care
+                        {item?.title}
                     </Text>
                     <View className="">
-                        <Text
+                        {/* <Text
                             className={"text-sm text-left"}
                             style={{ color: THEME_COLORS.PRIMARY_COLOR_DARK, fontFamily: "Poppins-SemiBold" }}
                         >
                             {eventDetails?.title}
-                        </Text>
+                        </Text> */}
                         <View className="flex-row">
                             <Text
-                                className={"text-lg"}
+                                className={"text-base"}
                                 style={{ color: THEME_COLORS.PRIMARY_COLOR_DARK, fontFamily: "Poppins-SemiBold" }}
                             >
-                                {eventDetails?.time},{" "}
+                                {item?.session_time?.slot},{" "}
                             </Text>
                             <Text
-                                className={"text-lg"}
+                                className={"text-base"}
                                 style={{ color: THEME_COLORS.PRIMARY_COLOR_DARK, fontFamily: "Poppins-Regular" }}
                             >
-                                {eventDetails?.duration}
+                                {item?.duration}
                             </Text>
                         </View>
                         <Text
@@ -74,14 +79,14 @@ export default function SessionDetails({ navigation, route }) {
                             ellipsizeMode='tail'
                             style={{ color: THEME_COLORS.PRIMARY_COLOR_DARK, fontFamily: "Poppins-Regular" }}
                         >
-                            {eventDetails?.date}
+                            {moment(item?.session_date?.date).format("ll")}
                         </Text>
                     </View>
                 </View>
             </View>
 
             {/* Speakers detail */}
-            <View className="flex-1">
+            <View className="">
                 <HeaderOther showBack={false} label='Speakers' classes="py-3 justify-center" />
                 <View
                     className="flex-row rounded-xl mb-4"
@@ -94,24 +99,60 @@ export default function SessionDetails({ navigation, route }) {
                         backgroundColor: THEME_COLORS.PRIMARY_COLOR_DARK
                     }}
                 >
-                    {speakers_all_data[0].image}
-                    <View className="flex-1 p-1 speakers_all_data[0]s-center justify-center">
+                    {/* {speakers_all_data[0].image} */}
+                    <Image
+                        className="rounded-xl"
+                        resizeMode='cover'
+                        style={{
+                            height: hp(18),
+                            width: wp(29)
+                        }}
+                        source={{ uri: `${MEDIA_BASE_URL}/${data.image}` }}
+                    />
+                    <View className="flex-1 p-1 justify-center">
                         <Text
                             className={"text-2xl font-bold text-center"}
                             style={{ color: THEME_COLORS.HALF_WHITE_COLOR, fontFamily: "Poppins-Bold" }}
                         >
-                            {speakers_all_data[0].name}
+                            {data?.name}
                         </Text>
                         <Text
                             className={"text-base text-center"}
                             numberOfLines={2}
                             style={{ color: THEME_COLORS.HALF_WHITE_COLOR, fontFamily: "Poppins-Regular" }}
                         >
-                            {speakers_all_data[0].designation}
+                            {data?.tagline}
                         </Text>
                     </View>
                 </View>
             </View>
+
+            {/* Quiz section */}
+            <View className="flex-1">
+                <HeaderOther showBack={false} label='Quiz' classes="py-3 justify-center" />
+                <Text
+                    className={"text-xs text-center"}
+                    ellipsizeMode='tail'
+                    style={{ color: THEME_COLORS.PRIMARY_COLOR_DARK, fontFamily: "Poppins-Medium" }}
+                >
+                    Note: Quiz will start in the last 30 minutes of the session
+                </Text>
+                <TouchableOpacity
+                    onPress={() => { }}
+                    className="my-4 w-full p-3 items-center justify-center self-cente rounded-lg"
+                    style={{
+                        backgroundColor: THEME_COLORS.PRIMARY_COLOR_DARK
+                    }}
+                >
+                    {isLoading ? <ActivityIndicator color={"white"} size={"large"} /> : <Text
+                        className="text-white font-semibold"
+                        style={{
+                            fontFamily: "Poppins-Medium"
+                        }}
+                    >Not Available</Text>}
+                </TouchableOpacity>
+            </View>
+
         </View>
     )
 }

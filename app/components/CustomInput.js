@@ -4,10 +4,21 @@ import { heightPercentageToDP as hp } from "react-native-responsive-screen"
 import { AcademicCapIcon, BanknotesIcon, BriefcaseIcon, BuildingOfficeIcon, DevicePhoneMobileIcon, EnvelopeIcon, EyeIcon, EyeSlashIcon, GlobeAltIcon, IdentificationIcon, LockClosedIcon, PhoneIcon, UserIcon } from 'react-native-heroicons/outline'
 import { THEME_COLORS } from '../constants/colors';
 
-export default function CustomInput({ name = "", classes, value = "", setValue, style, placeholder = "", isSecured = false, error = null, keyboardType = "default", editable = true }) {
+export default function CustomInput({ name = "", classes, value = "", setValue, style, placeholder = "", isSecured = false, error = null, keyboardType = "default", editable = true, label = "" }) {
     const [secure, setSecure] = useState(isSecured);
     return (
         <View>
+            {/* {label && <Text
+                className={"text-lg font-thin"}
+                style={{
+                    color: THEME_COLORS.GRAY_TEXT,
+                    fontSize: hp(1.5),
+                    fontFamily: "Poppins-Regular",
+                    textTransform: "capitalize"
+                }}
+            >
+                {label}
+            </Text>} */}
             <View className={`flex-row border rounded-lg p-3 space-x-2 items-center justify-between ${classes}`}
                 style={[style, { borderColor: error ? "red" : THEME_COLORS.BORDER_COLOR }]}
             >

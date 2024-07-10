@@ -5,28 +5,47 @@ import React, { useEffect } from "react";
 import { ActivityIndicator, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import AppIcon from "../../assets/AppIcon";
-import { get_profile } from "../constants/APIEndpoints";
+import { general_information, get_profile } from "../constants/APIEndpoints";
 import { THEME_COLORS } from "../constants/colors";
 import { getRequest } from "../helpers/APIRequest";
 import { setAuth, setIsAuthorized } from "../redux/AuthSlice";
+import Toast from "react-native-toast-message";
+import { setGeneralInfo } from "../redux/GeneralInfoSlice";
 
 export default function SplashScreen() {
   const dispatch = useDispatch();
   const { isAuthorized } = useSelector((state) => state?.AuthStore);
   const navigation = useNavigation();
 
+
   useEffect(() => {
     getTokenOrProceed();
+    getGeneralInformation()
   }, [isAuthorized]);
 
-  // useEffect(() => {
-  //     if (!isAuthorized) {
-  //         navigation.reset({
-  //             index: 0,
-  //             routes: [{ name: 'Dashboard' }],
-  //         });
-  //     }
-  // }, [isAuthorized])
+  function getGeneralInformation() {
+    getRequest(general_information)
+      .then((respponse) => {
+        if (respponse.status) {
+          console.log("General api data:::", respponse.data)
+          dispatch(setGeneralInfo(respponse.data));
+        } else {
+          Toast.show({
+            text1: "Error getting information",
+            type: "error",
+            text2: respponse.message || "Error while getting general information please try again later."
+          })
+        }
+      })
+      .catch((error) => {
+        Toast.show({
+          text1: "Error getting information",
+          type: "error",
+          text2: "Error while getting general information please try again later."
+        })
+        console.log("Error GEt general profile::", error);
+      });
+  }
 
   async function getTokenOrProceed() {
     const token = await AsyncStorage.getItem("token");
@@ -46,17 +65,22 @@ export default function SplashScreen() {
     await getRequest(get_profile, token)
       .then((respponse) => {
         if (respponse.status) {
+          console.log("User data:::", respponse.data)
           dispatch(setAuth(respponse.data?.profile));
           dispatch(setIsAuthorized(true));
           navigation.replace("Dashboard");
         } else {
-          setTimeout(() => {
-            // toggleColorScheme()
-            navigation.replace("Login");
-          }, 2500);
+          // setTimeout(() => {
+          //   // toggleColorScheme()
+          navigation.replace("Login");
+          // }, 2500);
         }
       })
       .catch((error) => {
+        navigation.reset({
+          index: 0,
+          routes: [{ name: "Dashboard" }],
+        });
         console.log("Error GEt Profile::", error);
       });
   }

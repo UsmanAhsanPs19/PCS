@@ -2,10 +2,46 @@ import { View, Text, TouchableOpacity } from 'react-native'
 import React from 'react'
 import { GlbalLocale } from '../../../constants/locale'
 import { THEME_COLORS } from '../../../constants/colors'
+import Toast from 'react-native-toast-message';
+import * as ImagePicker from 'expo-image-picker';
 
-export default function ChooseImage({ openImagePicker, picked_image }) {
+export default function ChooseImage({ heading = null, setPickedImage, picked_image }) {
+
+    async function openImagePicker() {
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            allowsEditing: true,
+            aspect: [4, 3],
+            quality: 1,
+        });
+
+        if (!result.canceled) {
+            setPickedImage(result.assets[0])
+        }
+        else {
+            Toast.show({
+                text1: "Pick Image",
+                text2: "User cancelled the process",
+                type: "error",
+                text1Style: {
+                    fontFamily: "Poppins-Regular"
+                },
+                text2Style: {
+                    fontFamily: "Poppins-Regular"
+                }
+            })
+        }
+    }
+
     return (
         <View>
+            {heading && <Text
+                className=" text-left"
+                style={{
+                    color: THEME_COLORS.textLightGrayColor,
+                    fontFamily: "Poppins-Medium"
+                }}
+            >{heading}</Text>}
             <View className="border rounded-lg flex-row justify-evenly"
                 style={{
                     borderColor: THEME_COLORS.BORDER_COLOR

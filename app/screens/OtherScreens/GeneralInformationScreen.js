@@ -1,13 +1,38 @@
-import { View, Text } from 'react-native'
-import React from 'react'
+import { View, Text, Image } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import { THEME_COLORS } from '../../constants/colors'
 import { StatusBar } from 'expo-status-bar'
 import HeaderOther from './components/HeaderOther'
 import AppIcon from '../../../assets/AppIcon'
 import { GlbalLocale } from '../../constants/locale'
 import { CalendarIcon, EnvelopeIcon, GlobeAltIcon, MapPinIcon, PhoneIcon } from 'react-native-heroicons/solid'
+import { general_information } from '../../constants/APIEndpoints'
+import { getRequest, MEDIA_BASE_URL } from '../../helpers/APIRequest'
 
 export default function GeneralInformationScreen({ navigation }) {
+
+    const [data, setData] = useState({});
+    const [isLoading, setIsLoading] = useState(false);
+
+    useEffect(() => {
+        getInformation()
+    }, [])
+
+    // Get information
+    async function getInformation() {
+        setIsLoading(true);
+        await getRequest(general_information).then(response => {
+            console.log("General Information Data::", JSON.stringify(response))
+            if (response.status && response.data) {
+                setData(response.data)
+            }
+            setIsLoading(false)
+        }).catch(error => {
+            console.log("general Information Error:::", error)
+            setIsLoading(false)
+        })
+    }
+
     return (
         <View
             style={{ backgroundColor: THEME_COLORS.PRIMARY_COLOR_DARK }}
@@ -27,6 +52,15 @@ export default function GeneralInformationScreen({ navigation }) {
             >
                 {/* App icon */}
                 <View className="bg-white items-center justify-center p-4">
+                    {/* <Image
+                        className="rounded-xl"
+                        resizeMode='contain'
+                        style={{
+                            height: hp(15),
+                            width: wp('70%')
+                        }}
+                        source={{ uri: `${MEDIA_BASE_URL}/${data?.logo}` }}
+                    /> */}
                     <AppIcon />
                 </View>
                 <Text
@@ -36,7 +70,7 @@ export default function GeneralInformationScreen({ navigation }) {
                         color: THEME_COLORS.textColor
                     }}
                 >
-                    {GlbalLocale.eventName}
+                    {data?.title}
                 </Text>
                 <View>
                     <View className="bg-white p-4 flex-row space-x-2 items-center">
@@ -49,7 +83,7 @@ export default function GeneralInformationScreen({ navigation }) {
                                     color: THEME_COLORS.TEXT_LIGHT_BLACK
                                 }}
                             >
-                                {GlbalLocale.eventDate}
+                                {data?.date}
                             </Text>
                             <Text
                                 className="text-xs"
@@ -58,7 +92,7 @@ export default function GeneralInformationScreen({ navigation }) {
                                     color: THEME_COLORS.TEXT_GRAY_TIME
                                 }}
                             >
-                                {GlbalLocale.eventTime}
+                                {data?.time}
                             </Text>
                         </View>
                     </View>
@@ -72,16 +106,7 @@ export default function GeneralInformationScreen({ navigation }) {
                                     color: THEME_COLORS.TEXT_LIGHT_BLACK
                                 }}
                             >
-                                {GlbalLocale.eventDate}
-                            </Text>
-                            <Text
-                                className="text-xs"
-                                style={{
-                                    fontFamily: "Poppins-Light",
-                                    color: THEME_COLORS.TEXT_GRAY_TIME
-                                }}
-                            >
-                                {GlbalLocale.eventTime}
+                                {data?.location}
                             </Text>
                         </View>
                     </View>
@@ -106,7 +131,7 @@ export default function GeneralInformationScreen({ navigation }) {
                                     color: THEME_COLORS.TEXT_LIGHT_BLACK
                                 }}
                             >
-                                {GlbalLocale.contactNumbers}
+                                {data?.contact_us} {data?.contact_us_two}
                             </Text>
                         </View>
                     </View>
@@ -120,7 +145,7 @@ export default function GeneralInformationScreen({ navigation }) {
                                     color: THEME_COLORS.TEXT_LIGHT_BLACK
                                 }}
                             >
-                                {GlbalLocale.eventEmail}
+                                {data?.email}
                             </Text>
                         </View>
                     </View>
@@ -134,7 +159,7 @@ export default function GeneralInformationScreen({ navigation }) {
                                     color: THEME_COLORS.TEXT_LIGHT_BLACK
                                 }}
                             >
-                                {GlbalLocale.eventWebLink}
+                                {data?.website}
                             </Text>
                         </View>
                     </View>
