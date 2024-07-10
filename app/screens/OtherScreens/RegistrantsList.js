@@ -8,16 +8,27 @@ import { MEDIA_BASE_URL, getRequest, postRequest } from '../../helpers/APIReques
 import { get_my_card, get_registrants_api } from '../../constants/APIEndpoints'
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen'
 import Toast from 'react-native-toast-message'
+import PaymentProofModal from '../../components/PaymentProofModal'
+import { useIsFocused } from '@react-navigation/native'
 
 export default function RegistrantsList({ navigation }) {
 
     const [registratnts_list, setRegistratntsList] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [indexLoading, setIndexLoading] = useState(false)
+    const [seleted_value, setSelectedValue] = useState(null);
+    const [showPaymentModel, setShowPaymentModel] = useState(null);
 
     useEffect(() => {
-        getRegistratntsList()
-    }, [])
+        if (seleted_value) {
+            setShowPaymentModel(true)
+        }
+    }, [seleted_value])
+
+    useEffect(() => {
+        if (!showPaymentModel)
+            getRegistratntsList()
+    }, [showPaymentModel])
 
     async function getMyRegistrationCard(registration_id) {
         setIndexLoading(registration_id)
@@ -68,6 +79,11 @@ export default function RegistrantsList({ navigation }) {
                 setIsLoading(false)
                 console.log("Error Get Registrants:::", error)
             })
+    }
+
+    function onCloseModel() {
+        setSelectedValue(null)
+        setShowPaymentModel(false)
     }
 
     const main_list_item_css = "p-1 border-b-2 border-gray-100 flex justify-evenly items-center flex-row"
@@ -236,7 +252,9 @@ export default function RegistrantsList({ navigation }) {
                                         }}
                                     >UnPaid</Text>
                                     <TouchableOpacity
-                                        onPress={() => { }}
+                                        onPress={() => {
+                                            setSelectedValue(item)
+                                        }}
                                         className="my-2 w-full p-2 items-center justify-center self-center rounded-lg"
                                         style={{
                                             backgroundColor: THEME_COLORS.PRIMARY_COLOR
@@ -307,6 +325,11 @@ export default function RegistrantsList({ navigation }) {
                     }
                 />
             </View>
+            <PaymentProofModal
+                isModalVisible={showPaymentModel}
+                selectedData={seleted_value}
+                onCloseModel={onCloseModel}
+            />
         </View>
     )
 }

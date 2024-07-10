@@ -101,8 +101,10 @@ export default function PCSPortal({ navigation }) {
                         numColumns={2}
                         renderItem={({ item, index }) => (<TouchableOpacity
                             onPress={() => {
-                                if (item.screenName) {
+                                if (item.screenName && !item.link) {
                                     navigation.navigate({ name: item.screenName, params: { forSelf: item.text === "Other Person Registration" ? false : true } })
+                                } else if (item.link) {
+                                    navigation.navigate({ name: 'WebSubmissionForms', params: { title: item.text, path: `${user[item.key] ? "edit-" : ""}${item.link}${user.user_id}` } })
                                 }
                             }}
                             style={{
@@ -123,13 +125,19 @@ export default function PCSPortal({ navigation }) {
                                     fontFamily: "Poppins-Medium",
                                     fontSize: hp(1)
                                 }}>{item.text}</Text>
-                            {item.isEditable && <Text className="py-0.5 px-2 rounded-full text-center"
-                                style={{
-                                    color: "white",
-                                    fontFamily: "Poppins-Medium",
-                                    fontSize: hp(0.8),
-                                    backgroundColor: THEME_COLORS.PRIMARY_COLOR
-                                }}>Edit Submission</Text>}
+                            {item.key && user[item.key] == 1 && (
+                                <Text
+                                    className="py-0.5 px-2 rounded-full text-center"
+                                    style={{
+                                        color: "white",
+                                        fontFamily: "Poppins-Medium",
+                                        fontSize: hp(0.8),
+                                        backgroundColor: THEME_COLORS.PRIMARY_COLOR,
+                                    }}
+                                >
+                                    Edit Submission
+                                </Text>
+                            )}
                         </TouchableOpacity>)}
                         keyExtractor={(item, index) => index.toString()}
                     // ListFooterComponent={

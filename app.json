@@ -1,16 +1,11 @@
 {
   "expo": {
-    "name": "PCS(Pakistan Cardiac Society)",
+    "name": "PakCardiocon",
     "slug": "PCS",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/app_logo.png",
     "userInterfaceStyle": "light",
-    "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
-    },
     "assetBundlePatterns": [
       "**/*"
     ],
@@ -20,7 +15,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/app_logo.png",
         "backgroundColor": "#ffffff"
       },
       "permissions": [

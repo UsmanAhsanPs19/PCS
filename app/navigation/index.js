@@ -43,12 +43,13 @@ export default function AppNavigation() {
                 tabBarIcon: ({ focused, color, size }) => {
                     if (route.name === 'Home') {
                         return <HomeIcon size={size} color={color} />
-                    } else if (route.name === 'Navigation') {
-                        return <Squares2X2Icon size={size} color={color} />
                     }
-                    else if (route.name === 'Schedule') {
-                        return <CalendarDaysIcon size={size} color={color} />
-                    }
+                    // else if (route.name === 'Navigation') {
+                    //     return <Squares2X2Icon size={size} color={color} />
+                    // }
+                    // else if (route.name === 'Schedule') {
+                    //     return <CalendarDaysIcon size={size} color={color} />
+                    // }
 
                     // You can return any component that you like here!
                     // return <Icon name={iconName} size={size} color={color} />;
@@ -71,8 +72,8 @@ export default function AppNavigation() {
                 }}
             >
                 <BottomTabs.Screen name="Home" component={HomeScreen} />
-                <BottomTabs.Screen name="Navigation" component={NavigationScreen} />
-                <BottomTabs.Screen name="Schedule" component={ScheduleScreen} />
+                {/* <BottomTabs.Screen name="Navigation" component={NavigationScreen} />
+                <BottomTabs.Screen name="Schedule" component={ScheduleScreen} /> */}
             </BottomTabs.Navigator>
         )
     }

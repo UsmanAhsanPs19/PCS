@@ -220,7 +220,7 @@ export default function HomeScreen({ navigation }) {
                         >
                           {d.text}
                         </Text>
-                        {d.key && user[d.key] == 0 && (
+                        {d.key && user[d.key] == 1 && (
                           <Text
                             className="py-0.5 px-2 rounded-full text-center"
                             style={{
@@ -477,19 +477,30 @@ export default function HomeScreen({ navigation }) {
                     Please wait...
                   </Text>
                 </View>
-              ) : (
-                top_sponsers.map((image, index) => (
-                  <View key={`sponsers-${index}`} className="p-3">
-                    <Image
-                      key={index}
-                      resizeMode="contain"
-                      className=""
-                      style={{ height: hp(6), width: wp("17%") }}
-                      source={{ uri: `${MEDIA_BASE_URL}/${image.image}` }}
-                    />
-                  </View>
-                ))
-              )}
+              ) :
+                top_sponsers.length > 0 ? (
+                  top_sponsers.map((image, index) => (
+                    <View key={`sponsers-${index}`} className="p-3">
+                      <Image
+                        key={index}
+                        resizeMode="contain"
+                        className=""
+                        style={{ height: hp(6), width: wp("17%") }}
+                        source={{ uri: `${MEDIA_BASE_URL}/${image.image}` }}
+                      />
+                    </View>
+                  ))
+                ) : (
+                  <Text
+                    className="text-center"
+                    style={{
+                      color: THEME_COLORS.GRAY_TEXT,
+                      fontFamily: "Poppins-Regular",
+                    }}
+                  >
+                    There is no sponsers
+                  </Text>
+                )}
             </View>
           </View>
         </View>

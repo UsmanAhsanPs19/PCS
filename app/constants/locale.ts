@@ -67,5 +67,6 @@ export const GlbalLocale = {
     submit: "Submit",
     check_details: "check Details",
     pay_now: "Pay Now",
-    entry_card: "Get Card"
+    entry_card: "Get Card",
+    dismiss_label: "Dismiss"
 }
