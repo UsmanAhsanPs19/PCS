@@ -14,8 +14,9 @@ import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
 } from "react-native-responsive-screen";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
+  get_profile,
   top_speakers_url,
   top_sponsers_url,
 } from "../../constants/APIEndpoints";
@@ -24,6 +25,8 @@ import { navigation_data_after_auth, navigation_section_data, pcs_portal_data } 
 import { GlbalLocale } from "../../constants/locale";
 import { MEDIA_BASE_URL, getRequest } from "../../helpers/APIRequest";
 import HomeHeader from "./components/header";
+import { setAuth } from "../../redux/AuthSlice";
+import { useIsFocused } from "@react-navigation/native";
 export default function HomeScreen({ navigation }) {
   const { isAuthorized } = useSelector((state) => state?.AuthStore);
   const { user } = useSelector(state => state.AuthStore);
@@ -32,11 +35,16 @@ export default function HomeScreen({ navigation }) {
   const [sponsers_loading, setSponsersLoading] = useState(false);
   const [top_speakers, setTopSpeakers] = useState([]);
   const [top_sponsers, setTopSponsers] = useState([]);
+  const dispatch = useDispatch()
+  const isFocused = useIsFocused();
 
   useEffect(() => {
-    getSpeakers();
-    getSponsers();
-  }, []);
+    if (isFocused) {
+      getSpeakers();
+      getSponsers();
+      getUserData();
+    }
+  }, [isFocused]);
 
   // Get list of top speakers
   async function getSpeakers() {
@@ -53,6 +61,17 @@ export default function HomeScreen({ navigation }) {
         console.log("getSpeakers Error:::", error);
         setSpeakersLoading(false);
       });
+  }
+
+  // Get user data
+  async function getUserData() {
+    await getRequest(get_profile).then(response => {
+      if (response.status) {
+        dispatch(setAuth(response.data?.profile));
+      }
+    }).catch(error => {
+      console.log("Error GEt Profile::", error)
+    })
   }
 
   // Get list of top sponsers
@@ -148,7 +167,7 @@ export default function HomeScreen({ navigation }) {
                             navigation.navigate(d.screenName);
                           }
                           else if (d.key !== "modify_profile") {
-                            navigation.navigate({ name: 'WebSubmissionForms', params: { title: d.text, path: `${d.link}${user.user_id}` } })
+                            navigation.navigate({ name: 'WebSubmissionForms', params: { title: d.text, path: `${user[d.key] ? "edit-" : ""}${d.link}${user.user_id}` } })
                           }
                         }}
                         style={{
@@ -172,7 +191,7 @@ export default function HomeScreen({ navigation }) {
                         >
                           {d.text}
                         </Text>
-                        {d.key && user[d.key] == 0 && (
+                        {d.key && user[d.key] == 1 && (
                           <Text
                             className="py-0.5 px-2 rounded-full text-center"
                             style={{
@@ -364,9 +383,9 @@ export default function HomeScreen({ navigation }) {
                 <FlatList
                   disableVirtualization
                   data={top_speakers}
-                  ListHeaderComponent={
-                    speakers_loading && (
-                      <View className="space-y-1 my-2 flex justify-center items-center">
+                  ListEmptyComponent={
+                    speakers_loading ? (
+                      <View className="bg-white space-y-1 my-2 flex justify-center items-center">
                         <ActivityIndicator
                           color={THEME_COLORS.PRIMARY_DARK}
                           size={"large"}
@@ -379,7 +398,16 @@ export default function HomeScreen({ navigation }) {
                         >
                           Please wait...
                         </Text>
-                      </View>
+                      </View>) : (
+                      <Text
+                        className="text-center"
+                        style={{
+                          color: THEME_COLORS.GRAY_TEXT,
+                          fontFamily: "Poppins-Regular",
+                        }}
+                      >
+                        There is no speakers
+                      </Text>
                     )
                   }
                   numColumns={2}
@@ -492,7 +520,7 @@ export default function HomeScreen({ navigation }) {
                   ))
                 ) : (
                   <Text
-                    className="text-center"
+                    className="flex-1 self-center text-center"
                     style={{
                       color: THEME_COLORS.GRAY_TEXT,
                       fontFamily: "Poppins-Regular",

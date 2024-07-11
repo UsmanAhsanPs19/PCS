@@ -89,7 +89,8 @@ export default function AppNavigation() {
                 <MainScreens.Screen name='Forgot' component={ResetPasswordScreen} />
                 <MainScreens.Screen name='ChangePassword' component={ChangeForgotPassword} />
                 <MainScreens.Screen name='UpdateProfile' component={ModifyAccount} />
-                <MainScreens.Screen name='Dashboard' component={Dashboard} />
+                {/* <MainScreens.Screen name='Dashboard' component={Dashboard} /> */}
+                <MainScreens.Screen name="Dashboard" component={HomeScreen} />
                 <MainScreens.Screen name='PCSPortal' component={PCSPortal} />
                 <MainScreens.Screen name='NavigationPortal' component={NavigationPortal} />
                 <MainScreens.Screen name='EventInfo' component={GeneralInformation} />

@@ -90,7 +90,7 @@ export default function ScheduleScreen({ navigation }) {
                                     }}
                                 >
                                     <Text
-                                        className={"text-lg text-center"}
+                                        className={"text-xl text-center"}
                                         style={{
                                             color: THEME_COLORS.PRIMARY_COLOR_DARK,
                                             textDecorationLine: selected_index == date ? "underline" : "none",
@@ -107,6 +107,7 @@ export default function ScheduleScreen({ navigation }) {
                 <View>
                     <FlatList
                         data={data[selected_index]}
+                        disableVirtualization
                         renderItem={({ item, index }) => (
                             <View>
                                 <View

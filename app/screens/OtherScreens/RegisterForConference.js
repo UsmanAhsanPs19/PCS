@@ -445,7 +445,8 @@ export default function RegisterForConference({ navigation, route }) {
                                             height: hp('25%')
                                         }}
                                         source={{
-                                            uri: (profile_picture && `${MEDIA_BASE_URL}/${profile_picture}`) || picked_image?.uri
+                                            // uri: (profile_picture && `${MEDIA_BASE_URL}/${profile_picture}`) || 
+                                            uri: picked_image?.uri
                                         }}
                                     />
                                     :

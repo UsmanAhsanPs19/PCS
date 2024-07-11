@@ -1,6 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useEffect, useState } from "react";
-import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { Image, Platform, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { THEME_COLORS } from "../../constants/colors";
 
 import { Picker } from "@react-native-picker/picker";
@@ -13,6 +13,10 @@ import { GlbalLocale } from "../../constants/locale";
 import { getRequest, postRequest } from "../../helpers/APIRequest";
 import CustomButton from "./components/CustomButton";
 import ChooseImage from "../OtherScreens/components/ChooseImage";
+import ModalPicker from "rn-modal-picker";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { GENDER_PICKER, TITLE_PICKER } from "../../constants/data";
+// import KeyboardAwareScrollView from 'react-native-keyboard-aware-scroll-view';
 
 export default function SignupScreen({ navigation }) {
   // const [firstName, setFirstName] = useState("Usman");
@@ -85,7 +89,11 @@ export default function SignupScreen({ navigation }) {
       .then((response) => {
         console.log("getProfessions Data::", response);
         if (response.status && response.data) {
-          setProfessionList(response.data)
+          let temp_profession = -[]
+          response.data.map(val => {
+            temp_profession = [...temp_profession, { name: val?.name, id: val?.name }]
+          })
+          setProfessionList(temp_profession)
         }
         else {
           Toast.show({
@@ -330,261 +338,304 @@ export default function SignupScreen({ navigation }) {
   return (
     <View
       style={{ backgroundColor: THEME_COLORS.BG_COLOR }}
-      className="flex-1 items-center pt-10"
+      className={`flex-1 items-center ${Platform.OS === "android" && "pt-10"}`}
     >
       <StatusBar style={"dark"} />
       {/* View for input fields & login button */}
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <View className="space-y-3">
-          <ArrowLeftIcon
-            onPress={() => {
-              navigation.goBack();
-            }}
-            size={hp(3)}
-            color={THEME_COLORS.textColor}
-          />
-          <View>
-            <Text
-              className={"text-lg font-medium space-y-2"}
-              style={{
-                color: THEME_COLORS.textColor,
-                fontSize: hp(2.5),
-                fontFamily: "Poppins-Medium",
+      <KeyboardAwareScrollView contentContainerStyle={{ paddingHorizontal: Platform.OS === "ios" && 10, flex: 1 }}>
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <View className="space-y-2">
+            <ArrowLeftIcon
+              onPress={() => {
+                navigation.goBack();
               }}
-            >
-              {GlbalLocale.signup}
-            </Text>
-          </View>
-
-          {/* Profile picture */}
-          <View>
-            <View className="items-center justify-center">
-              {picked_image ? <Image
-                className="rounded-full mb-3"
-                style={{
-                  width: wp('50%'),
-                  height: hp('25%')
-                }}
-                source={{
-                  uri: picked_image?.uri
-                }}
-              /> :
-                <UserCircleIcon color={"gray"} size={hp('20%')} />}
-            </View>
-            {errors.profile &&
+              size={hp(3)}
+              color={THEME_COLORS.textColor}
+            />
+            <View>
               <Text
-                className="text-red-500 text-center"
+                className={"text-lg font-medium space-y-1"}
                 style={{
-                  fontFamily: "Poppins-Medium"
+                  color: THEME_COLORS.textColor,
+                  fontSize: hp(2.5),
+                  fontFamily: "Poppins-Medium",
                 }}
-              >{errors.profile}</Text>
-            }
-            {/* Image picker */}
-            {<ChooseImage
-              setPickedImage={setPickedImage}
-              picked_image={picked_image}
-            />}
-          </View>
-          {/* Dropdown for title inputs */}
-          <View
-            className="border rounded-lg"
-            style={{
-              borderColor: THEME_COLORS.BORDER_COLOR,
-            }}
-          >
-            <Picker
-              className=""
-              selectionColor={THEME_COLORS.PRIMARY_COLOR}
-              selectedValue={selected_title}
-              shouldRasterizeIOS
-              onValueChange={(itemValue, itemIndex) =>
-                setSelectedTitle(itemValue)
+              >
+                {GlbalLocale.signup}
+              </Text>
+            </View>
+
+            {/* Profile picture */}
+            <View>
+              <View className="items-center justify-center">
+                {picked_image ? <Image
+                  className="rounded-full mb-3"
+                  style={{
+                    width: wp('50%'),
+                    height: hp('25%')
+                  }}
+                  source={{
+                    uri: picked_image?.uri
+                  }}
+                /> :
+                  <UserCircleIcon color={"gray"} size={hp('20%')} />}
+              </View>
+              {errors.profile &&
+                <Text
+                  className="text-red-500 text-center"
+                  style={{
+                    fontFamily: "Poppins-Medium"
+                  }}
+                >{errors.profile}</Text>
               }
-            >
-              <Picker.Item label="Mr." value="Mr." />
-              <Picker.Item label="Mrs." value="Mrs." />
-              <Picker.Item label="Miss" value="Miss" />
-              <Picker.Item label="Dr." value="Dr." />
-              <Picker.Item label="Prof." value="Prof." />
-            </Picker>
-          </View>
-
-          {/* First name Input */}
-          <CustomInput
-            placeholder={GlbalLocale.firstName}
-            value={firstName}
-            setValue={setFirstName}
-            name="username"
-            label="First Name"
-            error={errors.firstName}
-            classes={"my-2"}
-          />
-
-          {/* Last name Input */}
-          <CustomInput
-            placeholder={GlbalLocale.lastName}
-            value={lastName}
-            setValue={setLastName}
-            name="username"
-            label="Last Name"
-            error={errors.lastName}
-            classes={"my-2"}
-          />
-
-          {/* Gender details */}
-          <View>
+              {/* Image picker */}
+              {<ChooseImage
+                setPickedImage={setPickedImage}
+                picked_image={picked_image}
+              />}
+            </View>
+            {/* Dropdown for title inputs */}
             <View
               className="border rounded-lg"
               style={{
                 borderColor: THEME_COLORS.BORDER_COLOR,
               }}
             >
-              <Picker
+              {Platform.OS === "ios" && <ModalPicker
+                value={selected_title}
+                data={TITLE_PICKER}
+                animationType={"slide"}
+                pickerContainerStyle={styles.pickerStyle}
+                // dropDownIcon={require("./res/ic_drop_down.png")}
+                selectedTextStyle={styles.selectedTextStyle}
+                listTextStyle={styles.listTextStyle}
+                placeHolderText={"Please select title"}
+                placeHolderTextColor={"black"}
+                onChange={(value) => {
+                  setSelectedTitle(value);
+                }}
+              />}
+              {Platform.OS === "android" && <Picker
                 className=""
                 selectionColor={THEME_COLORS.PRIMARY_COLOR}
-                selectedValue={selected_gender}
-                shouldRasterizeIOS
+                selectedValue={selected_title}
+                mode="dialog"
                 onValueChange={(itemValue, itemIndex) =>
-                  setSelectedGender(itemValue)
+                  setSelectedTitle(itemValue)
                 }
               >
-                <Picker.Item label="Male" value="Male" />
-                <Picker.Item label="Female" value="Female" />
-              </Picker>
+                <Picker.Item label="Mr." value="Mr." />
+                <Picker.Item label="Mrs." value="Mrs." />
+                <Picker.Item label="Miss" value="Miss" />
+                <Picker.Item label="Dr." value="Dr." />
+                <Picker.Item label="Prof." value="Prof." />
+              </Picker>}
             </View>
-          </View>
 
-          {/* Profession Input */}
-          <View className="space-y-1">
-            <Text
-              className={"text-lg font-thin"}
-              style={{
-                color: THEME_COLORS.GRAY_TEXT,
-                fontSize: hp(1.5),
-                fontFamily: "Poppins-Regular",
-              }}
-            >
-              {GlbalLocale.profession}
-            </Text>
-            <View
-              className="border rounded-lg"
-              style={{
-                borderColor: THEME_COLORS.BORDER_COLOR,
-              }}
-            >
-              <Picker
-                className=""
-                selectionColor={THEME_COLORS.PRIMARY_COLOR}
-                selectedValue={profession}
-                shouldRasterizeIOS
-                placeholder="Profession"
-                onValueChange={(itemValue, itemIndex) =>
-                  setProfession(itemValue)
-                }
+            {/* First name Input */}
+            <CustomInput
+              placeholder={GlbalLocale.firstName}
+              value={firstName}
+              setValue={setFirstName}
+              name="username"
+              label="First Name"
+              error={errors.firstName}
+              classes={"my-2"}
+            />
+
+            {/* Last name Input */}
+            <CustomInput
+              placeholder={GlbalLocale.lastName}
+              value={lastName}
+              setValue={setLastName}
+              name="username"
+              label="Last Name"
+              error={errors.lastName}
+              classes={"my-2"}
+            />
+
+            {/* Gender details */}
+            <View>
+              <View
+                className="border rounded-lg"
+                style={{
+                  borderColor: THEME_COLORS.BORDER_COLOR,
+                }}
               >
-                {
-                  profession_list.map((prof, index) => (
-                    <Picker.Item key={index} label={prof?.name} value={prof?.name} />
-                  ))
-                }
-              </Picker>
+                {Platform.OS === "ios" && <ModalPicker
+                  value={selected_gender}
+                  data={GENDER_PICKER}
+                  animationType={"slide"}
+                  pickerContainerStyle={styles.pickerStyle}
+                  // dropDownIcon={require("./res/ic_drop_down.png")}
+                  selectedTextStyle={styles.selectedTextStyle}
+                  listTextStyle={styles.listTextStyle}
+                  placeHolderText={"Please select gender"}
+                  placeHolderTextColor={"black"}
+                  onChange={(value) => {
+                    setSelectedGender(value);
+                  }}
+                />}
+                {Platform.OS === "android" && <Picker
+                  className=""
+                  selectionColor={THEME_COLORS.PRIMARY_COLOR}
+                  selectedValue={selected_gender}
+                  shouldRasterizeIOS
+                  onValueChange={(itemValue, itemIndex) =>
+                    setSelectedGender(itemValue)
+                  }
+                >
+                  <Picker.Item label="Male" value="Male" />
+                  <Picker.Item label="Female" value="Female" />
+                </Picker>}
+              </View>
             </View>
-          </View>
 
-          {/* Place of work Input */}
-          <CustomInput
-            placeholder={GlbalLocale.place_of_work}
-            value={place_of_work}
-            setValue={setPlaceOfWork}
-            name="place_of_work"
-            label="Place of Work"
-            error={errors.place_of_work}
-            classes={"my-2"}
-          />
+            {/* Profession Input */}
+            <View className="space-y-1">
+              <Text
+                className={"text-lg font-thin"}
+                style={{
+                  color: THEME_COLORS.GRAY_TEXT,
+                  fontSize: hp(1.5),
+                  fontFamily: "Poppins-Regular",
+                }}
+              >
+                {GlbalLocale.profession}
+              </Text>
+              <View
+                className="border rounded-lg"
+                style={{
+                  borderColor: THEME_COLORS.BORDER_COLOR,
+                }}
+              >
+                {Platform.OS === "ios" && <ModalPicker
+                  value={profession}
+                  data={profession_list}
+                  animationType={"slide"}
+                  pickerContainerStyle={styles.pickerStyle}
+                  // dropDownIcon={require("./res/ic_drop_down.png")}
+                  selectedTextStyle={styles.selectedTextStyle}
+                  listTextStyle={styles.listTextStyle}
+                  placeHolderText={"Please select profession"}
+                  placeHolderTextColor={"black"}
+                  onChange={(value) => {
+                    setProfession(value);
+                  }}
+                />}
+                {Platform.OS === "android" && <Picker
+                  className=""
+                  selectionColor={THEME_COLORS.PRIMARY_COLOR}
+                  selectedValue={profession}
+                  shouldRasterizeIOS
+                  placeholder="Profession"
+                  onValueChange={(itemValue, itemIndex) =>
+                    setProfession(itemValue)
+                  }
+                >
+                  {
+                    profession_list.map((prof, index) => (
+                      <Picker.Item key={index} label={prof?.name} value={prof?.name} />
+                    ))
+                  }
+                </Picker>}
+              </View>
+            </View>
 
-          {/* Department Input */}
-          <CustomInput
-            placeholder={GlbalLocale.department}
-            value={department}
-            setValue={setDepartment}
-            name="department"
-            label="Department"
-            error={errors.department}
-            classes={"my-2"}
-          />
+            {/* Place of work Input */}
+            <CustomInput
+              placeholder={GlbalLocale.place_of_work}
+              value={place_of_work}
+              setValue={setPlaceOfWork}
+              name="place_of_work"
+              label="Place of Work"
+              error={errors.place_of_work}
+              classes={"my-2"}
+            />
 
-          {/* PMDC/ PMNC Input */}
-          {profession === ("Doctor" || "Nurse") && <CustomInput
-            placeholder={
-              profession === "Doctor" ? GlbalLocale.pmdc : GlbalLocale.pmnc
-            }
-            value={pm_number}
-            label={profession === "Doctor" ? GlbalLocale.pmdc : GlbalLocale.pmnc}
-            setValue={setPmNumber}
-            name="pm_number"
-            keyboardType="numeric"
-            error={errors.pm_number}
-            classes={"my-2"}
-          />}
+            {/* Department Input */}
+            <CustomInput
+              placeholder={GlbalLocale.department}
+              value={department}
+              setValue={setDepartment}
+              name="department"
+              label="Department"
+              error={errors.department}
+              classes={"my-2"}
+            />
 
-          {/* CNIC Input */}
-          <CustomInput
-            placeholder={GlbalLocale.cnic_without_dash}
-            value={cnic}
-            setValue={setCnic}
-            name="cnic"
-            label="CNIC"
-            error={errors.cnic}
-            classes={"my-2"}
-          />
+            {/* PMDC/ PMNC Input */}
+            {profession === ("Doctor" || "Nurse") && <CustomInput
+              placeholder={
+                profession === "Doctor" ? GlbalLocale.pmdc : GlbalLocale.pmnc
+              }
+              value={pm_number}
+              label={profession === "Doctor" ? GlbalLocale.pmdc : GlbalLocale.pmnc}
+              setValue={setPmNumber}
+              name="pm_number"
+              keyboardType="numeric"
+              error={errors.pm_number}
+              classes={"my-2"}
+            />}
 
-          {/* Country Input */}
-          <CustomInput
-            placeholder={GlbalLocale.country}
-            value={country}
-            setValue={setCountry}
-            name="country"
-            label="Country"
-            error={errors.country}
-            classes={"my-2"}
-          />
+            {/* CNIC Input */}
+            <CustomInput
+              placeholder={GlbalLocale.cnic_without_dash}
+              value={cnic}
+              setValue={setCnic}
+              name="cnic"
+              label="CNIC"
+              error={errors.cnic}
+              classes={"my-2"}
+            />
 
-          {/* Phone Number Input */}
-          <CustomInput
-            placeholder={GlbalLocale.phone_number}
-            value={phone_number}
-            setValue={setPhoneNumber}
-            name="phone_number"
-            keyboardType="numeric"
-            label="Phone Number"
-            error={errors.phone_number}
-            classes={"my-2"}
-          />
+            {/* Country Input */}
+            <CustomInput
+              placeholder={GlbalLocale.country}
+              value={country}
+              setValue={setCountry}
+              name="country"
+              label="Country"
+              error={errors.country}
+              classes={"my-2"}
+            />
 
-          {/* Mobile Number Input */}
-          <CustomInput
-            placeholder={GlbalLocale.mobile_number}
-            value={mobile_number}
-            setValue={setMobileNumber}
-            name='mobile_number'
-            keyboardType="numeric"
-            label="Mobile Number"
-            error={errors.mobile_number}
-            classes={"my-2"}
-          />
+            {/* Phone Number Input */}
+            <CustomInput
+              placeholder={GlbalLocale.phone_number}
+              value={phone_number}
+              setValue={setPhoneNumber}
+              name="phone_number"
+              keyboardType="numeric"
+              label="Phone Number"
+              error={errors.phone_number}
+              classes={"my-2"}
+            />
 
-          {/* Email Input */}
-          <CustomInput
-            placeholder={GlbalLocale.email}
-            value={email}
-            setValue={setEmail}
-            name="email"
-            label="Email"
-            error={errors.email}
-            classes={"my-2"}
-          />
-          {/* Email Input */}
-          {/* <CustomInput
+            {/* Mobile Number Input */}
+            <CustomInput
+              placeholder={GlbalLocale.mobile_number}
+              value={mobile_number}
+              setValue={setMobileNumber}
+              name='mobile_number'
+              keyboardType="numeric"
+              label="Mobile Number"
+              error={errors.mobile_number}
+              classes={"my-2"}
+            />
+
+            {/* Email Input */}
+            <CustomInput
+              placeholder={GlbalLocale.email}
+              value={email}
+              setValue={setEmail}
+              name="email"
+              label="Email"
+              error={errors.email}
+              classes={"my-2"}
+            />
+            {/* Email Input */}
+            {/* <CustomInput
                         placeholder={GlbalLocale.email}
                         value={confirm_email}
                         setValue={setConfirmEmail}
@@ -592,69 +643,70 @@ export default function SignupScreen({ navigation }) {
                         error={errors.confirm_email}
                         classes={"my-2"}
                     /> */}
-          {/* Password Input */}
-          <CustomInput
-            placeholder={GlbalLocale.password_placeholder}
-            value={password}
-            setValue={setPassword}
-            isSecured={true}
-            name="password"
-            label="Password"
-            error={errors.password}
-            classes={"my-2"}
-          />
-
-          {/* Password Input */}
-          <CustomInput
-            placeholder={GlbalLocale.confirm_password}
-            value={confirm_password}
-            setValue={setConfirmPassword}
-            isSecured={true}
-            name="password"
-            label="Confirm Password"
-            error={errors.confirm_password}
-            classes={"my-2"}
-          />
-
-          {/* Signup button */}
-          <View>
-            <CustomButton
-              text={GlbalLocale.signup}
-              onClick={validateAndSubmit}
-              isLoading={isLoading}
+            {/* Password Input */}
+            <CustomInput
+              placeholder={GlbalLocale.password_placeholder}
+              value={password}
+              setValue={setPassword}
+              isSecured={true}
+              name="password"
+              label="Password"
+              error={errors.password}
+              classes={"my-2"}
             />
+
+            {/* Password Input */}
+            <CustomInput
+              placeholder={GlbalLocale.confirm_password}
+              value={confirm_password}
+              setValue={setConfirmPassword}
+              isSecured={true}
+              name="password"
+              label="Confirm Password"
+              error={errors.confirm_password}
+              classes={"my-2"}
+            />
+
+            {/* Signup button */}
+            <View>
+              <CustomButton
+                text={GlbalLocale.signup}
+                onClick={validateAndSubmit}
+                isLoading={isLoading}
+              />
+            </View>
           </View>
-        </View>
-        {/* View to show the signup text */}
-        <View className="flex-row justify-center items-center mb-3">
-          <Text
-            className={"text-lg font-medium space-y-2"}
-            style={{
-              color: THEME_COLORS.textColor,
-              fontSize: hp(2),
-              fontFamily: "Poppins-Regular",
-            }}
-          >
-            {GlbalLocale.have_account}
-          </Text>
-          <TouchableOpacity
-            onPress={() => {
-              navigation.goBack();
-            }}
-          >
+          {/* View to show the signup text */}
+          <View className="flex-row justify-center items-center mb-3">
             <Text
               className={"text-lg font-medium space-y-2"}
               style={{
-                color: THEME_COLORS.PRIMARY_COLOR,
+                color: THEME_COLORS.textColor,
                 fontSize: hp(2),
-                fontFamily: "Poppins-Medium",
+                fontFamily: "Poppins-Regular",
               }}
             >
-              {GlbalLocale.signin}!
+              {GlbalLocale.have_account}
             </Text>
-          </TouchableOpacity>
-        </View>
-      </ScrollView>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.goBack();
+              }}
+            >
+              <Text
+                className={"text-lg font-medium space-y-2"}
+                style={{
+                  color: THEME_COLORS.PRIMARY_COLOR,
+                  fontSize: hp(2),
+                  fontFamily: "Poppins-Medium",
+                }}
+              >
+                {GlbalLocale.signin}!
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </ScrollView>
+      </KeyboardAwareScrollView>
 
       {/* <PopupMessage
                 visible={true}
@@ -662,3 +714,29 @@ export default function SignupScreen({ navigation }) {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  pickerStyle: {
+    height: "auto",
+    width: "100%",
+    marginVertical: 10,
+    borderColor: "transparent",
+    alignItems: "center",
+    alignSelf: "center",
+    padding: 5,
+    backgroundColor: "white",
+    borderRadius: 5,
+    borderWidth: 1.5,
+    fontSize: 16,
+    color: "#000",
+  },
+  selectedTextStyle: {
+    paddingLeft: 5,
+    color: "#000",
+    textAlign: "right",
+  },
+  listTextStyle: {
+    color: "#000",
+    textAlign: "right",
+  },
+});

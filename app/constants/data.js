@@ -189,14 +189,13 @@ export const navigation_data_after_auth = [
 ]
 
 export const navigation_all_data = [
-    // { name: "PCS Portal", screenName: "PCSPortal" },
     { name: "Schedule", screenName: "ScheduleScreen" },
-    { name: "Scientific Program", screenName: "" },
     { name: "Speakers", screenName: "SpeakersScreen" },
     { name: "Sponsors", screenName: "SponsersScreens" },
-    { name: "FAQs", screenName: "" },
+    { name: "Event Information", screenName: "EventInfo" },
     { name: "General Information", screenName: "GeneralInformation" },
-    { name: "Register for Cardiocon 2024", screenName: "" }
+    // { name: "FAQs", screenName: "" },
+    { name: "Register for Cardiocon 2024", screenName: "RegisterForConference" }
 ]
 
 export const speakers_data = [{
@@ -250,4 +249,38 @@ export const sponers_data = [
 // Big dimesions
 export const sponers_data_big = [
     <SathiSponser width={104} height={120} />, <LekSellIcon width={152} height={120} />, <HitonIcon width={120} height={120} />, <GetzIcon width={146} height={66} />, <SathiSponser width={104} height={120} />, <LekSellIcon width={152} height={120} />, <HitonIcon width={120} height={120} />, <GetzIcon width={146} height={66} />
+]
+
+export const TITLE_PICKER = [
+    {
+        id: "Mr.",
+        name: "Mr.",
+    },
+    {
+        id: "Mrs.",
+        name: "Mrs.",
+    },
+    {
+        id: "Miss",
+        name: "Miss",
+    },
+    {
+        id: "Dr.",
+        name: "Dr.",
+    },
+    {
+        id: "Prof.",
+        name: "Prof.",
+    },
+]
+
+export const GENDER_PICKER = [
+    {
+        id: "Male",
+        name: "Male",
+    },
+    {
+        id: "Female",
+        name: "Female",
+    }
 ]

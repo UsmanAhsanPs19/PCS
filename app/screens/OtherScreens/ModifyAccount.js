@@ -1,4 +1,4 @@
-import { Image, ScrollView, Text, View } from 'react-native'
+import { Image, Platform, ScrollView, StyleSheet, Text, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { THEME_COLORS } from '../../constants/colors'
 import { StatusBar } from 'expo-status-bar'
@@ -7,7 +7,7 @@ import { GlbalLocale } from '../../constants/locale'
 import CustomInput from '../../components/CustomInput'
 import CustomButton from './components/CustomButton'
 import { Picker } from '@react-native-picker/picker'
-import { getRequest, postRequest } from '../../helpers/APIRequest'
+import { getRequest, MEDIA_BASE_URL, postRequest } from '../../helpers/APIRequest'
 import { get_profession, get_profile, update_user } from '../../constants/APIEndpoints'
 import Toast from 'react-native-toast-message';
 import HeaderOther from './components/HeaderOther'
@@ -16,6 +16,9 @@ import ChooseImage from './components/ChooseImage'
 import { UserCircleIcon } from 'react-native-heroicons/solid'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { setAuth } from '../../redux/AuthSlice'
+import ModalPicker from 'rn-modal-picker'
+import { TITLE_PICKER } from '../../constants/data'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 export default function ModifyAccount({ navigation }) {
     const { user } = useSelector(state => state.AuthStore);
@@ -43,7 +46,7 @@ export default function ModifyAccount({ navigation }) {
     }, [])
 
     async function fillExistingDetails() {
-        console.log("Token data:::", await AsyncStorage.getItem('token'))
+        console.log("Token data:::", user)
         setFirstName(user?.first_name)
         setLastName(user?.second_name)
         setEmail(user?.email)
@@ -66,7 +69,11 @@ export default function ModifyAccount({ navigation }) {
             .then((response) => {
                 console.log("getProfessions Data::", response);
                 if (response.status && response.data) {
-                    setProfessionList(response.data)
+                    let temp_profession = []
+                    response.data?.map(val => {
+                        temp_profession = [...temp_profession, { name: val?.name, id: val?.name }]
+                    })
+                    setProfessionList(temp_profession)
                 }
                 else {
                     Toast.show({
@@ -88,6 +95,8 @@ export default function ModifyAccount({ navigation }) {
         await getRequest(get_profile).then(response => {
             if (response.status) {
                 dispatch(setAuth(response.data?.profile));
+                fillExistingDetails()
+                setPickedImage(null)
             }
             else {
                 Toast.show({
@@ -206,8 +215,9 @@ export default function ModifyAccount({ navigation }) {
             data.append('country', country);
             data.append('phone_number', phone_number);
             data.append('mobile_number', mobile_number);
+            // if (picked_image)
             data.append('profile_picture', {
-                uri: picked_image.uri,
+                uri: picked_image?.uri,
                 name: 'profile_image.jpg',
                 type: 'image/jpg',
             })
@@ -282,93 +292,123 @@ export default function ModifyAccount({ navigation }) {
             </View>
 
             {/* View for input fields & login button */}
-            <ScrollView
-                showsVerticalScrollIndicator={false}
-            >
-                <View className="space-y-4">
+            <KeyboardAwareScrollView contentContainerStyle={{ paddingHorizontal: Platform.OS === "ios" && 10, flex: 1 }}>
+                <ScrollView
+                    scrollEnabled={!isLoading}
+                    showsVerticalScrollIndicator={false}
+                >
+                    <View className="space-y-4">
 
-                    <View className="items-center justify-center">
-                        {user?.profile_picture || picked_image ? <Image
-                            className="rounded-full mb-3"
+                        <View className="items-center justify-center">
+                            {user?.profile_picture && !picked_image ? <Image
+                                className="bg-gray-50 rounded-full mb-3"
+                                style={{
+                                    width: wp('50%'),
+                                    height: hp('25%')
+                                }}
+                                source={{
+                                    uri: (user?.profile_picture && `${MEDIA_BASE_URL}/${user?.profile_picture}`)
+                                }}
+                            /> :
+                                picked_image ?
+                                    <Image
+                                        className="bg-gray-50 rounded-full mb-3"
+                                        style={{
+                                            width: wp('50%'),
+                                            height: hp('25%')
+                                        }}
+                                        source={{
+                                            uri: picked_image?.uri
+                                        }}
+                                    />
+                                    :
+                                    <UserCircleIcon color={"gray"} size={hp('20%')} />}
+                        </View>
+                        {/* Image picker */}
+                        <ChooseImage
+                            setPickedImage={setPickedImage}
+                            picked_image={picked_image}
+                        />
+
+                        {/* Dropdown for title inputs */}
+                        <View className="border rounded-lg"
                             style={{
-                                width: wp('50%'),
-                                height: hp('25%')
+                                borderColor: THEME_COLORS.BORDER_COLOR
                             }}
-                            source={{ uri: user?.profile_picture || picked_image?.uri }}
-                        /> :
-                            <UserCircleIcon color={"gray"} size={hp('20%')} />}
-                    </View>
-                    {/* Image picker */}
-                    <ChooseImage
-                        setPickedImage={setPickedImage}
-                        picked_image={picked_image}
-                    />
-
-                    {/* Dropdown for title inputs */}
-                    <View className="border rounded-lg"
-                        style={{
-                            borderColor: THEME_COLORS.BORDER_COLOR
-                        }}
-                    >
-                        <Picker
-                            className=""
-                            selectionColor={THEME_COLORS.PRIMARY_COLOR}
-                            selectedValue={selected_title}
-                            shouldRasterizeIOS
-                            onValueChange={(itemValue, itemIndex) =>
-                                setSelectedTitle(itemValue)
-                            }
                         >
-                            <Picker.Item label="Mr." value="Mr." />
-                            <Picker.Item label="Mrs." value="Mrs." />
-                            <Picker.Item label="Miss" value="Miss" />
-                            <Picker.Item label="Dr." value="Dr." />
-                            <Picker.Item label="Prof." value="Prof." />
-                        </Picker>
-                    </View>
+                            <Picker
+                                className=""
+                                selectionColor={THEME_COLORS.PRIMARY_COLOR}
+                                selectedValue={selected_title}
+                                shouldRasterizeIOS
+                                onValueChange={(itemValue, itemIndex) =>
+                                    setSelectedTitle(itemValue)
+                                }
+                            >
+                                <Picker.Item label="Mr." value="Mr." />
+                                <Picker.Item label="Mrs." value="Mrs." />
+                                <Picker.Item label="Miss" value="Miss" />
+                                <Picker.Item label="Dr." value="Dr." />
+                                <Picker.Item label="Prof." value="Prof." />
+                            </Picker>
+                        </View>
 
-                    {/* First name Input */}
-                    <CustomInput
-                        placeholder={GlbalLocale.firstName}
-                        value={firstName}
-                        setValue={setFirstName}
-                        name='username'
-                        error={errors.firstName}
-                        classes={"my-2"}
-                    />
+                        {/* First name Input */}
+                        <CustomInput
+                            placeholder={GlbalLocale.firstName}
+                            value={firstName}
+                            setValue={setFirstName}
+                            name='username'
+                            error={errors.firstName}
+                            classes={"my-2"}
+                        />
 
-                    {/* Last name Input */}
-                    <CustomInput
-                        placeholder={GlbalLocale.lastName}
-                        value={lastName}
-                        setValue={setLastName}
-                        name='username'
-                        error={errors.lastName}
-                        classes={"my-2"}
-                    />
+                        {/* Last name Input */}
+                        <CustomInput
+                            placeholder={GlbalLocale.lastName}
+                            value={lastName}
+                            setValue={setLastName}
+                            name='username'
+                            error={errors.lastName}
+                            classes={"my-2"}
+                        />
 
-                    {/* Gender details */}
-                    <View className="border rounded-lg"
-                        style={{
-                            borderColor: THEME_COLORS.BORDER_COLOR
-                        }}
-                    >
-                        <Picker
-                            className=""
-                            selectionColor={THEME_COLORS.PRIMARY_COLOR}
-                            selectedValue={selected_title}
-                            shouldRasterizeIOS
-                            onValueChange={(itemValue, itemIndex) =>
-                                setSelectedTitle(itemValue)
-                            }
+                        {/* Gender details */}
+                        <View className="border rounded-lg"
+                            style={{
+                                borderColor: THEME_COLORS.BORDER_COLOR
+                            }}
                         >
-                            <Picker.Item label="Male" value="Male" />
-                            <Picker.Item label="Female" value="Female" />
-                        </Picker>
-                    </View>
+                            {Platform.OS === "ios" && <ModalPicker
+                                value={selected_title}
+                                data={TITLE_PICKER}
+                                animationType={"slide"}
+                                pickerContainerStyle={styles.pickerStyle}
+                                // dropDownIcon={require("./res/ic_drop_down.png")}
+                                selectedTextStyle={styles.selectedTextStyle}
+                                listTextStyle={styles.listTextStyle}
+                                placeHolderText={"Please select title"}
+                                placeHolderTextColor={"black"}
+                                onChange={(value) => {
+                                    setSelectedTitle(value);
+                                }}
+                            />}
+                            {Platform.OS === "android" && <Picker
+                                className=""
+                                selectionColor={THEME_COLORS.PRIMARY_COLOR}
+                                selectedValue={selected_title}
+                                shouldRasterizeIOS
+                                onValueChange={(itemValue, itemIndex) =>
+                                    setSelectedTitle(itemValue)
+                                }
+                            >
+                                <Picker.Item label="Male" value="Male" />
+                                <Picker.Item label="Female" value="Female" />
+                            </Picker>}
+                        </View>
 
-                    {/* Profession Input */}
-                    {/* <CustomInput
+                        {/* Profession Input */}
+                        {/* <CustomInput
                         placeholder={GlbalLocale.profession}
                         value={profession}
                         setValue={setProfession}
@@ -376,107 +416,121 @@ export default function ModifyAccount({ navigation }) {
                         error={errors.profession}
                         classes={"my-2"}
                     /> */}
-                    {/* Profession Input */}
-                    <View className="space-y-1">
-                        <Text
-                            className={"text-lg font-thin"}
-                            style={{
-                                color: THEME_COLORS.GRAY_TEXT,
-                                fontSize: hp(1.5),
-                                fontFamily: "Poppins-Regular",
-                            }}
-                        >
-                            {GlbalLocale.profession}
-                        </Text>
-                        <View
-                            className="border rounded-lg"
-                            style={{
-                                borderColor: THEME_COLORS.BORDER_COLOR,
-                            }}
-                        >
-                            <Picker
-                                className=""
-                                selectionColor={THEME_COLORS.PRIMARY_COLOR}
-                                selectedValue={profession}
-                                shouldRasterizeIOS
-                                placeholder="Profession"
-                                onValueChange={(itemValue, itemIndex) =>
-                                    setProfession(itemValue)
-                                }
+                        {/* Profession Input */}
+                        <View className="space-y-1">
+                            <Text
+                                className={"text-lg font-thin"}
+                                style={{
+                                    color: THEME_COLORS.GRAY_TEXT,
+                                    fontSize: hp(1.5),
+                                    fontFamily: "Poppins-Regular",
+                                }}
                             >
-                                {
-                                    profession_list.map((prof, index) => (
-                                        <Picker.Item key={index} label={prof?.name} value={prof?.name} />
-                                    ))
-                                }
-                            </Picker>
+                                {GlbalLocale.profession}
+                            </Text>
+                            <View
+                                className="border rounded-lg"
+                                style={{
+                                    borderColor: THEME_COLORS.BORDER_COLOR,
+                                }}
+                            >
+                                {Platform.OS === "ios" && <ModalPicker
+                                    value={profession}
+                                    data={profession_list}
+                                    animationType={"slide"}
+                                    pickerContainerStyle={styles.pickerStyle}
+                                    // dropDownIcon={require("./res/ic_drop_down.png")}
+                                    selectedTextStyle={styles.selectedTextStyle}
+                                    listTextStyle={styles.listTextStyle}
+                                    placeHolderText={"Please select profession"}
+                                    placeHolderTextColor={"black"}
+                                    onChange={(value) => {
+                                        setProfession(value);
+                                    }}
+                                />}
+                                {Platform.OS === "android" && <Picker
+                                    className=""
+                                    selectionColor={THEME_COLORS.PRIMARY_COLOR}
+                                    selectedValue={profession}
+                                    shouldRasterizeIOS
+                                    placeholder="Profession"
+                                    onValueChange={(itemValue, itemIndex) =>
+                                        setProfession(itemValue)
+                                    }
+                                >
+                                    {
+                                        profession_list.map((prof, index) => (
+                                            <Picker.Item key={index} label={prof?.name} value={prof?.name} />
+                                        ))
+                                    }
+                                </Picker>}
+                            </View>
                         </View>
-                    </View>
 
-                    {/* Place of work Input */}
-                    <CustomInput
-                        placeholder={GlbalLocale.place_of_work}
-                        value={place_of_work}
-                        setValue={setPlaceOfWork}
-                        name='place_of_work'
-                        error={errors.place_of_work}
-                        classes={"my-2"}
-                    />
+                        {/* Place of work Input */}
+                        <CustomInput
+                            placeholder={GlbalLocale.place_of_work}
+                            value={place_of_work}
+                            setValue={setPlaceOfWork}
+                            name='place_of_work'
+                            error={errors.place_of_work}
+                            classes={"my-2"}
+                        />
 
-                    {/* Department Input */}
-                    <CustomInput
-                        placeholder={GlbalLocale.department}
-                        value={department}
-                        setValue={setDepartment}
-                        name='department'
-                        error={errors.department}
-                        classes={"my-2"}
-                    />
+                        {/* Department Input */}
+                        <CustomInput
+                            placeholder={GlbalLocale.department}
+                            value={department}
+                            setValue={setDepartment}
+                            name='department'
+                            error={errors.department}
+                            classes={"my-2"}
+                        />
 
-                    {/* Country Input */}
-                    <CustomInput
-                        placeholder={GlbalLocale.country}
-                        value={country}
-                        setValue={setCountry}
-                        name='country'
-                        error={errors.country}
-                        classes={"my-2"}
-                    />
+                        {/* Country Input */}
+                        <CustomInput
+                            placeholder={GlbalLocale.country}
+                            value={country}
+                            setValue={setCountry}
+                            name='country'
+                            error={errors.country}
+                            classes={"my-2"}
+                        />
 
-                    {/* Phone Number Input */}
-                    <CustomInput
-                        placeholder={GlbalLocale.phone_number}
-                        value={phone_number}
-                        setValue={setPhoneNumber}
-                        name='phone_number'
-                        keyboardType='numeric'
-                        error={errors.phone_number}
-                        classes={"my-2"}
-                    />
+                        {/* Phone Number Input */}
+                        <CustomInput
+                            placeholder={GlbalLocale.phone_number}
+                            value={phone_number}
+                            setValue={setPhoneNumber}
+                            name='phone_number'
+                            keyboardType='numeric'
+                            error={errors.phone_number}
+                            classes={"my-2"}
+                        />
 
-                    {/* Phone Number Input */}
-                    <CustomInput
-                        placeholder={GlbalLocale.phone_number}
-                        value={mobile_number}
-                        setValue={setMobileNumber}
-                        name='mobile_number'
-                        keyboardType='numeric'
-                        error={errors.phone_number}
-                        classes={"my-2"}
-                    />
+                        {/* Phone Number Input */}
+                        <CustomInput
+                            placeholder={GlbalLocale.phone_number}
+                            value={mobile_number}
+                            setValue={setMobileNumber}
+                            name='mobile_number'
+                            keyboardType='numeric'
+                            error={errors.phone_number}
+                            classes={"my-2"}
+                        />
 
-                    {/* Email Input */}
-                    <CustomInput
-                        placeholder={GlbalLocale.email}
-                        value={email}
-                        setValue={setEmail}
-                        name='email'
-                        editable={false}
-                        error={errors.email}
-                        classes={"my-2"}
-                    />
-                    {/* Email Input */}
-                    {/* <CustomInput
+                        {/* Email Input */}
+                        <CustomInput
+                            placeholder={GlbalLocale.email}
+                            value={email}
+                            setValue={setEmail}
+                            name='email'
+                            editable={false}
+                            error={errors.email}
+                            classes={"my-2"}
+                        />
+                        {/* Email Input */}
+                        {/* <CustomInput
                         placeholder={GlbalLocale.email}
                         value={confirm_email}
                         setValue={setConfirmEmail}
@@ -484,8 +538,8 @@ export default function ModifyAccount({ navigation }) {
                         error={errors.confirm_email}
                         classes={"my-2"}
                     /> */}
-                    {/* Password Input */}
-                    {/* <CustomInput
+                        {/* Password Input */}
+                        {/* <CustomInput
                         placeholder={GlbalLocale.password_placeholder}
                         value={password}
                         setValue={setPassword}
@@ -495,8 +549,8 @@ export default function ModifyAccount({ navigation }) {
                         classes={"my-2"}
                     /> */}
 
-                    {/* Password Input */}
-                    {/* <CustomInput
+                        {/* Password Input */}
+                        {/* <CustomInput
                         placeholder={GlbalLocale.confirm_password}
                         value={confirm_password}
                         setValue={setConfirmPassword}
@@ -506,18 +560,45 @@ export default function ModifyAccount({ navigation }) {
                         classes={"my-2"}
                     /> */}
 
-                    {/* Signup button */}
-                    <View>
-                        <CustomButton
-                            text={GlbalLocale.update}
-                            onClick={validateAndSubmit}
-                            isLoading={isLoading}
-                        />
+                        {/* Signup button */}
+                        <View>
+                            <CustomButton
+                                text={GlbalLocale.update}
+                                onClick={validateAndSubmit}
+                                isLoading={isLoading}
+                            />
+                        </View>
                     </View>
-                </View>
-                {/* View to show the signup text */}
+                    {/* View to show the signup text */}
 
-            </ScrollView>
+                </ScrollView>
+            </KeyboardAwareScrollView>
         </View>
     )
 }
+
+const styles = StyleSheet.create({
+    pickerStyle: {
+        height: "auto",
+        width: "100%",
+        marginVertical: 10,
+        borderColor: "transparent",
+        alignItems: "center",
+        alignSelf: "center",
+        padding: 5,
+        backgroundColor: "white",
+        borderRadius: 5,
+        borderWidth: 1.5,
+        fontSize: 16,
+        color: "#000",
+    },
+    selectedTextStyle: {
+        paddingLeft: 5,
+        color: "#000",
+        textAlign: "right",
+    },
+    listTextStyle: {
+        color: "#000",
+        textAlign: "right",
+    },
+});

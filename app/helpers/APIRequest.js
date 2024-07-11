@@ -30,6 +30,9 @@ const apiRequest = async (method, url, data = null, token = null) => {
             maxBodyLength: Infinity,
             url: `${BASE_URL}/${url}`,
             headers,
+            transformRequest: (data, headers) => {
+                return data; // This chunk was written to make API functional on iOS becuase form data was not working withour this
+            },
             data: data ? data instanceof FormData ? data : JSON.stringify(data) : null,
         });
         return response.data;

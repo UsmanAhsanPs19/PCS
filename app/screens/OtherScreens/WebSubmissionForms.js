@@ -17,9 +17,9 @@ export default function WebSubmissionForms({ navigation, route }) {
             className="flex-1 pt-10"
         >
             <StatusBar style='dark' />
-            <View className="space-y-4 px-4 h-5/6">
+            <View className="space-y-4 h-full">
                 {/* Header for other Screens */}
-                <View>
+                <View className="px-4">
                     <HeaderOther
                         onPress={() => {
                             navigation.goBack()
@@ -40,7 +40,13 @@ export default function WebSubmissionForms({ navigation, route }) {
                     source={{ uri: BASE_PATH + `${path}` }}
                     onLoad={() => setLoading(false)}
                     onError={() => setLoading(false)}
-                    className="flex h-full"
+                    onNavigationStateChange={(navState) => {
+                        //your code goes here 
+                        if (navState.url !== BASE_PATH + `${path}`) {
+                            navigation.goBack();
+                        }
+                    }}
+                    className="flex-1s h-full w-full"
                 />
             </View>
         </View>
