@@ -6,7 +6,7 @@ import { ArrowLeftIcon, ArrowRightIcon } from 'react-native-heroicons/outline';
 
 export default function HeaderOther({ label = "No Label", classes, text_color = THEME_COLORS.PRIMARY_COLOR, onPress, showBack = true, color_arrow = THEME_COLORS.textColor, bg = THEME_COLORS.BG_COLOR }) {
     return (
-        <View className={`flex-row justify-between items-center ${classes}`}
+        <View className={`mt-1 flex-row justify-between items-center ${classes}`}
             style={{
                 backgroundColor: bg
             }}

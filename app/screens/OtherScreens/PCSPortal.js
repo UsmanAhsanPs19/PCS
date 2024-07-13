@@ -108,11 +108,11 @@ export default function PCSPortal({ navigation }) {
                                 }
                             }}
                             style={{
-                                elevation: 5,
+                                elevation: 3,
                                 shadowColor: '#000',
-                                shadowOffset: { width: 0, height: 5 },
-                                shadowOpacity: 0.5,
-                                shadowRadius: 5,
+                                shadowOffset: { width: 0, height: 2 },
+                                shadowOpacity: 0.2,
+                                shadowRadius: 2,
                                 marginLeft: wp(3),
                                 marginRight: wp(3),
                                 marginVertical: hp(0.8)
@@ -123,7 +123,7 @@ export default function PCSPortal({ navigation }) {
                                 style={{
                                     color: THEME_COLORS.textColor,
                                     fontFamily: "Poppins-Medium",
-                                    fontSize: hp(1)
+                                    fontSize: hp(1.2)
                                 }}>{item.text}</Text>
                             {item.key && user[item.key] == 1 && (
                                 <Text
@@ -131,7 +131,7 @@ export default function PCSPortal({ navigation }) {
                                     style={{
                                         color: "white",
                                         fontFamily: "Poppins-Medium",
-                                        fontSize: hp(0.8),
+                                        fontSize: hp(1),
                                         backgroundColor: THEME_COLORS.PRIMARY_COLOR,
                                     }}
                                 >

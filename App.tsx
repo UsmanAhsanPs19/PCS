@@ -40,10 +40,10 @@ export default function App() {
 
   return (
     <Provider store={store}>
-      <SafeAreaView style={{ flex: 1 }}>
+      <View style={{ flex: 1 }}>
         <AppNavigation />
         <Toast />
-      </SafeAreaView>
+      </View>
     </Provider>
   );
 }
