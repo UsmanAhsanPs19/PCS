@@ -167,7 +167,7 @@ export default function HomeScreen({ navigation }) {
                             navigation.navigate(d.screenName);
                           }
                           else if (d.key !== "modify_profile") {
-                            navigation.navigate({ name: 'WebSubmissionForms', params: { title: d.text, path: `${user[d.key] ? "edit-" : ""}${d.link}${user.user_id}` } })
+                            navigation.navigate({ name: 'WebSubmissionForms', params: { title: d.text, path: `${user && user[d.key] ? "edit-" : ""}${d.link}${user.user_id}` } })
                           }
                         }}
                         style={{
@@ -180,7 +180,7 @@ export default function HomeScreen({ navigation }) {
                         }}
                         className=" w-1/3 flex-1 p-3 bg-white items-center justify-center rounded-xl"
                       >
-                        {d.icon}
+                        {d?.icon}
                         <Text
                           className="text-center mt-1"
                           style={{
@@ -189,9 +189,9 @@ export default function HomeScreen({ navigation }) {
                             fontSize: hp(1),
                           }}
                         >
-                          {d.text}
+                          {d?.text}
                         </Text>
-                        {d.key && user[d.key] == 1 && (
+                        {d?.key && user && user[d.key] == 1 && (
                           <Text
                             className="py-0.5 px-2 rounded-full text-center"
                             style={{
@@ -239,7 +239,7 @@ export default function HomeScreen({ navigation }) {
                         >
                           {d.text}
                         </Text>
-                        {d.key && user[d.key] == 1 && (
+                        {d.key && user && user[d.key] == 1 && (
                           <Text
                             className="py-0.5 px-2 rounded-full text-center"
                             style={{

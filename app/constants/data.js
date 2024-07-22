@@ -195,7 +195,8 @@ export const navigation_all_data = [
     { name: "Event Information", screenName: "EventInfo" },
     { name: "General Information", screenName: "GeneralInformation" },
     // { name: "FAQs", screenName: "" },
-    { name: "Register for Cardiocon 2024", screenName: "RegisterForConference" }
+    { name: "Register for Cardiocon 2024", screenName: "RegisterForConference" },
+    { name: "Delete Account", screenName: "" }
 ]
 
 export const speakers_data = [{

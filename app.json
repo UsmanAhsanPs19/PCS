@@ -2,7 +2,7 @@
   "expo": {
     "name": "PakCardiocon",
     "slug": "PCS",
-    "version": "1.0.1",
+    "version": "1.0.3",
     "orientation": "portrait",
     "icon": "./assets/app_logo.png",
     "userInterfaceStyle": "light",
@@ -15,9 +15,11 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true,
+      "supportsTablet": false,
       "bundleIdentifier": "com.edylinn.pakcardiocon",
       "infoPlist": {
+        "NSCameraUsageDescription": "We need access to your camera to allow you to take and upload profile pictures and payment receipts. This helps personalize your user profile and enables you to keep track of your payment records.",
+        "NSPhotoLibraryUsageDescription": "We need access to your gallery to enable you to upload profile pictures and payment receipts from your saved photos. This allows you to personalize your user profile and manage your payment records efficiently.",
         "NSAppTransportSecurity": {
           "NSAllowsArbitraryLoads": true,
           "NSExceptionDomains": {
@@ -28,10 +30,10 @@
           }
         }
       },
-      "buildNumber": "1"
+      "buildNumber": "4"
     },
     "android": {
-      "versionCode": 2,
+      "versionCode": 3,
       "adaptiveIcon": {
         "foregroundImage": "./assets/app_logo.png",
         "backgroundColor": "#ffffff"

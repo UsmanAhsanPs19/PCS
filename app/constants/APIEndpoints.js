@@ -35,3 +35,4 @@ export const conference_schedule = "conference-schedule"
 
 export const get_my_card = "get-my-card";
 export const save_payment_proof = "save-payment-proof"
+export const delete_account = "account-delete"
