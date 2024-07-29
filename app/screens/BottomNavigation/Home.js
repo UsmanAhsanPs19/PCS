@@ -42,7 +42,8 @@ export default function HomeScreen({ navigation }) {
     if (isFocused) {
       getSpeakers();
       getSponsers();
-      getUserData();
+      if (isAuthorized)
+        getUserData();
     }
   }, [isFocused]);
 

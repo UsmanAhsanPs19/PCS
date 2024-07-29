@@ -29,8 +29,8 @@ export default function NavigationPortal({ navigation }) {
 
     function deleteAccount() {
         let data = new FormData();
-        // data.append('email', user?.email);
-        data.append('email', "faranab205@ikangou.com")
+        data.append('email', user?.email);
+        // data.append('email', "faranab205@ikangou.com")
         setIsLoadin(true)
         postRequest(delete_account, data)
             .then(response => {
@@ -65,6 +65,7 @@ export default function NavigationPortal({ navigation }) {
                         onPress={() => {
                             navigation.goBack()
                         }}
+                        showBack={true}
                         label={GlbalLocale.navigation_label}
                     />
                 </View>

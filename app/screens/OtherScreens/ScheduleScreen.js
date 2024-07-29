@@ -1,5 +1,5 @@
 import { ActivityIndicator, FlatList, ScrollView, Text, TouchableOpacity, View } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import HeaderOther from './components/HeaderOther'
 import { StatusBar } from 'expo-status-bar'
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen'
@@ -12,6 +12,9 @@ export default function ScheduleScreen({ navigation }) {
     const [selected_index, set_selected_index] = useState()
     const [data, setData] = useState({})
     const [isLoading, setIsLoading] = useState(false)
+
+    const scrollViewRef = useRef(null);
+    const itemLayouts = useRef({});
 
     useEffect(() => {
         getSchedule();
@@ -50,6 +53,17 @@ export default function ScheduleScreen({ navigation }) {
             });
     }
 
+    const handleDatePress = (date, index) => {
+        set_selected_index(date)
+        const layout = itemLayouts.current[date];
+        if (layout) {
+            scrollViewRef.current.scrollTo({
+                x: layout.x - wp('15%'), // Center the item
+                animated: true,
+            });
+        }
+    };
+
     return (
         <View
             style={{ backgroundColor: THEME_COLORS.PRIMARY_COLOR_DARK }}
@@ -60,7 +74,7 @@ export default function ScheduleScreen({ navigation }) {
                 bg={THEME_COLORS.PRIMARY_COLOR_DARK}
                 text_color={"white"}
                 color_arrow='white'
-                classes="px-4 py-3" showBack onPress={() => navigation.goBack()} />
+                classes="px-4 py-3" onPress={() => navigation.goBack()} />
 
 
 
@@ -73,21 +87,23 @@ export default function ScheduleScreen({ navigation }) {
             >
                 {/* Event dates will be displayed */}
                 <ScrollView horizontal
+                    ref={scrollViewRef}
                     showsHorizontalScrollIndicator={false}
                     contentContainerStyle={{ flexGrow: 1 }} // Allow content to grow vertically
                     style={{ maxHeight: '9%' }} // Limit ScrollView to 90% of parent height
                 >
                     {
-                        Object.keys(data).map((date) => (
+                        Object.keys(data).map((date, index) => (
                             <View
                                 className="p-5"
+                                onLayout={(event) => {
+                                    itemLayouts.current[date] = event.nativeEvent.layout;
+                                }}
                                 style={{
-                                    width: wp('60%')
+                                    minWidth: wp('70%')
                                 }}>
                                 <TouchableOpacity
-                                    onPress={() => {
-                                        set_selected_index(date)
-                                    }}
+                                    onPress={() => handleDatePress(date, index)}
                                 >
                                     <Text
                                         className={"text-xl text-center"}

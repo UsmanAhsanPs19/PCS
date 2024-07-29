@@ -34,7 +34,7 @@ export const GlbalLocale = {
     account_title: "Account Title",
     account_number: "Account Number",
     bank_name: "Bank Name",
-    no_image: "No image picked",
+    no_image: "No image selected",
     continue: "Continue",
     send: "Send",
     homeHeaderText: "53rd International\nCardiocon 2024\nLahore",
