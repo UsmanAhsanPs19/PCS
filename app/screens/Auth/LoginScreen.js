@@ -198,7 +198,7 @@ export default function LoginScreen({ navigation }) {
             </View>
             {/* View to show the signup text */}
             <View
-                className="flex-row justify-center items-center mb-3 z-0"
+                className="flex-row justify-center items-center mb-10 z-0"
             >
                 <Text
                     className={"text-lg font-medium space-y-2"}

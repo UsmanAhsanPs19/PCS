@@ -2,7 +2,7 @@
   "expo": {
     "name": "PakCardiocon",
     "slug": "PCS",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "orientation": "portrait",
     "icon": "./assets/app_logo.png",
     "userInterfaceStyle": "light",
@@ -28,10 +28,10 @@
           }
         }
       },
-      "buildNumber": "4"
+      "buildNumber": "5"
     },
     "android": {
-      "versionCode": 3,
+      "versionCode": 4,
       "adaptiveIcon": {
         "foregroundImage": "./assets/app_logo.png",
         "backgroundColor": "#ffffff"

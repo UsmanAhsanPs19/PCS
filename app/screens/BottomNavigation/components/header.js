@@ -5,6 +5,7 @@ import { THEME_COLORS } from '../../../constants/colors'
 import { GlbalLocale } from '../../../constants/locale'
 import HeaderIcon from '../../../../assets/HeaderIcon'
 import { useSelector } from 'react-redux'
+import { heightPercentageToDP, widthPercentageToDP } from 'react-native-responsive-screen'
 
 export default function HomeHeader() {
     const { general_info } = useSelector((state) => state?.GeneralState);
@@ -29,7 +30,7 @@ export default function HomeHeader() {
                     <View className="flex-row items-center w-1/5">
                         <View className="h-3/5 border-l-2 border-white" />
                         <View className="ml-2">
-                            <HeaderIcon />
+                            <HeaderIcon width={widthPercentageToDP(18)} height={heightPercentageToDP(10)} />
                         </View>
                     </View>
                 </View>

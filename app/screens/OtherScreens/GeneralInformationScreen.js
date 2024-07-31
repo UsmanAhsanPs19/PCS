@@ -1,4 +1,4 @@
-import { View, Text, Image } from 'react-native'
+import { View, Text, Image, TouchableOpacity } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { THEME_COLORS } from '../../constants/colors'
 import { StatusBar } from 'expo-status-bar'
@@ -8,6 +8,7 @@ import { GlbalLocale } from '../../constants/locale'
 import { CalendarIcon, EnvelopeIcon, GlobeAltIcon, MapPinIcon, PhoneIcon } from 'react-native-heroicons/solid'
 import { general_information } from '../../constants/APIEndpoints'
 import { getRequest, MEDIA_BASE_URL } from '../../helpers/APIRequest'
+import HandleAction from '../../components/HandleAction'
 
 export default function GeneralInformationScreen({ navigation }) {
 
@@ -123,21 +124,34 @@ export default function GeneralInformationScreen({ navigation }) {
                 <View>
                     <View className="bg-white p-4 flex-row space-x-2 items-center">
                         <PhoneIcon color={THEME_COLORS.TEXT_LIGHT_BLACK} />
-                        <View>
-                            <Text
-                                className="text-xs"
-                                style={{
-                                    fontFamily: "Poppins-Regular",
-                                    color: THEME_COLORS.TEXT_LIGHT_BLACK
-                                }}
-                            >
-                                {data?.contact_us} {data?.contact_us_two}
-                            </Text>
+                        <View className="flex flex-row items-center justify-start">
+                            <TouchableOpacity onPress={() => HandleAction('phone', data?.contact_us)}>
+                                <Text
+                                    className="text-xs"
+                                    style={{
+                                        fontFamily: "Poppins-Regular",
+                                        color: THEME_COLORS.TEXT_LIGHT_BLACK
+                                    }}
+                                >
+                                    {data?.contact_us}
+                                </Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={() => HandleAction('phone', data?.contact_us_two)}>
+                                <Text
+                                    className="text-xs"
+                                    style={{
+                                        fontFamily: "Poppins-Regular",
+                                        color: THEME_COLORS.TEXT_LIGHT_BLACK
+                                    }}
+                                >
+                                    {data?.contact_us_two}
+                                </Text>
+                            </TouchableOpacity>
                         </View>
                     </View>
                     <View className="bg-white mt-0.5 p-4 flex-row space-x-2 items-center">
                         <EnvelopeIcon color={THEME_COLORS.TEXT_LIGHT_BLACK} />
-                        <View>
+                        <TouchableOpacity onPress={() => HandleAction('email', data?.email)}>
                             <Text
                                 className="text-xs"
                                 style={{
@@ -147,11 +161,11 @@ export default function GeneralInformationScreen({ navigation }) {
                             >
                                 {data?.email}
                             </Text>
-                        </View>
+                        </TouchableOpacity>
                     </View>
                     <View className="bg-white mt-0.5 p-4 flex-row space-x-2 items-center">
                         <GlobeAltIcon color={THEME_COLORS.TEXT_LIGHT_BLACK} />
-                        <View>
+                        <TouchableOpacity onPress={() => HandleAction('website', `https://${data?.website}`)}>
                             <Text
                                 className="text-xs"
                                 style={{
@@ -161,7 +175,7 @@ export default function GeneralInformationScreen({ navigation }) {
                             >
                                 {data?.website}
                             </Text>
-                        </View>
+                        </TouchableOpacity>
                     </View>
                 </View>
             </View>

@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, ActivityIndicator, TouchableOpacity, Linking } from 'react-native'
+import { View, Text, ScrollView, ActivityIndicator, TouchableOpacity, Linking, Platform } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { THEME_COLORS } from '../../constants/colors'
 import { StatusBar } from 'expo-status-bar'
@@ -78,7 +78,7 @@ export default function GeneralInformation({ navigation }) {
                     <TouchableOpacity
                         onPress={openGoogleMaps}
                         className="items-center justify-stretch">
-                        <MapImage />
+                        <MapImage style={{ transform: [{ rotate: Platform.OS === "ios" ? '180deg' : "0deg" }] }} />
                     </TouchableOpacity>
                     <View className="space-y-2">
                         {/* Event Name and Date view */}
