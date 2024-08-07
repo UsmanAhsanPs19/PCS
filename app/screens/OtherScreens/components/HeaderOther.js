@@ -27,7 +27,7 @@ export default function HeaderOther({ label = "No Label", classes, text_color = 
                     </TouchableOpacity>
                 }
                 <Text
-                    className="text-xl text-center mx-3"
+                    className="flex-1 text-xl text-center mx-3"
                     numberOfLines={1}
                     ellipsizeMode='middle'
                     style={{

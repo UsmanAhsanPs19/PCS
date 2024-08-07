@@ -36,3 +36,8 @@ export const conference_schedule = "conference-schedule"
 export const get_my_card = "get-my-card";
 export const save_payment_proof = "save-payment-proof"
 export const delete_account = "account-delete"
+
+export const mark_entry_api = "mark-entry"
+export const mark_exit_api = "mark-exit"
+export const check_entry_api = "check-entry"
+export const mark_meal_entry_api = "meal-entry"

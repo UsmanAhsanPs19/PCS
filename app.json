@@ -2,7 +2,7 @@
   "expo": {
     "name": "PakCardiocon",
     "slug": "PCS",
-    "version": "1.0.4",
+    "version": "1.0.7",
     "orientation": "portrait",
     "icon": "./assets/app_logo.png",
     "userInterfaceStyle": "light",
@@ -28,10 +28,10 @@
           }
         }
       },
-      "buildNumber": "5"
+      "buildNumber": "8"
     },
     "android": {
-      "versionCode": 4,
+      "versionCode": 7,
       "adaptiveIcon": {
         "foregroundImage": "./assets/app_logo.png",
         "backgroundColor": "#ffffff"
@@ -64,6 +64,12 @@
         "expo-image-picker",
         {
           "photosPermission": "The app accesses your photos to use it for your identification."
+        }
+      ],
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera"
         }
       ]
     ],

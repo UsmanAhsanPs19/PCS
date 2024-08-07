@@ -1,11 +1,9 @@
-import { View, Text, ScrollView, FlatList, Button, TouchableOpacity, ActivityIndicator } from 'react-native'
+import { View, Text, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { THEME_COLORS } from '../../constants/colors'
 import { StatusBar } from 'expo-status-bar'
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen'
 import { GlbalLocale } from '../../constants/locale'
-import HeaderOther from './components/HeaderOther'
-import { pcs_data_souvenier, pcs_later_part, pcs_portal_all_data, pcs_portal_data, pcs_portal_register_data } from '../../constants/data'
 import { postRequest } from '../../helpers/APIRequest'
 import { logout_url } from '../../constants/APIEndpoints'
 import { useDispatch, useSelector } from 'react-redux'
@@ -13,8 +11,10 @@ import { setAuth, setIsAuthorized } from '../../redux/AuthSlice'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import Toast from 'react-native-toast-message'
 import { useIsFocused } from '@react-navigation/native'
+import HeaderOther from '../OtherScreens/components/HeaderOther'
+import { entry_app_data } from '../../constants/data'
 
-export default function PCSPortal({ navigation }) {
+export default function EntryAppDashboard({ navigation }) {
     const { user } = useSelector(state => state.AuthStore);
     const dispatch = useDispatch();
     const [data, setData] = useState([]);
@@ -22,13 +22,13 @@ export default function PCSPortal({ navigation }) {
     const [isLoading, setIsLoading] = useState(false)
 
     async function clearSession() {
+        dispatch(setAuth(null));
+        dispatch(setIsAuthorized(false));
         await AsyncStorage.clear()
         navigation.reset({
             index: 0,
             routes: [{ name: "Splash" }],
         });
-        dispatch(setIsAuthorized(false));
-        dispatch(setAuth(null));
     }
 
     const signout = () => {
@@ -36,7 +36,7 @@ export default function PCSPortal({ navigation }) {
         postRequest(logout_url)
             .then(async respoonse => {
                 if (respoonse.status) {
-                    clearSession();
+                    await clearSession();
                     Toast.show({
                         type: 'success',
                         text1: 'Logout',
@@ -57,23 +57,6 @@ export default function PCSPortal({ navigation }) {
             })
     }
 
-    useEffect(() => {
-        if (isFocused && user) {
-            if (!user.is_conference) {
-                setData(pcs_portal_register_data)
-            }
-            else if (user.is_conference === 1) {
-                var filterData = pcs_portal_register_data.filter(item => item.isVisible)
-                setData([...filterData, ...pcs_later_part])
-            }
-            else if (user.is_conference === 2) {
-                var filterData = pcs_portal_register_data.filter(item => item.isVisible)
-
-                setData([...filterData, ...pcs_later_part, ...pcs_data_souvenier])
-            }
-        }
-    }, [user, isFocused])
-
     return (
         <View
             style={{ backgroundColor: THEME_COLORS.BG_COLOR }}
@@ -84,15 +67,17 @@ export default function PCSPortal({ navigation }) {
                 {/* Header for other Screens */}
                 <View>
                     <HeaderOther
+                        showBack={false}
                         onPress={() => {
                             navigation.goBack()
                         }}
-                        label={GlbalLocale.pcs_portal}
+
+                        label={GlbalLocale.event_entry_portal}
                     />
                 </View>
                 <View className="h-fit">
                     <FlatList
-                        data={data}
+                        data={entry_app_data}
                         columnWrapperStyle={{
                             justifyContent: 'space-between'
                         }}
@@ -100,10 +85,8 @@ export default function PCSPortal({ navigation }) {
                         numColumns={2}
                         renderItem={({ item, index }) => (<TouchableOpacity
                             onPress={() => {
-                                if (item.screenName && !item.link) {
-                                    navigation.navigate({ name: item.screenName, params: { forSelf: item.text === "Other Person Registration" ? false : true } })
-                                } else if (item.link) {
-                                    navigation.navigate({ name: 'WebSubmissionForms', params: { title: item.text, path: `${user[item.key] ? "edit-" : ""}${item.link}${user.user_id}` } })
+                                if (item.screenName) {
+                                    navigation.navigate({ name: item.screenName, params: { label: item.text } })
                                 }
                             }}
                             style={{
@@ -124,19 +107,6 @@ export default function PCSPortal({ navigation }) {
                                     fontFamily: "Poppins-Medium",
                                     fontSize: hp(1.2)
                                 }}>{item.text}</Text>
-                            {item.key && user[item.key] == 1 && (
-                                <Text
-                                    className="py-0.5 px-2 rounded-full text-center"
-                                    style={{
-                                        color: "white",
-                                        fontFamily: "Poppins-Medium",
-                                        fontSize: hp(1),
-                                        backgroundColor: THEME_COLORS.PRIMARY_COLOR,
-                                    }}
-                                >
-                                    Edit Submission
-                                </Text>
-                            )}
                         </TouchableOpacity>)}
                         keyExtractor={(item, index) => index.toString()}
                     // ListFooterComponent={

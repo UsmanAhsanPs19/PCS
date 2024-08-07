@@ -30,6 +30,10 @@ import BookSouvinir from '../screens/OtherScreens/Souvinir/BookSouvinir';
 import RegistrantsList from '../screens/OtherScreens/RegistrantsList';
 import RegistrantDetails from '../screens/OtherScreens/RegistrantDetails';
 import WebSubmissionForms from '../screens/OtherScreens/WebSubmissionForms';
+import EntryAppDashboard from '../screens/EntryAppScreens/EntryAppDashboard';
+import EntryAppScanner from '../screens/EntryAppScreens/EntryAppScanner';
+import EntryUserDetails from '../screens/EntryAppScreens/UserDetails';
+import ErrorScreen from '../screens/EntryAppScreens/ErrorScreen';
 
 // Create a bottom tab navigator
 const BottomTabs = createBottomTabNavigator();
@@ -89,8 +93,14 @@ export default function AppNavigation() {
                 <MainScreens.Screen name='Forgot' component={ResetPasswordScreen} />
                 <MainScreens.Screen name='ChangePassword' component={ChangeForgotPassword} />
                 <MainScreens.Screen name='UpdateProfile' component={ModifyAccount} />
-                {/* <MainScreens.Screen name='Dashboard' component={Dashboard} /> */}
-                <MainScreens.Screen name="Dashboard" component={HomeScreen} />
+                <MainScreens.Screen name='Dashboard' component={Dashboard} />
+
+                <MainScreens.Screen name="EntryAppDashboard" component={EntryAppDashboard} />
+                <MainScreens.Screen name="EntryScanner" component={EntryAppScanner} />
+                <MainScreens.Screen name="EntryUserDetails" component={EntryUserDetails} />
+                <MainScreens.Screen name="ErrorScreen" component={ErrorScreen} />
+
+                {/* <MainScreens.Screen name="Dashboard" component={HomeScreen} /> */}
                 <MainScreens.Screen name='PCSPortal' component={PCSPortal} />
                 <MainScreens.Screen name='NavigationPortal' component={NavigationPortal} />
                 <MainScreens.Screen name='EventInfo' component={GeneralInformation} />

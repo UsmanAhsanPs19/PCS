@@ -45,7 +45,7 @@ export default function HomeScreen({ navigation }) {
       if (isAuthorized)
         getUserData();
     }
-  }, [isFocused]);
+  }, [isFocused, isAuthorized]);
 
   // Get list of top speakers
   async function getSpeakers() {
@@ -67,6 +67,7 @@ export default function HomeScreen({ navigation }) {
   // Get user data
   async function getUserData() {
     await getRequest(get_profile).then(response => {
+      console.log("Data:::", response)
       if (response.status) {
         dispatch(setAuth(response.data?.profile));
       }

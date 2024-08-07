@@ -18,13 +18,13 @@ export default function NavigationPortal({ navigation }) {
     const dispatch = useDispatch();
 
     async function clearSession() {
-        dispatch(setAuth(null));
-        dispatch(setIsAuthorized(false));
         await AsyncStorage.clear()
         navigation.reset({
             index: 0,
             routes: [{ name: "Splash" }],
         });
+        dispatch(setAuth(null));
+        dispatch(setIsAuthorized(false));
     }
 
     function deleteAccount() {

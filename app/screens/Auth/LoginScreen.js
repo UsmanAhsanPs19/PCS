@@ -21,8 +21,8 @@ export default function LoginScreen({ navigation }) {
     const [remeberMe, setRememberMe] = useState(false);
     const [errors, setErrors] = useState({});
     const [isLoading, setIsLoading] = useState(false)
-    const [email, setEmail] = useState(''); //wepidi4096@nolanzip.com
-    const [password, setPassword] = useState(""); //Usman@786
+    const [email, setEmail] = useState(''); //mrdeveloper47@gmail.com
+    const [password, setPassword] = useState(""); //password
 
     useEffect(() => {
         // Check if user credentials are saved and automatically log in if "Remember Me" is enabled
@@ -81,14 +81,18 @@ export default function LoginScreen({ navigation }) {
                     await AsyncStorage.setItem('token', _token);
                     const data = await getUserData(_token);
                     if (data.status) {
-                        dispatch(setAuth(data.data?.profile));
+                        dispatch(setAuth({ ...data.data?.profile, status: data.status }));
                         dispatch(setIsAuthorized(true));
                         Toast.show({
                             type: 'success',
                             text1: 'Login',
                             text2: response.message
                         });
-                        navigation.replace('Dashboard')
+                        if (data.status > 1) {
+                            navigation.replace("EntryAppDashboard");
+                        }
+                        else
+                            navigation.replace('Dashboard')
                     }
                     else {
                         Toast.show({

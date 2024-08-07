@@ -66,9 +66,14 @@ export default function SplashScreen() {
       .then((respponse) => {
         if (respponse.status) {
           console.log("User data:::", respponse.data)
-          dispatch(setAuth(respponse.data?.profile));
+          dispatch(setAuth({ ...respponse.data?.profile, status: respponse.status }));
           dispatch(setIsAuthorized(true));
-          navigation.replace("Dashboard");
+          // EntryAppDashboard
+          if (respponse.status > 1) {
+            navigation.replace("EntryAppDashboard");
+          }
+          else
+            navigation.replace("Dashboard");
         } else {
           // setTimeout(() => {
           //   // toggleColorScheme()

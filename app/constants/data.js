@@ -1,9 +1,11 @@
+import EntryForLunchIcon from "../../assets/EntryForLunchIcon"
 import EventIcon from "../../assets/EventIcon"
 import GetzIcon from "../../assets/GetzIcon"
 import HitonIcon from "../../assets/HitonIcon"
 import ImageIcon from "../../assets/ImageIcon"
 import InfoIcon from "../../assets/InfoIcon"
 import LekSellIcon from "../../assets/LeksellIcon"
+import MarkExitIcon from "../../assets/MarkExitIcon"
 import MedicalFileIcon from "../../assets/MedicalFileIcon"
 import NurseIcon from "../../assets/NurseIcon"
 import PrintEventCardIcon from "../../assets/PrintEventCardIcon"
@@ -125,6 +127,7 @@ export const pcs_portal_register_data = [
     },
 ];
 
+
 export const pcs_later_part = [
     {
         text: "Other Person Registration",
@@ -139,6 +142,33 @@ export const pcs_later_part = [
         screenName: "RegistrantsList",
         isVisible: true,
         isAfter: true,
+    },
+]
+
+export const entry_app_data = [
+    {
+        text: "Mark Entry",
+        icon: <RegisterEventIcon width={55} height={56} />,
+        screenName: "EntryScanner",
+        isVisible: true,
+    },
+    {
+        text: "Mark Exit",
+        icon: <MarkExitIcon width={40} height={40} />,
+        screenName: "EntryScanner",
+        isVisible: true,
+    },
+    {
+        text: "Mark Entry for Lunch",
+        icon: <EntryForLunchIcon width={40} height={40} />,
+        screenName: "EntryScanner",
+        isVisible: true,
+    },
+    {
+        text: "Check Entry",
+        icon: <RegistrationListIcon width={55} height={56} />,
+        screenName: "EntryScanner",
+        isVisible: true,
     },
 ]
 

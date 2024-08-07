@@ -68,5 +68,9 @@ export const GlbalLocale = {
     check_details: "check Details",
     pay_now: "Pay Now",
     entry_card: "Get Card",
-    dismiss_label: "Dismiss"
+    dismiss_label: "Dismiss",
+    event_entry_portal: "Event Entry",
+    mark_entry_label: "Mark Entry",
+    error_label: "Error",
+    back_to_home_label: "Back to homepage"
 }
