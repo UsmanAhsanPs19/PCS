@@ -1,4 +1,4 @@
-import { View, Text, Image, TouchableOpacity } from 'react-native'
+import { View, Text, TouchableOpacity } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { THEME_COLORS } from '../../constants/colors'
 import { StatusBar } from 'expo-status-bar'
@@ -7,7 +7,7 @@ import AppIcon from '../../../assets/AppIcon'
 import { GlbalLocale } from '../../constants/locale'
 import { CalendarIcon, EnvelopeIcon, GlobeAltIcon, MapPinIcon, PhoneIcon } from 'react-native-heroicons/solid'
 import { general_information } from '../../constants/APIEndpoints'
-import { getRequest, MEDIA_BASE_URL } from '../../helpers/APIRequest'
+import { getRequest } from '../../helpers/APIRequest'
 import HandleAction from '../../components/HandleAction'
 
 export default function GeneralInformationScreen({ navigation }) {
@@ -60,7 +60,7 @@ export default function GeneralInformationScreen({ navigation }) {
                             height: hp(15),
                             width: wp('70%')
                         }}
-                        source={{ uri: `${MEDIA_BASE_URL}/${data?.logo}` }}
+                        source={{ uri: `${data?.logo}` }}
                     /> */}
                     <AppIcon />
                 </View>

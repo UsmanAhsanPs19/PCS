@@ -7,14 +7,13 @@ import { GlbalLocale } from '../../constants/locale'
 import CustomInput from '../../components/CustomInput'
 import CustomButton from './components/CustomButton'
 import { Picker } from '@react-native-picker/picker'
-import { getRequest, MEDIA_BASE_URL, postRequest } from '../../helpers/APIRequest'
+import { getRequest, postRequest } from '../../helpers/APIRequest'
 import { get_profession, get_profile, update_user } from '../../constants/APIEndpoints'
 import Toast from 'react-native-toast-message';
 import HeaderOther from './components/HeaderOther'
 import { useDispatch, useSelector } from 'react-redux'
 import ChooseImage from './components/ChooseImage'
 import { UserCircleIcon } from 'react-native-heroicons/solid'
-import AsyncStorage from '@react-native-async-storage/async-storage'
 import { setAuth } from '../../redux/AuthSlice'
 import ModalPicker from 'rn-modal-picker'
 import { TITLE_PICKER } from '../../constants/data'
@@ -307,7 +306,7 @@ export default function ModifyAccount({ navigation }) {
                                     height: hp('25%')
                                 }}
                                 source={{
-                                    uri: (user?.profile_picture && `${MEDIA_BASE_URL}/${user?.profile_picture}`)
+                                    uri: (user?.profile_picture && `${user?.profile_picture}`)
                                 }}
                             /> :
                                 picked_image ?

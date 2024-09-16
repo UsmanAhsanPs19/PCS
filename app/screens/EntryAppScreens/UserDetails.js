@@ -5,7 +5,6 @@ import { StatusBar } from 'expo-status-bar'
 import { THEME_COLORS } from '../../constants/colors'
 import { GlbalLocale } from '../../constants/locale'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen'
-import { MEDIA_BASE_URL } from '../../helpers/APIRequest'
 
 export default function EntryUserDetails({ navigation, route }) {
     const { data, label } = route?.params || {};
@@ -38,7 +37,7 @@ export default function EntryUserDetails({ navigation, route }) {
                         source={
                             // require("../../../assets/d1.png")
                             {
-                                uri: (`${MEDIA_BASE_URL}/${data?.profile_picture}`)
+                                uri: (`${data?.profile_picture}`)
                             }
                         }
                     />

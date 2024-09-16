@@ -27,6 +27,7 @@
     "nativewind": "^2.0.11",
     "react": "18.2.0",
     "react-native": "0.74.3",
+    "react-native-circular-progress-indicator": "^4.4.2",
     "react-native-heroicons": "^4.0.0",
     "react-native-keyboard-aware-scroll-view": "^0.9.5",
     "react-native-maps": "1.14.0",

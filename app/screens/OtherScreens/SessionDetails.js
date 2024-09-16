@@ -1,12 +1,10 @@
-import { View, Text, FlatList, Image, ActivityIndicator, TouchableOpacity } from 'react-native'
+import { View, Text, Image, ActivityIndicator, TouchableOpacity } from 'react-native'
 import React, { useState } from 'react'
 import { THEME_COLORS } from '../../constants/colors'
 import { StatusBar } from 'expo-status-bar'
 import HeaderOther from './components/HeaderOther'
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen'
 import moment from 'moment'
-import { speakers_all_data } from '../../constants/data'
-import { MEDIA_BASE_URL } from '../../helpers/APIRequest'
 // import { navigation_all_data } from '../../constants/data'
 
 export default function SessionDetails({ navigation, route }) {
@@ -107,7 +105,7 @@ export default function SessionDetails({ navigation, route }) {
                             height: hp(18),
                             width: wp(29)
                         }}
-                        source={{ uri: `${MEDIA_BASE_URL}/${data.image}` }}
+                        source={{ uri: `${data.image}` }}
                     />
                     <View className="flex-1 p-1 justify-center">
                         <Text

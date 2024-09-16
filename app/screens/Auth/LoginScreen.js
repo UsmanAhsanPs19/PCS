@@ -21,8 +21,8 @@ export default function LoginScreen({ navigation }) {
     const [remeberMe, setRememberMe] = useState(false);
     const [errors, setErrors] = useState({});
     const [isLoading, setIsLoading] = useState(false)
-    const [email, setEmail] = useState(''); //mrdeveloper47@gmail.com
-    const [password, setPassword] = useState(""); //password
+    const [email, setEmail] = useState("tahir.waqar95@gmail.com"); //mrdeveloper47@gmail.com
+    const [password, setPassword] = useState("password"); //password
 
     useEffect(() => {
         // Check if user credentials are saved and automatically log in if "Remember Me" is enabled

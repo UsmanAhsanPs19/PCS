@@ -5,7 +5,6 @@ import { StatusBar } from 'expo-status-bar'
 import HeaderOther from './components/HeaderOther'
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen'
 import moment from 'moment'
-import { MEDIA_BASE_URL } from '../../helpers/APIRequest'
 // import { navigation_all_data } from '../../constants/data'
 
 export default function SpeakerDetails({ navigation, route }) {
@@ -40,7 +39,7 @@ export default function SpeakerDetails({ navigation, route }) {
                             height: hp(18),
                             width: wp(29)
                         }}
-                        source={{ uri: `${MEDIA_BASE_URL}/${data.image}` }}
+                        source={{ uri: `${data.image}` }}
                     />
                 </View>
 

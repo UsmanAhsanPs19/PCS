@@ -41,3 +41,13 @@ export const mark_entry_api = "mark-entry"
 export const mark_exit_api = "mark-exit"
 export const check_entry_api = "check-entry"
 export const mark_meal_entry_api = "meal-entry"
+
+export const quiz_list_api = "quiz-list"
+export const get_quiz_api = "get-quiz"
+export const post_quiz_answer = "submit-quiz-answer"
+export const get_quiz_results = "quiz-result"
+export const get_quiz_leaderboard = "quiz-leaderbord"
+
+export const pool_list_api = "audience-poll-list"
+export const get_pool_data_api = "get-audience-poll"
+export const submit_pool_ans_api = "submit-poll-answer"

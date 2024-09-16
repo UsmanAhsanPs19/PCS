@@ -72,5 +72,7 @@ export const GlbalLocale = {
     event_entry_portal: "Event Entry",
     mark_entry_label: "Mark Entry",
     error_label: "Error",
-    back_to_home_label: "Back to homepage"
+    back_to_home_label: "Back to homepage",
+    quizes_label: "Quizzes",
+    pool_label: "Audience Poll"
 }

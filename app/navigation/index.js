@@ -34,6 +34,11 @@ import EntryAppDashboard from '../screens/EntryAppScreens/EntryAppDashboard';
 import EntryAppScanner from '../screens/EntryAppScreens/EntryAppScanner';
 import EntryUserDetails from '../screens/EntryAppScreens/UserDetails';
 import ErrorScreen from '../screens/EntryAppScreens/ErrorScreen';
+import QuizScreenDashboard from '../screens/QuizScreens/QuizScreenDashboard';
+import QuizExplaination from '../screens/QuizScreens/QuizExplaination';
+import QuizScreen from '../screens/QuizScreens/QuizScreen';
+import QuizResults from '../screens/QuizScreens/QuizResults';
+import QuizLeaderboard from '../screens/QuizScreens/QuizLeaderboard';
 
 // Create a bottom tab navigator
 const BottomTabs = createBottomTabNavigator();
@@ -115,6 +120,12 @@ export default function AppNavigation() {
                 <MainScreens.Screen name='RegistrantsList' component={RegistrantsList} />
                 <MainScreens.Screen name='RegistrantsDetails' component={RegistrantDetails} />
                 <MainScreens.Screen name='WebSubmissionForms' component={WebSubmissionForms} />
+
+                <MainScreens.Screen name='QuizDashboard' component={QuizScreenDashboard} />
+                <MainScreens.Screen name='QuizExplaination' component={QuizExplaination} />
+                <MainScreens.Screen name='QuizScreen' component={QuizScreen} />
+                <MainScreens.Screen name='QuizResult' component={QuizResults} />
+                <MainScreens.Screen name='QuizLeaderboard' component={QuizLeaderboard} />
 
                 {/*<MainScreens.Screen name='RecipeDetail' component={RecipeDetails} /> */}
             </MainScreens.Navigator>

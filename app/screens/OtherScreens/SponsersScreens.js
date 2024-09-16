@@ -5,7 +5,7 @@ import { StatusBar } from 'expo-status-bar'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen'
 import HeaderOther from './components/HeaderOther'
 import { all_sponsers_url } from '../../constants/APIEndpoints'
-import { MEDIA_BASE_URL, getRequest } from '../../helpers/APIRequest'
+import { getRequest } from '../../helpers/APIRequest'
 
 export default function SponsersScreens({ navigation }) {
     const [sponsers, setSponsers] = useState([])
@@ -68,7 +68,7 @@ export default function SponsersScreens({ navigation }) {
                                 height: hp('10%'),
                                 width: wp('27%')
                             }}
-                            source={{ uri: `${MEDIA_BASE_URL}/${item.image}` }}
+                            source={{ uri: `${item.image}` }}
                         />
                     </View>
                 )}

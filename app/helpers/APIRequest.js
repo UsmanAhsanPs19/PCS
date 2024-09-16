@@ -1,7 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
-import { useDispatch } from 'react-redux';
 import { setAuth, setIsAuthorized } from '../redux/AuthSlice';
 import { store } from '../redux/store';
 import Toast from 'react-native-toast-message';

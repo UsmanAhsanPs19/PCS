@@ -4,7 +4,6 @@ import { THEME_COLORS } from '../../constants/colors'
 import { StatusBar } from 'expo-status-bar'
 import HeaderOther from './components/HeaderOther'
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen'
-import { MEDIA_BASE_URL } from '../../helpers/APIRequest'
 
 
 const main_list_item_css = "p-1 flex justify-evenly items-center flex-row"
@@ -39,7 +38,7 @@ export default function RegistrantDetails({ navigation, route }) {
                                     height: wp('40%')
                                 }}
                                 source={{
-                                    uri: data?.profile_picture && `${MEDIA_BASE_URL}/${data?.profile_picture}`
+                                    uri: data?.profile_picture && `${data?.profile_picture}`
                                 }}
                             />
                         </View>
@@ -59,7 +58,7 @@ export default function RegistrantDetails({ navigation, route }) {
                                 height: wp('20%')
                             }}
                             source={{
-                                uri: data?.file && `${MEDIA_BASE_URL}/${data?.file}`
+                                uri: data?.file && `${data?.file}`
                             }}
                         />
                     </View> */}
@@ -198,7 +197,7 @@ export default function RegistrantDetails({ navigation, route }) {
                                     height: wp('20%')
                                 }}
                                 source={{
-                                    uri: data?.file && `${MEDIA_BASE_URL}/${data?.file}`
+                                    uri: data?.file && `${data?.file}`
                                 }}
                             />
                         </View>

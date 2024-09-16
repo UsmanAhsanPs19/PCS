@@ -23,7 +23,7 @@ import {
 import { THEME_COLORS } from "../../constants/colors";
 import { navigation_data_after_auth, navigation_section_data, pcs_portal_data } from "../../constants/data";
 import { GlbalLocale } from "../../constants/locale";
-import { MEDIA_BASE_URL, getRequest } from "../../helpers/APIRequest";
+import { getRequest } from "../../helpers/APIRequest";
 import HomeHeader from "./components/header";
 import { setAuth } from "../../redux/AuthSlice";
 import { useIsFocused } from "@react-navigation/native";
@@ -428,7 +428,7 @@ export default function HomeScreen({ navigation }) {
                         className="rounded-lg"
                         resizeMode="cover"
                         style={{ height: "100%", width: wp("15%") }}
-                        source={{ uri: `${MEDIA_BASE_URL}/${item.image}` }}
+                        source={{ uri: `${item.image}` }}
                       />
                       <View className="px-1 flex-1">
                         <Text
@@ -516,7 +516,7 @@ export default function HomeScreen({ navigation }) {
                         resizeMode="contain"
                         className=""
                         style={{ height: hp(6), width: wp("17%") }}
-                        source={{ uri: `${MEDIA_BASE_URL}/${image.image}` }}
+                        source={{ uri: `${image.image}` }}
                       />
                     </View>
                   ))

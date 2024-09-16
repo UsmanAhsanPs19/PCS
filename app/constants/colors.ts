@@ -13,5 +13,6 @@ export const THEME_COLORS = {
     GRAY_TEXT: "#868686",
     HALF_WHITE_COLOR: "#F5F6FA",
     TEXT_LIGHT_BLACK: "#121212",
-    TEXT_GRAY_TIME: "#8F8E91"
+    TEXT_GRAY_TIME: "#8F8E91",
+    GRAY_300: "#d1d5db"
 }

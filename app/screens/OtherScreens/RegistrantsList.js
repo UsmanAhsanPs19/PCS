@@ -4,12 +4,11 @@ import { StatusBar } from 'expo-status-bar'
 import HeaderOther from './components/HeaderOther'
 import { GlbalLocale } from '../../constants/locale'
 import { THEME_COLORS } from '../../constants/colors'
-import { MEDIA_BASE_URL, getRequest, postRequest } from '../../helpers/APIRequest'
+import { getRequest, postRequest } from '../../helpers/APIRequest'
 import { get_my_card, get_registrants_api } from '../../constants/APIEndpoints'
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen'
 import Toast from 'react-native-toast-message'
 import PaymentProofModal from '../../components/PaymentProofModal'
-import { useIsFocused } from '@react-navigation/native'
 
 export default function RegistrantsList({ navigation }) {
 
@@ -139,7 +138,7 @@ export default function RegistrantsList({ navigation }) {
                                         height: wp('20%')
                                     }}
                                     source={{
-                                        uri: item?.profile_picture && `${MEDIA_BASE_URL}/${item?.profile_picture}`
+                                        uri: item?.profile_picture && `${item?.profile_picture}`
                                     }}
                                 />
                             </View>

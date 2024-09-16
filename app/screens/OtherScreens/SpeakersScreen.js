@@ -1,13 +1,11 @@
-import { View, Text, ScrollView, FlatList, TouchableOpacity, ActivityIndicator, Image } from 'react-native'
+import { View, Text, FlatList, TouchableOpacity, ActivityIndicator, Image } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { THEME_COLORS } from '../../constants/colors'
 import { StatusBar } from 'expo-status-bar'
 import { GlbalLocale } from '../../constants/locale'
 import HeaderOther from './components/HeaderOther'
-import { speakers_all_data } from '../../constants/data'
-import CustomInput from '../../components/CustomInput'
 import { all_speakers_url } from '../../constants/APIEndpoints'
-import { MEDIA_BASE_URL, getRequest } from '../../helpers/APIRequest'
+import { getRequest } from '../../helpers/APIRequest'
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen'
 // import { navigation_all_data } from '../../constants/data'
 
@@ -99,7 +97,7 @@ export default function SpeakersScreen({ navigation }) {
                                                 height: "100%",
                                                 width: wp('25%')
                                             }}
-                                            source={{ uri: `${MEDIA_BASE_URL}/${item.image}` }}
+                                            source={{ uri: `${item.image}` }}
                                         />
                                         {/* {item.image} */}
                                         <View className="flex-1 p-1 items-center justify-center">

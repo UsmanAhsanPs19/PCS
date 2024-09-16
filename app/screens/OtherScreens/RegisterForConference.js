@@ -1,4 +1,4 @@
-import { Image, Platform, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Image, Platform, ScrollView, StyleSheet, Text, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { THEME_COLORS } from '../../constants/colors'
 import { StatusBar } from 'expo-status-bar'
@@ -7,7 +7,7 @@ import { GlbalLocale } from '../../constants/locale'
 import CustomInput from '../../components/CustomInput'
 import CustomButton from './components/CustomButton'
 import { Picker } from '@react-native-picker/picker'
-import { MEDIA_BASE_URL, getRequest, postRequest } from '../../helpers/APIRequest'
+import { getRequest, postRequest } from '../../helpers/APIRequest'
 import { check_promo_code_url, confrence_registration, get_bank_details_url, get_participant, get_profession, get_profile, other_confrence_registration } from '../../constants/APIEndpoints'
 import Toast from 'react-native-toast-message';
 import HeaderOther from './components/HeaderOther'
@@ -15,7 +15,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import ChooseImage from './components/ChooseImage'
 import { UserCircleIcon } from 'react-native-heroicons/solid'
 import RadioButton from './components/RadioButton'
-import LoadableImage from '../../components/LoadableImage'
 import CRadioGroup from './components/CRadioGroup'
 import { setAuth } from '../../redux/AuthSlice'
 import ModalPicker from 'rn-modal-picker'
@@ -437,7 +436,7 @@ export default function RegisterForConference({ navigation, route }) {
                                             height: hp('25%')
                                         }}
                                         source={{
-                                            uri: (profile_picture && `${MEDIA_BASE_URL}/${profile_picture}`)
+                                            uri: (profile_picture && `${profile_picture}`)
                                         }}
                                     />
                                     :
@@ -449,7 +448,6 @@ export default function RegisterForConference({ navigation, route }) {
                                                 height: hp('25%')
                                             }}
                                             source={{
-                                                // uri: (profile_picture && `${MEDIA_BASE_URL}/${profile_picture}`) || 
                                                 uri: picked_image?.uri
                                             }}
                                         />

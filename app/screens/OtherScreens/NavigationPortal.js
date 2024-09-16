@@ -119,6 +119,9 @@ export default function NavigationPortal({ navigation }) {
                                                     autoHide: true
                                                 })
                                             }
+                                            else if (item.name === "Audience Poll") {
+                                                navigation.navigate({ name: item.screenName, params: { isForPool: true } })
+                                            }
                                             else if (item.screenName) {
                                                 navigation.navigate(item.screenName)
                                             }

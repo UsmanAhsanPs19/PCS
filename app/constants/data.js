@@ -214,7 +214,7 @@ export const navigation_data_after_auth = [
         text: "Quiz",
         isEditable: false,
         icon: <QuizIcon />,
-        screenName: ""
+        screenName: "QuizDashboard"
     }
 ]
 
@@ -222,6 +222,7 @@ export const navigation_all_data = [
     { name: "Schedule", screenName: "ScheduleScreen" },
     { name: "Speakers", screenName: "SpeakersScreen" },
     { name: "Sponsors", screenName: "SponsersScreens" },
+    { name: "Audience Poll", screenName: "QuizDashboard" },
     { name: "Event Information", screenName: "EventInfo" },
     { name: "General Information", screenName: "GeneralInformation" },
     // { name: "FAQs", screenName: "" },

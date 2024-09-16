@@ -1,7 +1,7 @@
 import { View, Text, FlatList, Image, TouchableOpacity, ActivityIndicator } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { get_souvinir, save_souvinir_booking } from '../../../constants/APIEndpoints';
-import { MEDIA_BASE_URL, getRequest, postRequest } from '../../../helpers/APIRequest';
+import { getRequest, postRequest } from '../../../helpers/APIRequest';
 import Toast from 'react-native-toast-message';
 import { StatusBar } from 'expo-status-bar';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
@@ -124,7 +124,7 @@ export default function BookSouvinir({ navigation }) {
                                     height: hp('19%')
                                 }}
                                 source={{
-                                    uri: `${MEDIA_BASE_URL}/${item.image}`
+                                    uri: `${item.image}`
                                 }}
                             />
                         </TouchableOpacity>
@@ -159,7 +159,7 @@ export default function BookSouvinir({ navigation }) {
                             height: hp('50%')
                         }}
                         source={{
-                            uri: `${MEDIA_BASE_URL}/${souvinir_list.filter(s => s.id === booked_souvinir.id)[0].image}`
+                            uri: `${souvinir_list.filter(s => s.id === booked_souvinir.id)[0].image}`
                         }}
                     />
                 </View>}
