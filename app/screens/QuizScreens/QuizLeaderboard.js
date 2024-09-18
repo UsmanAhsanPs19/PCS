@@ -100,19 +100,13 @@ export default function QuizLeaderboard({ navigation, route }) {
                                     >{index + 1}</Text>
                                 </View>
                                 <View className="flex-1 flex-row items-center space-x-2">
-                                    <Image
+                                    {/* <Image
                                         className="bg-gray-200 rounded-full self-center"
                                         style={{
                                             width: wp('13%'),
                                             height: wp('13%')
                                         }}
-                                    // source={
-                                    //     // require("../../../assets/d1.png")
-                                    //     // {
-                                    //     //     uri: (`${data?.profile_picture}`)
-                                    //     // }
-                                    // }
-                                    />
+                                    /> */}
                                     <View>
                                         <Text
                                             className="text-base text-center"

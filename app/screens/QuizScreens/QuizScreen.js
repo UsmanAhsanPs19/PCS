@@ -32,16 +32,22 @@ export default function QuizScreen({ navigation, route }) {
 
     function getQuiz(props_data, isPool) {
         let data = new FormData();
-        if (isPool)
+        if (isPool) {
+            data.append('type', data?.type)
             data.append('poll_id', props_data?.id);
+        }
         else
             data.append('quiz_id', props_data?.id);
         setIsLoading(true)
         postRequest(isPool ? get_pool_data_api : get_quiz_api, data, null)
             .then(response => {
                 console.log("Data::get:::quiz", JSON.stringify(response))
-                if (response.status == 1 && response?.data?.length) {
-                    setQuiz(isPool ? response.data[0].poll_questions : response.data[0].quiz_questions)
+                if (response.status == 1) {
+                    if (response?.data && response.data?.length)
+                        setQuiz(isPool ? response.data[0].poll_questions : response.data[0].quiz_questions)
+                    else {
+                        setQuiz([])
+                    }
                 }
                 else {
                     Toast.show({

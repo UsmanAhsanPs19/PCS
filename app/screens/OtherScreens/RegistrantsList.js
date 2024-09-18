@@ -238,7 +238,7 @@ export default function RegistrantsList({ navigation }) {
                                         fontFamily: "Poppins-Regular"
                                     }}
                                 >Payment Status</Text>
-                                <View className="flex-1">{item.status ? <Text
+                                <View className="flex-1">{item.payment_status ? <Text
                                     className={text_label_values_size}
                                     style={{
                                         fontFamily: "Poppins-Regular"

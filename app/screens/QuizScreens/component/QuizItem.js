@@ -5,7 +5,7 @@ import moment from 'moment';
 
 export default function QuizItem({ item, onPress, showDetails = false, isForPool = false }) {
     const { title, start_time, session_date } = item?.schedule_details || {};
-
+    console.log("Item:::", JSON.stringify(item))
     function getTimePassedOrNot() {
         let isPassed = false;
         const startTime = start_time;
@@ -47,7 +47,7 @@ export default function QuizItem({ item, onPress, showDetails = false, isForPool
         >
             <Text style={{ color: THEME_COLORS.PRIMARY_COLOR, fontFamily: "Poppins-SemiBold" }}>{title}</Text>
             <View className="flex-row my-1 items-center justify-between text-sm">
-                <Text style={{ color: THEME_COLORS.PLACEHOLDER_COLOR, fontFamily: "Poppins-Regular" }}>{(isForPool ? item?.poll_questions?.length : item?.quiz_questions?.length) + " Questions" || 0}</Text>
+                <Text style={{ color: THEME_COLORS.PLACEHOLDER_COLOR, fontFamily: "Poppins-Regular" }}>{showDetails && !isForPool && "By: " + (item?.quiz_speaker?.name || "") + "\n"}{(isForPool ? item?.poll_questions?.length : item?.quiz_questions?.length) + " Questions" || 0}</Text>
                 {showDetails && <TouchableOpacity
                     onPress={onPress}
                     disabled={isForPool ? !item.status : !getTimePassedOrNot()}
