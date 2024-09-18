@@ -13,7 +13,7 @@ export default function BookSouvinir({ navigation }) {
     const [souvinir_list, setSouvinirList] = useState([]);
     const [selected_sounenir, setSelectedSouvenir] = useState(null);
     const [booked_souvinir, setBookedSouvinir] = useState([]);
-    const [is_booked, setIsBooked] = useState(true);
+    const [is_booked, setIsBooked] = useState(false);
     const [isLoading, setIsLoading] = useState(false)
 
     // Get profession and make a selection dropdown
@@ -26,10 +26,13 @@ export default function BookSouvinir({ navigation }) {
             .then((response) => {
                 console.log("getSouvinir Data::", response);
                 if (response.status) {
+                    setSouvinirList(response?.souvinirs_list)
                     if (response.booked_souvinir?.id) {
                         setBookedSouvinir(response?.booked_souvinir)
-                        setSouvinirList(response?.souvinirs_list)
                         setIsBooked(true);
+                    }
+                    else {
+                        setIsBooked(false);
                     }
                 }
                 else {
@@ -43,15 +46,17 @@ export default function BookSouvinir({ navigation }) {
                 }
             })
             .catch((error) => {
-
                 console.log("getSouvinir Error:::", error);
             });
     }
 
     async function postSounvenir() {
+
+        // console.log("Souvenir id:", souvinir_list[selected_sounenir]?.id)
+
         setIsLoading(true)
         let data = new FormData();
-        data.append("souvinir_id", booked_souvinir.id);
+        data.append("souvinir_id", souvinir_list[selected_sounenir]?.id);
         postRequest(save_souvinir_booking, data, null)
             .then(response => {
                 console.log("Response:::Save souvenir::", response)
@@ -99,7 +104,7 @@ export default function BookSouvinir({ navigation }) {
                 </View>
                 <Text
                     className={"my-4 text-sm text-center font-medium space-y-2"}
-                    style={{ color: THEME_COLORS.textColor, fontFamily: "Poppins-Medium" }}
+                    style={{ color: !is_booked ? THEME_COLORS.textLightGrayColor : THEME_COLORS.textColor, fontFamily: "Poppins-Medium" }}
                 >{is_booked ? GlbalLocale.booked_souvenir : GlbalLocale.select_souvenir}
                 </Text>
 
@@ -159,7 +164,7 @@ export default function BookSouvinir({ navigation }) {
                             height: hp('50%')
                         }}
                         source={{
-                            uri: `${souvinir_list.filter(s => s.id === booked_souvinir.id)[0].image}`
+                            uri: `${souvinir_list.filter(s => s.id === booked_souvinir.id)[0]?.image}`
                         }}
                     />
                 </View>}

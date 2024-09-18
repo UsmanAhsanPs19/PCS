@@ -14,13 +14,13 @@ export default function QuizScreen({ navigation, route }) {
     const flatListRef = useRef(null);
     const [isLoading, setIsLoading] = useState(false)
     const data = route?.params?.data || {};
-    const isForPool = route?.params?.isForPool || {};
+    const isForPool = route?.params?.isForPool || false;
     const [selectedIndex, setSelectedIndex] = useState(0);
     const [quiz, setQuiz] = useState([])
 
     useEffect(() => {
         if (route?.params?.data?.id)
-            getQuiz(route?.params?.data, isForPool);
+            getQuiz(route?.params?.data, route?.params?.isForPool);
     }, [route?.params?.data])
 
     useEffect(() => {
@@ -86,10 +86,14 @@ export default function QuizScreen({ navigation, route }) {
         else {
             setIsLoading(true)
             let apiData = new FormData();
-            apiData.append('quiz_id', quiz[selectedIndex]?.quiz_id)
             apiData.append('question_id', quiz[selectedIndex]?.id)
-            if (isForPool)
-                apiData.append('type', quiz[selectedIndex]?.type)
+            if (isForPool) {
+                apiData.append('type', data?.type)
+                apiData.append('poll_id', quiz[selectedIndex]?.poll_id)
+            }
+            else {
+                apiData.append('quiz_id', quiz[selectedIndex]?.quiz_id)
+            }
             apiData.append('selected_option', answer)
 
             postRequest(isForPool ? submit_pool_ans_api : post_quiz_answer, apiData)

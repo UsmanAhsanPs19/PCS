@@ -56,7 +56,7 @@ export default function QuizExplaination({ navigation, route }) {
                                 <Text style={{ color: THEME_COLORS.textColor, fontFamily: "Poppins-Medium" }}>{data?.quiz_questions?.length || 0} Questions</Text>
                                 <Text
                                     className="text-xs"
-                                    style={{ color: THEME_COLORS.PLACEHOLDER_COLOR, fontFamily: "Poppins-Regular" }}>{data?.quiz_questions?.length || 0} points for a correct answer</Text>
+                                    style={{ color: THEME_COLORS.PLACEHOLDER_COLOR, fontFamily: "Poppins-Regular" }}>1 point for a correct answer</Text>
                             </View>
                         </View>
                         <View className="flex flex-row space-x-3">
@@ -97,7 +97,7 @@ export default function QuizExplaination({ navigation, route }) {
                             <Text
                                 className="text-sm"
                                 style={{ color: THEME_COLORS.textLightGrayColor, fontFamily: "Poppins-Regular" }}
-                            >10 point awarded for a correct answer and no marks for a incorrect answer</Text>
+                            >1 point awarded for a correct answer and no marks for a incorrect answer</Text>
                         </View>
                         <View className="flex-row items-center space-x-3">
                             <View

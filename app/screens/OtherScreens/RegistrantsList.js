@@ -168,7 +168,7 @@ export default function RegistrantsList({ navigation }) {
                                     style={{
                                         fontFamily: "Poppins-Regular"
                                     }}
-                                >{item?.last_name || "N/A"}</Text>
+                                >{item?.second_name || "N/A"}</Text>
                             </View>
 
                             <View className={main_list_item_css}>
@@ -280,9 +280,9 @@ export default function RegistrantsList({ navigation }) {
                                     style={{
                                         fontFamily: "Poppins-Regular"
                                     }}
-                                >{item.payment_status === 0 ? "Payment in Review"
-                                    : item.payment_status === 1 ? "Approved" :
-                                        item.payment_status === 2 ? "Rejected" : "Pending"
+                                >{item.status === 0 ? "Payment in Review"
+                                    : item.status === 1 ? "Approved" :
+                                        item.status === 2 ? "Rejected" : "Pending"
                                     }</Text>
                             </View>
                             <View className={`${main_list_item_css} border-b-0`}>
