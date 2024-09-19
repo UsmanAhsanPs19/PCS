@@ -5,7 +5,6 @@ import QuizItem from './component/QuizItem';
 import { THEME_COLORS } from '../../constants/colors';
 import HeaderOther from '../OtherScreens/components/HeaderOther';
 import { GlbalLocale } from '../../constants/locale';
-import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { postRequest } from '../../helpers/APIRequest';
 import { get_quiz_leaderboard } from '../../constants/APIEndpoints';
 import DiamondMedalIcon from '../../../assets/DiamondMedal';
@@ -126,7 +125,7 @@ export default function QuizLeaderboard({ navigation, route }) {
                                 </View>
                                 <View>
                                     {
-                                        index === 0 ? <DiamondMedalIcon /> : index == 1 ? <SilverMedalIcon /> : <BronzeMedalIcon />
+                                        index === 0 ? <DiamondMedalIcon /> : index == 1 ? <SilverMedalIcon /> : index == 2 ? <BronzeMedalIcon /> : <></>
                                     }
                                 </View>
                             </View>

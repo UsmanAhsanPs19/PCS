@@ -5,7 +5,6 @@ import moment from 'moment';
 
 export default function QuizItem({ item, onPress, showDetails = false, isForPool = false }) {
     const { title, start_time, session_date } = item?.schedule_details || {};
-    console.log("Item:::", JSON.stringify(item))
     function getTimePassedOrNot() {
         let isPassed = false;
         const startTime = start_time;
