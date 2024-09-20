@@ -1,5 +1,5 @@
 import { View, Text, Image, ActivityIndicator, TouchableOpacity } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { THEME_COLORS } from '../../constants/colors'
 import { StatusBar } from 'expo-status-bar'
 import HeaderOther from './components/HeaderOther'
@@ -12,14 +12,41 @@ export default function SessionDetails({ navigation, route }) {
     const { item, data } = route?.params
     const [isLoading, setIsLoading] = useState(false)
 
+    useEffect(() => {
+        getTimePassedOrNot()
+    }, [])
 
-    const eventDetails = {
-        date: moment().format("ll"),
-        time: "10:00 - 13:00",
-        duration: "3 Hours",
-        title: "Anaphylaxis and other life threatning allergic emergencies",
-        venue: "Maqbool Block, Hall A"
+    function getTimePassedOrNot() {
+        let isPassed = false;
+        const startTime = item?.start_time;
+        const sessionDate = item?.session_date?.date;
+
+        console.log("Date & Time::", startTime, "&&", sessionDate)
+
+        const arePresentAndUpcoming = !(startTime === null || startTime === undefined || sessionDate === null || sessionDate === undefined);
+        if (arePresentAndUpcoming) {
+            const formattedSessionDate = moment(sessionDate).format('YYYY-MM-DD'); // Format date for comparison
+            const formattedStartTime = moment(startTime, 'h:mm A').format('HH:mm'); // Format time for comparison (24-hour format)
+
+            const sessionDateTime = moment(`${formattedSessionDate} ${formattedStartTime}`);
+            const now = moment();
+
+            if (sessionDateTime.isAfter(now)) {
+                isPassed = false
+                // console.log("start_time and session_date.date are present and upcoming.");
+            } else {
+                isPassed = true;
+                // console.log("The session has already started or is in the past.");
+            }
+        }
+        else {
+            isPassed = false
+            console.log("One or both properties are missing.");
+        }
+
+        return isPassed;
     }
+
     return (
         <View
             style={{ backgroundColor: THEME_COLORS.BG_COLOR }}
@@ -136,7 +163,15 @@ export default function SessionDetails({ navigation, route }) {
                     Note: Quiz will start in the last 30 minutes of the session
                 </Text>
                 <TouchableOpacity
-                    onPress={() => { }}
+                    onPress={() => {
+                        navigation.navigate({
+                            name: "QuizScreen", params: {
+                                isForPool: false,
+                                data: (item?.quiz_details?.length && item?.quiz_details[0]) || {}
+                            }
+                        })
+                    }}
+                    disabled={!getTimePassedOrNot()}
                     className="my-4 w-full p-3 items-center justify-center self-cente rounded-lg"
                     style={{
                         backgroundColor: THEME_COLORS.PRIMARY_COLOR_DARK
@@ -147,7 +182,7 @@ export default function SessionDetails({ navigation, route }) {
                         style={{
                             fontFamily: "Poppins-Medium"
                         }}
-                    >Not Available</Text>}
+                    >{getTimePassedOrNot() ? "Start Quiz" : "Not Available"}</Text>}
                 </TouchableOpacity>
             </View>
 

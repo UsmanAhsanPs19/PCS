@@ -13,7 +13,7 @@ import Toast from 'react-native-toast-message'
 export default function QuizScreen({ navigation, route }) {
     const flatListRef = useRef(null);
     const [isLoading, setIsLoading] = useState(false)
-    const data = route?.params?.data || {};
+    const [data, setData] = useState({});
     const isForPool = route?.params?.isForPool || false;
     const [selectedIndex, setSelectedIndex] = useState(0);
     const [quiz, setQuiz] = useState([])
@@ -33,7 +33,7 @@ export default function QuizScreen({ navigation, route }) {
     function getQuiz(props_data, isPool) {
         let data = new FormData();
         if (isPool) {
-            data.append('type', data?.type)
+            data.append('type', props_data?.type)
             data.append('poll_id', props_data?.id);
         }
         else
@@ -43,8 +43,10 @@ export default function QuizScreen({ navigation, route }) {
             .then(response => {
                 console.log("Data::get:::quiz", JSON.stringify(response))
                 if (response.status == 1) {
-                    if (response?.data && response.data?.length)
+                    if (response?.data && response.data?.length) {
+                        setData(response.data[0])
                         setQuiz(isPool ? response.data[0].poll_questions : response.data[0].quiz_questions)
+                    }
                     else {
                         setQuiz([])
                     }
@@ -63,7 +65,7 @@ export default function QuizScreen({ navigation, route }) {
                     else
                         navigation.replace("QuizResult", {
                             isForPool,
-                            data: route?.params?.data
+                            data: (route?.params?.data?.schedule_details && route?.params?.data) || response.data[0]
                         }
                         )
                 }
@@ -152,9 +154,9 @@ export default function QuizScreen({ navigation, route }) {
                         label={isForPool ? GlbalLocale.pool_label : GlbalLocale.quizes_label}
                     />
                 </View>
-                <View>
+                {!isLoading && <View>
                     <QuizItem item={data} isForPool={isForPool} />
-                </View>
+                </View>}
                 {
                     isLoading &&
                     <ActivityIndicator

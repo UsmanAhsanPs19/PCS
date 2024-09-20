@@ -76,7 +76,8 @@ export default function ScheduleScreen({ navigation }) {
                 color_arrow='white'
                 classes="px-4 py-3" onPress={() => navigation.goBack()} />
 
-
+            {/* Loading */}
+            {isLoading && <ActivityIndicator className="self-center" color={"white"} size={"large"} />}
 
             {/* Details of schedule */}
 
