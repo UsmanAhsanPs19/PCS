@@ -46,46 +46,46 @@ const BottomTabs = createBottomTabNavigator();
 const MainScreens = createNativeStackNavigator();
 export default function AppNavigation() {
 
-    function Dashboard() {
-        return (
-            <BottomTabs.Navigator screenOptions={({ route }) => ({
-                tabBarIcon: ({ focused, color, size }) => {
-                    if (route.name === 'Home') {
-                        return <HomeIcon size={size} color={color} />
-                    }
-                    // else if (route.name === 'Navigation') {
-                    //     return <Squares2X2Icon size={size} color={color} />
-                    // }
-                    // else if (route.name === 'Schedule') {
-                    //     return <CalendarDaysIcon size={size} color={color} />
-                    // }
+    // function Dashboard() {
+    //     return (
+    //         <BottomTabs.Navigator screenOptions={({ route }) => ({
+    //             tabBarIcon: ({ focused, color, size }) => {
+    //                 if (route.name === 'Home') {
+    //                     return <HomeIcon size={size} color={color} />
+    //                 }
+    //                 // else if (route.name === 'Navigation') {
+    //                 //     return <Squares2X2Icon size={size} color={color} />
+    //                 // }
+    //                 // else if (route.name === 'Schedule') {
+    //                 //     return <CalendarDaysIcon size={size} color={color} />
+    //                 // }
 
-                    // You can return any component that you like here!
-                    // return <Icon name={iconName} size={size} color={color} />;
-                },
-                tabBarStyle: {
-                    borderTopRightRadius: 10,
-                    borderTopLeftRadius: 10,
-                    borderWidth: 1,
-                    borderColor: THEME_COLORS.BORDER_COLOR,
-                    height: hp('7%')
-                },
-                tabBarLabelStyle: {
-                    fontFamily: "Poppins-Regular"
-                },
-                headerShown: false
-            })}
-                tabBarOptions={{
-                    activeTintColor: THEME_COLORS.PRIMARY_COLOR,
-                    inactiveTintColor: 'gray',
-                }}
-            >
-                <BottomTabs.Screen name="Home" component={HomeScreen} />
-                {/* <BottomTabs.Screen name="Navigation" component={NavigationScreen} />
-                <BottomTabs.Screen name="Schedule" component={ScheduleScreen} /> */}
-            </BottomTabs.Navigator>
-        )
-    }
+    //                 // You can return any component that you like here!
+    //                 // return <Icon name={iconName} size={size} color={color} />;
+    //             },
+    //             tabBarStyle: {
+    //                 borderTopRightRadius: 10,
+    //                 borderTopLeftRadius: 10,
+    //                 borderWidth: 1,
+    //                 borderColor: THEME_COLORS.BORDER_COLOR,
+    //                 height: hp('7%')
+    //             },
+    //             tabBarLabelStyle: {
+    //                 fontFamily: "Poppins-Regular"
+    //             },
+    //             headerShown: false
+    //         })}
+    //             tabBarOptions={{
+    //                 activeTintColor: THEME_COLORS.PRIMARY_COLOR,
+    //                 inactiveTintColor: 'gray',
+    //             }}
+    //         >
+    //             <BottomTabs.Screen name="Home" component={HomeScreen} />
+    //             {/* <BottomTabs.Screen name="Navigation" component={NavigationScreen} />
+    //             <BottomTabs.Screen name="Schedule" component={ScheduleScreen} /> */}
+    //         </BottomTabs.Navigator>
+    //     )
+    // }
 
     return (
         <NavigationContainer>
@@ -98,7 +98,7 @@ export default function AppNavigation() {
                 <MainScreens.Screen name='Forgot' component={ResetPasswordScreen} />
                 <MainScreens.Screen name='ChangePassword' component={ChangeForgotPassword} />
                 <MainScreens.Screen name='UpdateProfile' component={ModifyAccount} />
-                <MainScreens.Screen name='Dashboard' component={Dashboard} />
+                <MainScreens.Screen name='Dashboard' component={HomeScreen} />
 
                 <MainScreens.Screen name="EntryAppDashboard" component={EntryAppDashboard} />
                 <MainScreens.Screen name="EntryScanner" component={EntryAppScanner} />
