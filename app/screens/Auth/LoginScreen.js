@@ -21,7 +21,7 @@ export default function LoginScreen({ navigation }) {
     const [remeberMe, setRememberMe] = useState(false);
     const [errors, setErrors] = useState({});
     const [isLoading, setIsLoading] = useState(false)
-    const [email, setEmail] = useState(""); //mrdeveloper47@gmail.com
+    const [email, setEmail] = useState(""); //mrdeveloper47@gmail.com //tahir.waqar95@gmail.com
     const [password, setPassword] = useState(""); //password
 
     useEffect(() => {

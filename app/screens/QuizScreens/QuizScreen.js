@@ -25,6 +25,7 @@ export default function QuizScreen({ navigation, route }) {
 
     useEffect(() => {
         if (selectedIndex > 0) {
+            console.log("SelectedIndex:::", selectedIndex)
             flatListRef.current?.scrollToIndex({ index: selectedIndex, animated: true });
         }
     }, [selectedIndex])
@@ -165,7 +166,7 @@ export default function QuizScreen({ navigation, route }) {
                         className="self-center"
                     />
                 }
-                {!isLoading && quiz?.length &&
+                {quiz?.length &&
                     <View className="px-2">
                         <View>
                             <FlatList
@@ -181,7 +182,7 @@ export default function QuizScreen({ navigation, route }) {
                                             style={{
                                                 backgroundColor: selectedIndex == index ? THEME_COLORS.PRIMARY_COLOR : THEME_COLORS.GRAY_300
                                             }}
-                                            className="bg-gray-300 items-center justify-center w-10 h-10 rounded-full mx-3 self-center flex">
+                                            className="bg-gray-300 items-center justify-center w-10 h-10 rounded-full mx-3">
                                             <Text
                                                 style={{
                                                     fontFamily: "Poppins-SemiBold"
@@ -197,6 +198,7 @@ export default function QuizScreen({ navigation, route }) {
                                     </View>
                                 )}
                                 horizontal
+                                keyExtractor={(item, index) => index.toString()}
                             />
                         </View>
                         <View className="mt-10">

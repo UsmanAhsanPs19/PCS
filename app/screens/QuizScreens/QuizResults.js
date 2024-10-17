@@ -108,7 +108,7 @@ export default function QuizResults({ navigation, route }) {
 
                         </View>
                     </View>
-                    <View
+                    {/* <View
                         className="my-3"
                     >
                         <TouchableOpacity
@@ -131,7 +131,7 @@ export default function QuizResults({ navigation, route }) {
                                 }}
                             >View score board</Text>
                         </TouchableOpacity>
-                    </View>
+                    </View> */}
                 </View>}
             </View>
         </View>

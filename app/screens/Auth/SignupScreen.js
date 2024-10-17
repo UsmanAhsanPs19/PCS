@@ -84,16 +84,40 @@ export default function SignupScreen({ navigation }) {
     getProfessions()
   }, [])
 
+  // async function getProfessions() {
+  //   await getRequest(get_profession)
+  //     .then((response) => {
+  //       console.log("getProfessions Data::", response);
+  //       if (response.status && response.data) {
+  //         let temp_profession = -[]
+  //         response.data.map(val => {
+  //           temp_profession = [...temp_profession, { name: val?.name, id: val?.name }]
+  //         })
+  //         setProfessionList(temp_profession)
+  //       }
+  //       else {
+  //         Toast.show({
+  //           text1: "Profession",
+  //           autoHide,
+  //           position: "top",
+  //           type: "error",
+  //           text2: response.message || response?.error?.message || "Some issue while getting professions."
+  //         })
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       console.log("getProfessions Error:::", error);
+  //     });
+  // }
+
+  // Validate email format
+
   async function getProfessions() {
     await getRequest(get_profession)
       .then((response) => {
         console.log("getProfessions Data::", response);
         if (response.status && response.data) {
-          let temp_profession = -[]
-          response.data.map(val => {
-            temp_profession = [...temp_profession, { name: val?.name, id: val?.name }]
-          })
-          setProfessionList(temp_profession)
+          setProfessionList(response.data)
         }
         else {
           Toast.show({
@@ -110,7 +134,6 @@ export default function SignupScreen({ navigation }) {
       });
   }
 
-  // Validate email format
   const validateEmail = (email) => {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return re.test(String(email).toLowerCase());
