@@ -40,7 +40,7 @@ export default function SignupScreen({ navigation }) {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
-  const [profession, setProfession] = useState("");
+  const [profession, setProfession] = useState(null);
   const [place_of_work, setPlaceOfWork] = useState("");
   const [department, setDepartment] = useState("");
   const [country, setCountry] = useState("");
@@ -56,6 +56,11 @@ export default function SignupScreen({ navigation }) {
   const [selected_gender, setSelectedGender] = useState("Male");
   const [picked_image, setPickedImage] = useState(null)
   const [profession_list, setProfessionList] = useState([])
+
+  useEffect(() => {
+    if (profession_list.length)
+      setProfession(profession_list[0]?.name)
+  }, [profession_list])
 
   useEffect(() => {
     // This effect runs whenever any of the following values change
@@ -598,7 +603,7 @@ export default function SignupScreen({ navigation }) {
               />
 
               {/* PMDC/ PMNC Input */}
-              {profession === ("Doctor" || "Nurse") && <CustomInput
+              {(profession === "Doctor" || profession === "Nurse") && <CustomInput
                 placeholder={
                   profession === "Doctor" ? GlbalLocale.pmdc : GlbalLocale.pmnc
                 }

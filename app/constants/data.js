@@ -221,7 +221,7 @@ export const navigation_data_after_auth = [
 export const navigation_all_data = [
     { name: "Schedule", screenName: "ScheduleScreen" },
     { name: "Speakers", screenName: "SpeakersScreen" },
-    { name: "Sponsors", screenName: "SponsersScreens" },
+    { name: "Sponsers", screenName: "SponsersScreens" },
     { name: "Audience Poll", screenName: "QuizDashboard" },
     { name: "Event Information", screenName: "EventInfo" },
     { name: "General Information", screenName: "GeneralInformation" },

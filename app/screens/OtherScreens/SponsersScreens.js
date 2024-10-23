@@ -36,7 +36,7 @@ export default function SponsersScreens({ navigation }) {
             className="pt-10 px-4 flex-1"
         >
             <StatusBar style='dark' />
-            <HeaderOther label='Sponers' classes="py-3 px-2" onPress={() => {
+            <HeaderOther label='Sponsers' classes="py-3 px-2" onPress={() => {
                 console.log("Go back pressed")
                 navigation.goBack()
             }} />

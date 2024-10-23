@@ -14,6 +14,7 @@ import Toast from 'react-native-toast-message';
 export default function QuizResults({ navigation, route }) {
     const [isLoading, setIsLoading] = useState(false);
     const data = route?.params?.data || {};
+    const resp = route?.params?.response || {};
     const [apiResponse, setApiResponse] = useState({})
 
     useEffect(() => {
@@ -30,13 +31,13 @@ export default function QuizResults({ navigation, route }) {
                 if (response.status) {
                     setApiResponse(response)
                 } else {
-                    Toast.show({
-                        type: "error",
-                        text1: 'Quiz Result',
-                        text2: response.message || response.error.message || "There is some issue please try again later.",
-                        autoHide: true,
-                        position: "top"
-                    });
+                    // Toast.show({
+                    //     type: "error",
+                    //     text1: 'Quiz Result',
+                    //     text2: response.message || response.error.message || "There is some issue please try again later.",
+                    //     autoHide: true,
+                    //     position: "top"
+                    // });
                 }
             }).catch(error => {
                 setIsLoading(false)
@@ -86,14 +87,16 @@ export default function QuizResults({ navigation, route }) {
                                         fontFamily: "Poppins-SemiBold",
                                         color: THEME_COLORS.textColor
                                     }}
-                                >You got <Text
+                                >{resp?.message || "Quiz has been Ended!"}
+                                    {/* <Text
                                     style={{
                                         fontFamily: "Poppins-SemiBold",
                                         color: THEME_COLORS.PRIMARY_COLOR
                                     }}
-                                    className="text-lg">{apiResponse?.correct_answer} Point(s)</Text> from{"\n"}this quiz!</Text>
+                                    className="text-lg">{apiResponse?.correct_answer} Point(s)</Text> from{"\n"}this quiz! */}
+                                </Text>
                             </View>
-                            <CircularProgress
+                            {/* <CircularProgress
                                 value={apiResponse?.correct_answer}
                                 radius={70}
                                 duration={500}
@@ -104,7 +107,7 @@ export default function QuizResults({ navigation, route }) {
                                 title={`/ ${apiResponse?.total_points}`}
                                 titleColor={'white'}
                                 titleStyle={{ fontFamily: "Poppins-Regular" }}
-                            />
+                            /> */}
 
                         </View>
                     </View>

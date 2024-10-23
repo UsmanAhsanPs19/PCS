@@ -41,7 +41,7 @@ export default function QuizExplaination({ navigation, route }) {
                     />
                 }
                 <View>
-                    <QuizItem item={data} />
+                    <QuizItem item={data} show_count={true} />
                 </View>
                 <View className="space-y-4 px-2">
                     <View>
@@ -59,18 +59,17 @@ export default function QuizExplaination({ navigation, route }) {
                                     style={{ color: THEME_COLORS.PLACEHOLDER_COLOR, fontFamily: "Poppins-Regular" }}>1 point for a correct answer</Text>
                             </View>
                         </View>
-                        <View className="flex flex-row space-x-3">
+                        {/* <View className="flex flex-row space-x-3">
                             <View className="bg-gray-700 items-center self-start p-2 rounded-full">
                                 <ClockIcon color={'white'} size={20} />
                             </View>
                             <View>
-                                {/* <Text style={{ color: THEME_COLORS.textColor, fontFamily: "Poppins-Medium" }}>{data?.schedule_details?.duration || "N/A"}</Text> */}
                                 <Text style={{ color: THEME_COLORS.textColor, fontFamily: "Poppins-Medium" }}>{"5 Minutes"}</Text>
                                 <Text
                                     className="text-xs"
                                     style={{ color: THEME_COLORS.PLACEHOLDER_COLOR, fontFamily: "Poppins-Regular" }}>Total duration of the quiz</Text>
                             </View>
-                        </View>
+                        </View> */}
                         <View className="flex flex-row space-x-3">
                             <View className="bg-gray-700 items-center self-start p-2 rounded-full">
                                 <StarIcon color={'white'} size={20} />
@@ -98,6 +97,16 @@ export default function QuizExplaination({ navigation, route }) {
                                 className="text-sm"
                                 style={{ color: THEME_COLORS.textLightGrayColor, fontFamily: "Poppins-Regular" }}
                             >1 point awarded for a correct answer and no marks for a incorrect answer</Text>
+                        </View>
+                        <View className="flex-row items-center space-x-3">
+                            <View
+                                className="bg-black w-2 h-2 rounded-full"
+                                style={{ color: THEME_COLORS.textColor, fontFamily: "Poppins-Regular" }}
+                            />
+                            <Text
+                                className="text-sm"
+                                style={{ color: THEME_COLORS.textLightGrayColor, fontFamily: "Poppins-Regular" }}
+                            >Half a mark will be deducted for un-attempted questions</Text>
                         </View>
                         <View className="flex-row items-center space-x-3">
                             <View

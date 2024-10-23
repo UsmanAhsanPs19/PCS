@@ -57,6 +57,11 @@ export default function RegisterForConference({ navigation, route }) {
     }, [firstName, cnic, lastName, email, profession, country, phone_number, picked_image, selected_title, selected_gender, selected_participants, pm_number]);
 
     useEffect(() => {
+        if (profession_list.length)
+            setProfession(profession_list[0]?.name)
+    }, [profession_list])
+
+    useEffect(() => {
         if (selected_participants) {
             setTotalAmount(selected_participants?.price)
         }

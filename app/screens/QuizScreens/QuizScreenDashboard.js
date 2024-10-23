@@ -22,7 +22,7 @@ export default function QuizScreenDashboard({ navigation, route }) {
         setIsLoading(true)
         getRequest(isForPool ? pool_list_api : quiz_list_api, null)
             .then(response => {
-                console.log("Response:::::", response)
+                console.log("Quiz Response:::::", JSON.stringify(response))
                 if (response.data) {
                     setData(response.data)
                 }
@@ -63,7 +63,9 @@ export default function QuizScreenDashboard({ navigation, route }) {
                     renderItem={({ item }) => (
                         <QuizItem
                             isForPool={isForPool}
-                            showDetails={true} item={item} onPress={() => {
+                            showDetails={true}
+                            show_count={true}
+                            item={item} onPress={() => {
                                 if (isForPool) {
                                     navigation.navigate({
                                         name: "QuizScreen", params: {

@@ -28,7 +28,7 @@ const QuizOption = ({ index, option, selectedAnswer, handleAnswerSelection, opti
                 className="bg-gray-300 items-center justify-center w-11 h-11 rounded-full self-center flex">
                 <Text style={{ fontFamily: "Poppins-Regular", color: "white" }}>{optionNumber}</Text>
             </TouchableOpacity>
-            <Text style={{ color: selectedAnswer === option ? THEME_COLORS.PRIMARY_COLOR : THEME_COLORS.textColor, fontFamily: "Poppins-Regular" }}>{option}</Text>
+            <Text style={{ color: selectedAnswer === option ? THEME_COLORS.PRIMARY_COLOR : THEME_COLORS.textColor, fontFamily: "Poppins-Regular" }}>{"Option " + (index + 1)}</Text>
         </View>
     );
 };
@@ -40,7 +40,7 @@ const QuizQuestion = ({ quiz, selectedIndex, handleAnswerSelection = () => { } }
 
     return (
         <View className="mt-4">
-            <Text style={{ color: THEME_COLORS.textColor, fontFamily: "Poppins-Regular" }}>{selectedQuiz?.question}</Text>
+            {/* <Text style={{ color: THEME_COLORS.textColor, fontFamily: "Poppins-Regular" }}>{selectedQuiz?.questions}</Text> */}
             <View className="mt-4 space-y-3">
                 {options.map((option, index) => (
                     <QuizOption index={index} key={index} option={option} selectedAnswer={selectedQuiz[selectedQuiz?.selectedAnswer]} handleAnswerSelection={handleAnswerSelection} optionNumber={index + 1} />

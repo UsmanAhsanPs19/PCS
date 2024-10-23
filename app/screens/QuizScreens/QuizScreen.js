@@ -9,29 +9,42 @@ import QuizItem from './component/QuizItem'
 import { get_pool_data_api, get_quiz_api, post_quiz_answer, submit_pool_ans_api } from '../../constants/APIEndpoints'
 import QuizQuestion from './component/QuizQuestion'
 import Toast from 'react-native-toast-message'
+import useInterval from '../../helpers/useInterval'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 export default function QuizScreen({ navigation, route }) {
     const flatListRef = useRef(null);
     const [isLoading, setIsLoading] = useState(false)
     const [data, setData] = useState({});
+    const [showWaiting, setShowWaiting] = useState(false);
     const isForPool = route?.params?.isForPool || false;
     const [selectedIndex, setSelectedIndex] = useState(0);
     const [quiz, setQuiz] = useState([])
 
+    if (route?.params?.data?.id) {
+        useInterval(() => {
+            getQuiz(route?.params?.data, route?.params?.isForPool, false);
+        }, 4000);
+    }
+
     useEffect(() => {
         if (route?.params?.data?.id)
-            getQuiz(route?.params?.data, route?.params?.isForPool);
+            // useInterval(() => {
+            getQuiz(route?.params?.data, route?.params?.isForPool, true);
+        // }, 2000)
     }, [route?.params?.data])
 
-    useEffect(() => {
-        if (selectedIndex > 0) {
-            console.log("SelectedIndex:::", selectedIndex)
-            flatListRef.current?.scrollToIndex({ index: selectedIndex, animated: true });
-        }
-    }, [selectedIndex])
 
 
-    function getQuiz(props_data, isPool) {
+    // useEffect(() => {
+    //     if (selectedIndex > 0) {
+    //         console.log("SelectedIndex:::", selectedIndex)
+    //         // flatListRef.current?.scrollToIndex({ index: selectedIndex, animated: true });
+    //     }
+    // }, [selectedIndex])
+
+
+    function getQuiz(props_data, isPool, isShowLoading) {
         let data = new FormData();
         if (isPool) {
             data.append('type', props_data?.type)
@@ -39,14 +52,46 @@ export default function QuizScreen({ navigation, route }) {
         }
         else
             data.append('quiz_id', props_data?.id);
-        setIsLoading(true)
+
+        if (isShowLoading)
+            setIsLoading(true)
         postRequest(isPool ? get_pool_data_api : get_quiz_api, data, null)
-            .then(response => {
-                console.log("Data::get:::quiz", JSON.stringify(response))
+            .then(async response => {
+                console.log("Equal::", JSON.stringify(response))
                 if (response.status == 1) {
                     if (response?.data && response.data?.length) {
-                        setData(response.data[0])
-                        setQuiz(isPool ? response.data[0].poll_questions : response.data[0].quiz_questions)
+                        console.log("Quiz:::", isShowLoading)
+                        setShowWaiting(response?.loader_flag === "true")
+                        setData({ ...response.data[0], count_question: response?.count_question })
+                        const q_id = await AsyncStorage.getItem("q_id")
+                        console.log("q_id:::", q_id)
+                        if (!isPool && !isShowLoading) {
+                            if (q_id != response.data[0]?.quiz_questions[0]?.id && response?.loader_flag !== "true") {
+                                await AsyncStorage.removeItem("q_id")
+                                console.log("loader false if")
+                                // Toast.show({
+                                //     type: 'error',
+                                //     text1: isPool ? 'Pool' : 'Quiz',
+                                //     text2: "Quiz time for question is over",
+                                //     autoHide: true,
+                                //     position: "top"
+                                // });
+                                setQuiz(response.data[0].quiz_questions)
+                            }
+                            else {
+                                await AsyncStorage.setItem("q_id", response.data[0].quiz_questions[0]?.id + "")
+                            }
+                            // if (quiz.length === 0 || (quiz.length && quiz[0]?.id !== response.data[0]?.quiz_questions[0]?.id)) {
+                            //     console.log("loader false if length 0")
+                            //     setQuiz(response.data[0].quiz_questions)
+                            // }
+                        }
+                        else {
+                            console.log("loader else if isPool")
+                            if (!isPool)
+                                await AsyncStorage.setItem("q_id", response.data[0].quiz_questions[0]?.id + "")
+                            setQuiz(isPool ? response.data[0].poll_questions : response.data[0].quiz_questions)
+                        }
                     }
                     else {
                         setQuiz([])
@@ -66,6 +111,7 @@ export default function QuizScreen({ navigation, route }) {
                     else
                         navigation.replace("QuizResult", {
                             isForPool,
+                            response,
                             data: (route?.params?.data?.schedule_details && route?.params?.data) || response.data[0]
                         }
                         )
@@ -77,9 +123,12 @@ export default function QuizScreen({ navigation, route }) {
             })
     }
 
-    const handleAnswerSelection = (selectedOption) => {
+    const handleAnswerSelection = async (selectedOption) => {
         const updatedQuiz = [...quiz]; // Create a copy of the quiz array
         updatedQuiz[selectedIndex].selectedAnswer = selectedOption; // Update the selected answer for the clicked question
+        if (!isForPool) {
+            await AsyncStorage.setItem("q_id", updatedQuiz[selectedIndex]?.id + "")
+        }
         setQuiz(updatedQuiz); // Update the state with the modified quiz array
     };
 
@@ -106,7 +155,13 @@ export default function QuizScreen({ navigation, route }) {
             apiData.append('selected_option', answer)
 
             postRequest(isForPool ? submit_pool_ans_api : post_quiz_answer, apiData)
-                .then(response => {
+                .then(async response => {
+                    await AsyncStorage.removeItem("q_id")
+                    if (!isForPool) {
+                        setShowWaiting(true)
+                        // setQuiz([])
+                    }
+
                     Toast.show({
                         type: response.status ? 'success' : "error",
                         text1: isForPool ? 'Pool Answer' : 'Quiz Answer',
@@ -121,11 +176,12 @@ export default function QuizScreen({ navigation, route }) {
                             if (isForPool) {
                                 navigation.goBack();
                             }
-                            else
+                            else if (response.thanks_flag === "true")
                                 navigation.replace("QuizResult", {
-                                    data
+                                    data,
                                 }
                                 )
+                            // setShowWaiting(true)
                         }
                         else
                             setSelectedIndex(selectedIndex + 1)
@@ -155,9 +211,9 @@ export default function QuizScreen({ navigation, route }) {
                         label={isForPool ? GlbalLocale.pool_label : GlbalLocale.quizes_label}
                     />
                 </View>
-                {!isLoading && <View>
+                {/* { <View>
                     <QuizItem item={data} isForPool={isForPool} />
-                </View>}
+                </View>} */}
                 {
                     isLoading &&
                     <ActivityIndicator
@@ -166,40 +222,44 @@ export default function QuizScreen({ navigation, route }) {
                         className="self-center"
                     />
                 }
-                {quiz?.length &&
+                {
+                    showWaiting && !isForPool &&
+                    <View className="self-center items-center justify-center">
+                        <ActivityIndicator
+                            color={THEME_COLORS.PRIMARY_COLOR}
+                            size={"large"}
+                            className="self-center"
+                        />
+                        <Text
+                            style={{
+                                fontFamily: "Poppins-SemiBold",
+                                color: THEME_COLORS.textColor
+                            }}
+                            className="">Please wait until the next question appears on the main screen</Text>
+                    </View>
+                }
+                {quiz?.length && !showWaiting &&
                     <View className="px-2">
                         <View>
-                            <FlatList
-                                ref={flatListRef}
-                                data={quiz}
-                                showsHorizontalScrollIndicator={false}
-                                renderItem={({ item, index }) => (
-                                    <View className="space-y-4">
-                                        <View
-                                            onPress={() => {
-                                                setSelectedIndex(index)
-                                            }}
-                                            style={{
-                                                backgroundColor: selectedIndex == index ? THEME_COLORS.PRIMARY_COLOR : THEME_COLORS.GRAY_300
-                                            }}
-                                            className="bg-gray-300 items-center justify-center w-10 h-10 rounded-full mx-3">
-                                            <Text
-                                                style={{
-                                                    fontFamily: "Poppins-SemiBold"
-                                                }}
-                                                className="text-white">{index + 1}</Text>
-                                        </View>
-                                        <View
-                                            style={{
-                                                backgroundColor: selectedIndex == index ? THEME_COLORS.PRIMARY_COLOR : THEME_COLORS.GRAY_300
-                                            }}
-                                            className="h-0.5"
-                                        />
-                                    </View>
-                                )}
-                                horizontal
-                                keyExtractor={(item, index) => index.toString()}
-                            />
+                            <View className="space-y-4">
+                                <View
+                                    style={{
+                                        backgroundColor: THEME_COLORS.PRIMARY_COLOR
+                                    }}
+                                    className="bg-gray-300 self-center items-center justify-center w-[40%] h-10 rounded-full mx-3">
+                                    <Text
+                                        style={{
+                                            fontFamily: "Poppins-SemiBold"
+                                        }}
+                                        className="text-white">Question# {(quiz?.length && quiz[0].question_id) || ""}</Text>
+                                </View>
+                                {/* <View
+                                    style={{
+                                        backgroundColor: selectedIndex == index ? THEME_COLORS.PRIMARY_COLOR : THEME_COLORS.GRAY_300
+                                    }}
+                                    className="h-0.5"
+                                /> */}
+                            </View>
                         </View>
                         <View className="mt-10">
                             <QuizQuestion quiz={quiz} selectedIndex={selectedIndex} handleAnswerSelection={handleAnswerSelection} />
