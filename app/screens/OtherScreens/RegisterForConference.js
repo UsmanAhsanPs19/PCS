@@ -291,17 +291,19 @@ export default function RegisterForConference({ navigation, route }) {
             data.append('last_name', lastName);
             data.append('profession', profession);
             data.append('phone_number', phone_number);
-            // data.append('place_of_work', place_of_work);
-            // data.append('department', department);
+            if (!route.params?.forSelf)
+                data.append('email', email);
+            data.append('total_amount', total_amount);
             data.append('country', country);
             data.append("payment_status", payment_type ? 1 : 0);
             if (payment_type) {
                 data.append("promo_code", promo_code)
-                data.append('file', {
-                    uri: picked_payment_profs.uri,
-                    name: 'payment_proof_image.jpg',
-                    type: 'image/jpg',
-                })
+                if (picked_payment_profs)
+                    data.append('file', {
+                        uri: picked_payment_profs?.uri,
+                        name: 'payment_proof_image.jpg',
+                        type: 'image/jpg',
+                    })
             }
             // data.append("mobile_number", mobile_number);
             data.append("cnic", cnic);
@@ -493,7 +495,7 @@ export default function RegisterForConference({ navigation, route }) {
                                 placeHolderText={"Please select profession"}
                                 placeHolderTextColor={"black"}
                                 onChange={(value) => {
-                                    setSelectedTitle(value);
+                                    setSelectedTitle(value?.name);
                                 }}
                             />}
                             {Platform.OS === "android" && <Picker
@@ -567,7 +569,7 @@ export default function RegisterForConference({ navigation, route }) {
                                 placeHolderText={"Please select profession"}
                                 placeHolderTextColor={"black"}
                                 onChange={(value) => {
-                                    setSelectedGender(value);
+                                    setSelectedGender(value?.name);
                                 }}
                             />}
                             {Platform.OS === "android" && <Picker
@@ -636,8 +638,7 @@ export default function RegisterForConference({ navigation, route }) {
                                     placeHolderText={"Please select profession"}
                                     placeHolderTextColor={"black"}
                                     onChange={(value) => {
-                                        console.log("values:::", value)
-                                        setProfession(value);
+                                        setProfession(value?.name);
                                     }}
                                 />}
                                 {Platform.OS === "android" && <Picker

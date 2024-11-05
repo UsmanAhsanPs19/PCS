@@ -30,23 +30,33 @@ export default function RegistrantsList({ navigation }) {
     }, [showPaymentModel])
 
     async function getMyRegistrationCard(registration_id) {
-        setIndexLoading(registration_id)
-        let data = new FormData();
-        data.append('registration_id', registration_id);
-        postRequest(get_my_card, data, null)
-            .then(response => {
-                Toast.show({
-                    text1: "Entry Card",
-                    text2: response.message || response.errror?.message,
-                    type: response.status ? "success" : "error",
-                    autoHide: true,
-                    position: "top"
+        try {
+            setIndexLoading(true)
+            let data = new FormData();
+            data.append('registration_id', registration_id);
+            postRequest(get_my_card, data, null)
+                .then(response => {
+                    Toast.show({
+                        text1: "Entry Card",
+                        text2: response.message || response.errror?.message,
+                        type: response.status ? "success" : "error",
+                        autoHide: true,
+                        position: "top"
+                    })
+                    setIndexLoading(false)
+                }).catch(error => {
+                    setIndexLoading(false)
+                    console.log("Error:::get my card:::", error)
                 })
-                setIndexLoading(null)
-            }).catch(error => {
-                setIndexLoading(null)
-                console.log("Error:::get my card:::", error)
-            })
+        } catch (error) {
+            Toast.show({
+                type: 'error',
+                text1: 'Error',
+                text2: error.message || 'An unexpected error occurred',
+                position: 'top', // Can also use 'bottom'
+                autoHide: true,
+            });
+        }
     }
 
     async function getRegistratntsList() {
@@ -121,7 +131,7 @@ export default function RegistrantsList({ navigation }) {
                                     style={{
                                         fontFamily: "Poppins-Regular"
                                     }}
-                                >{item?.id}</Text>
+                                >{index + 1}</Text>
                             </View>
                             <View className={main_list_item_css}>
                                 <Text

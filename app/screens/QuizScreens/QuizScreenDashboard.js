@@ -10,7 +10,7 @@ import { pool_list_api, quiz_list_api } from '../../constants/APIEndpoints'
 
 export default function QuizScreenDashboard({ navigation, route }) {
     const [isLoading, setIsLoading] = useState(false)
-    const [data, setData] = useState([])
+    const [data, setData] = useState({})
     const isForPool = route?.params?.isForPool || false;
 
     useEffect(() => {
@@ -23,8 +23,8 @@ export default function QuizScreenDashboard({ navigation, route }) {
         getRequest(isForPool ? pool_list_api : quiz_list_api, null)
             .then(response => {
                 console.log("Quiz Response:::::", JSON.stringify(response))
-                if (response.data) {
-                    setData(response.data)
+                if (response.status) {
+                    setData(response)
                 }
                 setIsLoading(false)
             }).catch(error => {
@@ -59,7 +59,7 @@ export default function QuizScreenDashboard({ navigation, route }) {
                 }
 
                 <FlatList
-                    data={data}
+                    data={data?.data}
                     renderItem={({ item }) => (
                         <QuizItem
                             isForPool={isForPool}
@@ -77,7 +77,8 @@ export default function QuizScreenDashboard({ navigation, route }) {
                                 else
                                     navigation.navigate({
                                         name: "QuizExplaination", params: {
-                                            data: item
+                                            data: item,
+                                            details: data?.details
                                         }
                                     })
                             }} />

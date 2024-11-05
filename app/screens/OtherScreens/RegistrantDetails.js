@@ -162,7 +162,7 @@ export default function RegistrantDetails({ navigation, route }) {
                                 style={{
                                     fontFamily: "Poppins-Regular"
                                 }}
-                            >{data?.name || "PGs/Residents (A letter of PG ship from concerned HOD will be required)"}</Text>
+                            >{data?.participant?.name || "N/A"}</Text>
                         </View>
                         <View className={main_list_item_css}>
                             <Text

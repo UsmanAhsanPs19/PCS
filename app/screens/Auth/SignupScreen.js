@@ -450,7 +450,7 @@ export default function SignupScreen({ navigation }) {
                   placeHolderText={"Please select title"}
                   placeHolderTextColor={"black"}
                   onChange={(value) => {
-                    setSelectedTitle(value);
+                    setSelectedTitle(value?.name);
                   }}
                 />}
                 {Platform.OS === "android" && <Picker
@@ -511,7 +511,7 @@ export default function SignupScreen({ navigation }) {
                     placeHolderText={"Please select gender"}
                     placeHolderTextColor={"black"}
                     onChange={(value) => {
-                      setSelectedGender(value);
+                      setSelectedGender(value?.name);
                     }}
                   />}
                   {Platform.OS === "android" && <Picker
@@ -558,7 +558,7 @@ export default function SignupScreen({ navigation }) {
                     placeHolderText={"Please select profession"}
                     placeHolderTextColor={"black"}
                     onChange={(value) => {
-                      setProfession(value);
+                      setProfession(value?.name);
                     }}
                   />}
                   {Platform.OS === "android" && <Picker

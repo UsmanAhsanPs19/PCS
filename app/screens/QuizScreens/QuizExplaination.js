@@ -10,6 +10,7 @@ import { ClockIcon, ListBulletIcon, StarIcon } from 'react-native-heroicons/outl
 export default function QuizExplaination({ navigation, route }) {
     const [isLoading, setIsLoading] = useState(false)
     const data = route?.params?.data || {};
+    const details = route?.params?.details;
 
 
     useEffect(() => {
@@ -88,17 +89,19 @@ export default function QuizExplaination({ navigation, route }) {
                         <Text style={{ color: THEME_COLORS.textColor, fontFamily: "Poppins-SemiBold" }}>Click submit if you are sure you want to complete all the quizzes</Text>
                     </View>
                     <View className="space-y-4">
-                        <View className="flex-row items-center space-x-3">
-                            <View
-                                className="bg-black w-2 h-2 rounded-full"
-                                style={{ color: THEME_COLORS.textColor, fontFamily: "Poppins-Regular" }}
-                            />
-                            <Text
-                                className="text-sm"
-                                style={{ color: THEME_COLORS.textLightGrayColor, fontFamily: "Poppins-Regular" }}
-                            >1 point awarded for a correct answer and no marks for a incorrect answer</Text>
-                        </View>
-                        <View className="flex-row items-center space-x-3">
+                        {details?.map((item) => (
+                            <View className="flex-row items-center space-x-3">
+                                <View
+                                    className="bg-black w-2 h-2 rounded-full"
+                                    style={{ color: THEME_COLORS.textColor, fontFamily: "Poppins-Regular" }}
+                                />
+                                <Text
+                                    className="text-sm"
+                                    style={{ color: THEME_COLORS.textLightGrayColor, fontFamily: "Poppins-Regular" }}
+                                >{item}</Text>
+                            </View>
+                        ))}
+                        {/* <View className="flex-row items-center space-x-3">
                             <View
                                 className="bg-black w-2 h-2 rounded-full"
                                 style={{ color: THEME_COLORS.textColor, fontFamily: "Poppins-Regular" }}
@@ -137,7 +140,7 @@ export default function QuizExplaination({ navigation, route }) {
                                 className="text-sm"
                                 style={{ color: THEME_COLORS.textLightGrayColor, fontFamily: "Poppins-Regular" }}
                             >Click submit if you are sure you want to complete all the quizzes</Text>
-                        </View>
+                        </View> */}
 
                     </View>
                 </View>
